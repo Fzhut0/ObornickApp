@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Data.Repositories;
+using API.Entities;
 using API.Interfaces;
 using AutoMapper;
 
@@ -19,6 +21,10 @@ namespace API.Data
         }
 
         public IUserRepository UserRepository => new UserRepository(_context, _mapper);
+
+        public IRecipeRepository RecipeRepository => new RecipeRepository(_context);
+
+        public IIngredientRepository IngredientRepository => new IngredientRepository(_context);
 
         public async Task<bool> Complete()
         {

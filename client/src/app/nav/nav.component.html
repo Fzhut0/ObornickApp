@@ -2,18 +2,9 @@
     <div class="container">
       <a class="navbar-brand" routerLink="/" routerLinkActive="active">App</a>
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
-          <ng-container *ngIf="accountService.currentUser$ | async">
+          <ng-container  *ngIf="accountService.currentUser$ | async">
             <li class="nav-item">
-              <a class="nav-link" routerLink="/members" routerLinkActive="active">Matches</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/lists" routerLinkActive="active">Lists</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/messages" routerLinkActive="active">Messages</a>
-            </li>
-            <li class="nav-item" *appHasRole="['Admin', 'Moderator']">
-              <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin panel</a>
+              <a class="nav-link" routerLink="/members">Matches</a>
             </li>
           </ng-container>
         </ul>
@@ -27,16 +18,16 @@
 
         </div>
 
-        <form *ngIf="!(accountService.currentUser$ | async)" class="d-flex" (ngSubmit)="login()">
+        <form #loginForm="ngForm" *ngIf="!(accountService.currentUser$ | async)" class="d-flex" (ngSubmit)="login()">
           <input 
           name="username"
-          
+          [(ngModel)]="model.username"
           class="form-control me-2" 
           type="text" 
           placeholder="Username">
           <input 
           name="password"
-          
+          [(ngModel)]="model.password"
           class="form-control me-2" 
           type="password" 
           placeholder="Password">

@@ -24,10 +24,6 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       gender: ['male'],
       username: ['', Validators.required],
-      knownAs: ['', Validators.required],
-      dateOfBirth: ['', Validators.required],
-      city: ['', Validators.required],
-      country: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(4)]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]],
     });
@@ -45,8 +41,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
 
-    const dob = this.getDateOnly(this.registerForm.controls['dateOfBirth'].value);
-    const values = {...this.registerForm.value, dateOfBirth: dob};
+    const values = {...this.registerForm.value};
 
     this.accountService.register(values).subscribe({
       next: response => {
@@ -60,16 +55,5 @@ export class RegisterComponent implements OnInit {
   }
   cancel() {
     this.cancelRegister.emit(false);
-  }
-
-  private getDateOnly(dob: string | undefined)
-  {
-    if (!dob)
-    {
-      return;
-    }
-    let theDob = new Date(dob);
-    return new Date(theDob.setMinutes(theDob.getMinutes() - theDob.getTimezoneOffset()))
-      .toISOString().slice(0, 10);
   }
 }
