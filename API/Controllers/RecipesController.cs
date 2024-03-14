@@ -3,6 +3,7 @@ using API.Entities;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
@@ -46,7 +47,7 @@ namespace API.Controllers
                     {
                         Name = ing.IngredientName
                     };
-                    _uow.IngredientRepository.AddIngredient(ingredient);
+                    await _uow.IngredientRepository.AddIngredient(ingredient);
                     await _uow.Complete();
                 }
 
@@ -93,6 +94,28 @@ namespace API.Controllers
             var recipeDto = _mapper.Map<RecipeDto>(recipe);
 
             return Ok(recipeDto);
+        }
+
+        [HttpGet("getrecipes")]
+        public async Task<ActionResult<List<RecipeDto>>> GetAllRecipes()
+        {
+            var recipes = await _uow.RecipeRepository.GetAllRecipes();
+
+            if(recipes.IsNullOrEmpty())
+            {
+                return NotFound("No recipes found");
+            }
+
+            var recipeDtoList = new List<RecipeDto>();
+
+            foreach(var recipe in recipes)
+
+            {
+                var recipeDto = _mapper.Map<RecipeDto>(recipe);
+                recipeDtoList.Add(recipeDto);
+            }
+
+            return Ok(recipeDtoList);
         }
 
 

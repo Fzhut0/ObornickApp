@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { MembersComponent } from './members/members.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BrowseRecipesComponent } from './browse-recipes/browse-recipes.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     RegisterComponent,
     HomeComponent,
     MembersComponent,
-    TextInputComponent
+    TextInputComponent,
+    BrowseRecipesComponent
   ],
   imports: [
     BrowserModule,

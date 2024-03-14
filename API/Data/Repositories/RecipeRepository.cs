@@ -42,5 +42,10 @@ namespace API.Data
         {
             return await _context.Recipes.Include(r => r.RecipeIngredients).FirstOrDefaultAsync(x => x.RecipeId == id);
         }
+
+        public async Task<List<Recipe>> GetAllRecipes()
+        {
+            return await _context.Recipes.Include(r => r.RecipeIngredients).ToListAsync();
+        }
     }
 }

@@ -15,4 +15,9 @@ export class RecipesService {
   {
     return this.httpClient.post<Recipe>(this.baseUrl + 'recipes/addrecipe', model);
   }
+
+  getAllRecipes()
+  {
+    return this.httpClient.get<Recipe>(this.baseUrl + 'recipes/getrecipes');
+  }
 }

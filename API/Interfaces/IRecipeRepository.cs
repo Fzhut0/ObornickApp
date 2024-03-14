@@ -18,5 +18,7 @@ namespace API.Interfaces
         Task<Recipe> GetRecipeById(int id);
 
         public Task<IEnumerable<Recipe>> GetRecipesByIngredientId(int ingredientId);
+
+        Task<List<Recipe>> GetAllRecipes();
     }
 }
