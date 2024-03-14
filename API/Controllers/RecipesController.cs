@@ -1,16 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
-using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
@@ -67,16 +59,16 @@ namespace API.Controllers
                 newRecipe.RecipeIngredients.Add(recipeIngredient);
             }
 
-            _uow.RecipeRepository.AddRecipe(newRecipe);
+            await _uow.RecipeRepository.AddRecipe(newRecipe);
             await _uow.Complete();
 
             return Ok("Recipe added successfully");
         }
 
-        [HttpGet("getrecipe")]
-        public async Task<ActionResult<RecipeDto>> GetRecipe(string name)
+        [HttpGet("getrecipe-byname")]
+        public async Task<ActionResult<RecipeDto>> GetRecipeByName(string name)
         {
-            var recipe = await _uow.RecipeRepository.GetRecipe(name);
+            var recipe = await _uow.RecipeRepository.GetRecipeByName(name);
 
             if(recipe == null)
             {
@@ -87,6 +79,22 @@ namespace API.Controllers
 
             return Ok(recipeDto);
         }
+        
+        [HttpGet("getrecipe-byid")]
+        public async Task<ActionResult<RecipeDto>> GetRecipeById(int id)
+        {
+            var recipe = await _uow.RecipeRepository.GetRecipeById(id);
+
+            if(recipe == null)
+            {
+                return NotFound("Recipe not found");
+            }
+
+            var recipeDto = _mapper.Map<RecipeDto>(recipe);
+
+            return Ok(recipeDto);
+        }
+
 
     }
 }

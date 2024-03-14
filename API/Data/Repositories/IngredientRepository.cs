@@ -17,9 +17,9 @@ namespace API.Data.Repositories
             _context = context;
         }
 
-        public void AddIngredient(Ingredient ingredient)
+        public async Task AddIngredient(Ingredient ingredient)
         {
-            _context.Ingredients.Add(ingredient);
+           await _context.Ingredients.AddAsync(ingredient);
         }
 
         public async Task<bool> IngredientExists(string name)

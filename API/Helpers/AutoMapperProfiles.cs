@@ -12,7 +12,6 @@ public class AutoMapperProfiles : Profile
         CreateMap<AppUser, UserDto>();
         CreateMap<RegisterDto, AppUser>();
 
-        // Mapping for Recipe and RecipeDto
         CreateMap<Recipe, RecipeDto>()
             .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.RecipeIngredients.Select(ri => ri.Ingredient)));
         
@@ -28,11 +27,9 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<RecipeIngredientDto, RecipeIngredient>();
 
-        // Mapping for Ingredient and IngredientDto
         CreateMap<Ingredient, IngredientDto>();
         CreateMap<IngredientDto, Ingredient>();
 
-        // Ensure that DateTime is mapped correctly
         CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
         CreateMap<DateTime?, DateTime?>().ConvertUsing(d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);
     }

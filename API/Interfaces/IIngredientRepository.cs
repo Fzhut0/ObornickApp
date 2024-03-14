@@ -13,7 +13,7 @@ namespace API.Interfaces
 
         Task<Ingredient> GetIngredientByName(string name);
 
-        void AddIngredient(Ingredient ingredient);
+        Task AddIngredient(Ingredient ingredient);
 
         public Task<bool> IngredientExists(string name);
     }

@@ -51,14 +51,19 @@ export class MembersComponent implements OnInit {
   addRecipe()
   {
     const values = {...this.recipeForm.value};
-
     console.log(values);
 
         this.recipeService.addRecipe(values).subscribe({
       error: error => {
         console.log(error)
       }
-    })
+        })
+    this.resetForm();
+  }
+
+    resetForm() {
+    this.recipeForm.reset();
+    this.ingredientsArray.clear();
   }
 
     cancel() {

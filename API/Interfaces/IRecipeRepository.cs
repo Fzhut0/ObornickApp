@@ -11,9 +11,11 @@ namespace API.Interfaces
     {
         public Task<bool> RecipeExists(string dishName);
 
-        void AddRecipe(Recipe recipe);
+        Task AddRecipe(Recipe recipe);
 
-        Task<Recipe> GetRecipe(string name);
+        Task<Recipe> GetRecipeByName(string name);
+
+        Task<Recipe> GetRecipeById(int id);
 
         public Task<IEnumerable<Recipe>> GetRecipesByIngredientId(int ingredientId);
     }
