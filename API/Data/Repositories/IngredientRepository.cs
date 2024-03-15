@@ -36,5 +36,19 @@ namespace API.Data.Repositories
         {
             return await _context.Ingredients.FirstOrDefaultAsync(i => i.Name == name);
         }
+
+        public async Task<IEnumerable<Ingredient>> GetIngredientsForRecipe(int recipeId)
+        {
+
+            var ingredients = await _context.Ingredients
+                .Where(r => r.RecipeIngredients.Any(ri => ri.RecipeId == recipeId)).ToListAsync();
+
+            return ingredients;
+        }
+
+        public async Task<RecipeIngredient> GetRecipeIngredientById(int id)
+        {
+            return await _context.RecipeIngredients.FirstOrDefaultAsync(r => r.IngredientId == id);
+        }
     }
 }

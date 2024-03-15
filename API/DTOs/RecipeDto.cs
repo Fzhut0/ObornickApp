@@ -8,6 +8,7 @@ namespace API.DTOs
 {
     public class RecipeDto
     {
+
         public string Name { get; set; }
         public List<RecipeIngredientDto> Ingredients { get; set; }
     }

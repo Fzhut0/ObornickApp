@@ -26,8 +26,10 @@ public class AutoMapperProfiles : Profile
     })));
 
         CreateMap<RecipeIngredientDto, RecipeIngredient>();
+        CreateMap<RecipeIngredient, RecipeIngredientDto>();
 
         CreateMap<Ingredient, IngredientDto>();
+        CreateMap<Ingredient, RecipeIngredientDto>();
         CreateMap<IngredientDto, Ingredient>();
 
         CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));

@@ -16,5 +16,9 @@ namespace API.Interfaces
         Task AddIngredient(Ingredient ingredient);
 
         public Task<bool> IngredientExists(string name);
+
+        Task<IEnumerable<Ingredient>> GetIngredientsForRecipe(int id);
+
+        Task<RecipeIngredient> GetRecipeIngredientById(int id);
     }
 }

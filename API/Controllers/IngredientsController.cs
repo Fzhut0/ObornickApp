@@ -20,26 +20,37 @@ namespace API.Controllers
             _uow = uow;
             _mapper = mapper;
         }
-        [HttpGet("getingredient")]
-        public async Task<ActionResult<IEnumerable<RecipeDto>>> GetIngredient(int id)
+        [HttpGet("getrecipeingredients")]
+        public async Task<ActionResult<List<RecipeIngredientDto>>> GetRecipeIngredients(string name)
         {
-            var ingredient = await _uow.IngredientRepository.GetIngredientById(3);
+            var recipe = await _uow.RecipeRepository.GetRecipeByName(name);
+            
 
-            if (ingredient == null)
+            if (recipe == null)
             {
-                return NotFound("Ingredient not found");
+                return NotFound("Recipe not found");
             }
 
-            var recipes = await _uow.RecipeRepository.GetRecipesByIngredientId(3);
+            var ingredients = await _uow.IngredientRepository.GetIngredientsForRecipe(recipe.RecipeId);
 
-            if (recipes == null || !recipes.Any())
+            if(ingredients == null)
             {
-                return NotFound("No recipes found containing this ingredient");
+                return NotFound("Ingredients not found");
             }
 
-            var recipeDtos = _mapper.Map<IEnumerable<RecipeDto>>(recipes);
+            var ingredientsDtoList = new List<RecipeIngredientDto>();
 
-            return Ok(recipeDtos);
+            foreach(var ingredient in ingredients)
+            {
+                var recipeIngredient = await _uow.IngredientRepository.GetRecipeIngredientById(ingredient.IngredientId);
+                var ingredientDto = new RecipeIngredientDto
+                {
+                    IngredientName = ingredient.Name,
+                    Quantity = recipeIngredient.IngredientQuantity
+                };
+                ingredientsDtoList.Add(ingredientDto);
+            }
+            return Ok(ingredientsDtoList);
         }
-            }
+    }
 }

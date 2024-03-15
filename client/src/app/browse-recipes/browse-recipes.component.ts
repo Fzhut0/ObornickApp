@@ -26,6 +26,13 @@ export class BrowseRecipesComponent implements OnInit {
     });
   }
 
+  listRecipeIngredients(name: string)
+  {
+    this.recipeService.getRecipeIngredients(name).subscribe({
+      next: response => console.log(response)
+    })
+  }
+
 
 
 
