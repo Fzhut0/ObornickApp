@@ -34,6 +34,9 @@ builder.Services.Configure<IdentityOptions>(opt =>
 
 });
 
+// var facebookApiKey = builder.Configuration["Facebook:ServiceApiKey"];
+// var facebookPageId = builder.Configuration["Facebook:SenderPageId"];
+// var facebookRecipientId = builder.Configuration["Facebook:RecipientId"];
 
 
 var app = builder.Build();

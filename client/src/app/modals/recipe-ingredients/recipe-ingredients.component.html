@@ -1,0 +1,13 @@
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{recipeName}}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngFor="let ingredient of ingredients">
+    <ul>
+        <li>{{ingredient.ingredientName}}</li>
+        <p>{{ingredient.quantity}}</p>
+    </ul>
+  </div>
+      <button (click)="sendIngredientsAsList()">Wyślij jako liste</button>

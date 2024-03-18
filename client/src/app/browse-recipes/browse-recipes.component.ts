@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RecipesService } from '../_services/recipes.service';
+import { RecipeIngredientsComponent } from '../modals/recipe-ingredients/recipe-ingredients.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-browse-recipes',
@@ -7,10 +9,10 @@ import { RecipesService } from '../_services/recipes.service';
   styleUrls: ['./browse-recipes.component.css']
 })
 export class BrowseRecipesComponent implements OnInit {
-
+  bsModalRef: BsModalRef<RecipeIngredientsComponent> = new BsModalRef<RecipeIngredientsComponent>();
   recipes: any;
 
-  constructor(private recipeService: RecipesService)
+  constructor(private recipeService: RecipesService, private modalService: BsModalService)
   {
 
   }
@@ -26,14 +28,17 @@ export class BrowseRecipesComponent implements OnInit {
     });
   }
 
-  listRecipeIngredients(name: string)
+  openRolesModal(name: string)
   {
-    this.recipeService.getRecipeIngredients(name).subscribe({
-      next: response => console.log(response)
-    })
+    const config =
+    {
+      initialState: {
+        
+        recipeName: name
+        }
+      }
+    this.bsModalRef = this.modalService.show(RecipeIngredientsComponent, config);
+    
   }
-
-
-
 
 }

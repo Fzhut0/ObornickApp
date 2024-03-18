@@ -12,6 +12,8 @@ import { MembersComponent } from './members/members.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowseRecipesComponent } from './browse-recipes/browse-recipes.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { RecipeIngredientsComponent } from './modals/recipe-ingredients/recipe-ingredients.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { BrowseRecipesComponent } from './browse-recipes/browse-recipes.componen
     HomeComponent,
     MembersComponent,
     TextInputComponent,
-    BrowseRecipesComponent
+    BrowseRecipesComponent,
+    RecipeIngredientsComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,8 @@ import { BrowseRecipesComponent } from './browse-recipes/browse-recipes.componen
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    ModalModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

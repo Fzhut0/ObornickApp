@@ -17,6 +17,7 @@ namespace API.Extensions
             services.AddScoped<LogUserActivity>();
             services.AddSignalR();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IFacebookMessageService, FacebookMessageService>();
 
             return services;
         }

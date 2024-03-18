@@ -30,6 +30,6 @@ export class RecipesService {
       }
     })
 
-    return this.httpClient.get<Ingredient>(this.baseUrl + 'Ingredients/getrecipeingredients', {params: params})
+    return this.httpClient.get<Ingredient[]>(this.baseUrl + 'Ingredients/getrecipeingredients', {params: params})
   }
 }
