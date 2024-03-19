@@ -1,3 +1,5 @@
+using System.Web;
+using API.DTOs;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +15,22 @@ namespace API.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult> SendMessage(string msg)
+        [HttpPost("sendmessage")]
+        public async Task<ActionResult> SendMessage([FromBody]MessageDto messageDto)
         {
             var pageId = _facebookMessageService.SenderPageId;
             var recipientId = _facebookMessageService.RecipientId;
             var accessApiKey = _facebookMessageService.ServiceApiKey;
+
+            var msg = messageDto.Message;
+
+            msg = HttpUtility.UrlDecode(msg);
+
+
+            if(msg == null)
+            {
+                return BadRequest("message is null");
+            }
 
             using (var httpClient = new HttpClient())
             {
