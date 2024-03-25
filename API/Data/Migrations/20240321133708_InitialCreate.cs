@@ -191,7 +191,7 @@ namespace API.Data.Migrations
                 {
                     RecipeId = table.Column<int>(type: "integer", nullable: false),
                     IngredientId = table.Column<int>(type: "integer", nullable: false),
-                    IngredientQuantity = table.Column<int>(type: "integer", nullable: false)
+                    IngredientQuantity = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

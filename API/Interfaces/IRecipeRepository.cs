@@ -9,7 +9,7 @@ namespace API.Interfaces
 {
     public interface IRecipeRepository
     {
-        public Task<bool> RecipeExists(string dishName);
+        Task<bool> RecipeExists(string dishName);
 
         Task AddRecipe(Recipe recipe);
 
@@ -17,8 +17,12 @@ namespace API.Interfaces
 
         Task<Recipe> GetRecipeById(int id);
 
-        public Task<IEnumerable<Recipe>> GetRecipesByIngredientId(int ingredientId);
+        Task<IEnumerable<Recipe>> GetRecipesByIngredientId(int ingredientId);
 
         Task<List<Recipe>> GetAllRecipes();
+
+        void DeleteRecipe(Recipe recipe);
+
+
     }
 }

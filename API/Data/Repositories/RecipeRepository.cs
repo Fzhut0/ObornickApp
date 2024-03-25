@@ -47,5 +47,10 @@ namespace API.Data
         {
             return await _context.Recipes.Include(r => r.RecipeIngredients).ToListAsync();
         }
+
+        public void DeleteRecipe(Recipe recipe)
+        {
+             _context.Recipes.Remove(recipe);
+        }
     }
 }

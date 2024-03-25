@@ -2,6 +2,7 @@ using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -18,6 +19,7 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPost("addrecipe")]
         public async Task<ActionResult> AddRecipe([FromBody] RecipeDto recipeDTO)
         {
@@ -117,6 +119,27 @@ namespace API.Controllers
             }
 
             return Ok(recipeDtoList);
+        }
+
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpDelete("deleterecipe")]
+        public async Task<ActionResult> DeleteRecipe(string name)
+        {
+            var recipe = await _uow.RecipeRepository.GetRecipeByName(name);
+
+            if(recipe == null)
+            {
+                return BadRequest("recipe doesn't exist");
+            }
+
+            _uow.RecipeRepository.DeleteRecipe(recipe);
+
+            if(await _uow.Complete())
+            {
+                return Ok();
+            }
+
+            return BadRequest("problem deleting recipe");
         }
 
 

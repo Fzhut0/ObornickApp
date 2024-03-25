@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240313151025_InitialCreate")]
+    [Migration("20240321133708_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -176,8 +176,8 @@ namespace API.Data.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IngredientQuantity")
-                        .HasColumnType("integer");
+                    b.Property<string>("IngredientQuantity")
+                        .HasColumnType("text");
 
                     b.HasKey("RecipeId", "IngredientId");
 

@@ -45,7 +45,6 @@ export class RecipeIngredientsComponent implements OnInit {
 
     console.log(message);
     
-
     this.messagesService.sendMessage(message).subscribe({
       next: response => console.log(response),
       error: error => console.log(error)

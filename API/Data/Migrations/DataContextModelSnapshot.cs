@@ -173,8 +173,8 @@ namespace API.Data.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IngredientQuantity")
-                        .HasColumnType("integer");
+                    b.Property<string>("IngredientQuantity")
+                        .HasColumnType("text");
 
                     b.HasKey("RecipeId", "IngredientId");
 

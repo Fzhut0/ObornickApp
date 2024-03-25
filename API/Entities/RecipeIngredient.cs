@@ -13,7 +13,7 @@ namespace API.Entities
 
         public int IngredientId { get; set; }
 
-        public int IngredientQuantity { get; set; }
+        public string IngredientQuantity { get; set; }
         public Ingredient Ingredient { get; set; }
     }
 }

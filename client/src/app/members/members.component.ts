@@ -53,11 +53,11 @@ export class MembersComponent implements OnInit {
     const values = {...this.recipeForm.value};
     console.log(values);
 
-        this.recipeService.addRecipe(values).subscribe({
+      this.recipeService.addRecipe(values).subscribe({
       error: error => {
         console.log(error)
-      }
-        })
+        }
+      })
     this.resetForm();
   }
 
@@ -66,7 +66,16 @@ export class MembersComponent implements OnInit {
     this.ingredientsArray.clear();
   }
 
-    cancel() {
+  cancel() {
+    this.recipeForm.reset();
+    if (this.ingredientsArray.length > 0)
+    {
+      this.ingredientsArray.clear;
+      for (let i = this.ingredientsArray.length - 1; i >= 0; i--)
+      {
+        this.ingredientsArray.removeAt(i);
+        }
+      }
     this.cancelRecipe.emit(false);
   }
 

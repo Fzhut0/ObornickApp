@@ -45,12 +45,12 @@ public class AccountController : BaseApiController
             return BadRequest("To jest error nr1");
         }
 
-        // var rolesResults = await _userManager.AddToRoleAsync(user, "Member");
+        var rolesResults = await _userManager.AddToRoleAsync(user, "Member");
 
-        // if(!rolesResults.Succeeded)
-        // {
-        //     return BadRequest("to jest error nr2");
-        // }
+        if(!rolesResults.Succeeded)
+        {
+            return BadRequest("to jest error nr2");
+        }
 
         return new UserDto
         {

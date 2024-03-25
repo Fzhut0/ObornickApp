@@ -4,13 +4,13 @@
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
-  <div class="modal-body" *ngFor="let ingredient of ingredients">
-    <ul>
-        <li>{{ingredient.ingredientName}}</li>
-        <p>{{ingredient.quantity}}</p>
-    </ul>
-  </div>
-    <div>
-      
-      <button (click)="sendIngredientsAsList()">Send</button>
+<div class="modal-body">
+  <ul>
+    <li *ngFor="let ingredient of ingredients">
+      <span class="ingredient-name">{{ ingredient.ingredientName }} {{ ingredient.quantity }}</span>
+    </li>
+  </ul>
+</div>
+    <div class="modal-footer">
+      <button class="btn-send" (click)="sendIngredientsAsList()">Send ingredients list</button>
     </div>
