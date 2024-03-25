@@ -19,7 +19,7 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Policy = "RequireAdminRole")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("addrecipe")]
         public async Task<ActionResult> AddRecipe([FromBody] RecipeDto recipeDTO)
         {
@@ -69,6 +69,7 @@ namespace API.Controllers
             return Ok("Recipe added successfully");
         }
 
+        
         [HttpGet("getrecipe-byname")]
         public async Task<ActionResult<RecipeDto>> GetRecipeByName(string name)
         {
@@ -140,6 +141,56 @@ namespace API.Controllers
             }
 
             return BadRequest("problem deleting recipe");
+        }
+        
+        [HttpPut("updaterecipe")]
+        public async Task<ActionResult> UpdateRecipe([FromBody] RecipeDto recipeDTO)
+        {
+            if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any())
+            {
+                return BadRequest("Invalid input");
+            }
+
+            var existingRecipe = await _uow.RecipeRepository.GetRecipeByName(recipeDTO.Name);
+
+            if (existingRecipe == null)
+            {
+                return BadRequest("Recipe not found");
+            }
+
+            existingRecipe.RecipeIngredients.Clear();
+
+            foreach (var ing in recipeDTO.Ingredients)
+            {
+                var ingredient = await _uow.IngredientRepository.GetIngredientByName(ing.IngredientName);
+
+                if (ingredient == null)
+                {
+                    ingredient = new Ingredient
+                    {
+                        Name = ing.IngredientName
+                    };
+                    await _uow.IngredientRepository.AddIngredient(ingredient);
+                    await _uow.Complete();
+                }
+
+                var recipeIngredient = new RecipeIngredient
+                {
+                    Recipe = existingRecipe,
+                    Ingredient = ingredient,
+                    IngredientQuantity = ing.Quantity
+                };
+                existingRecipe.RecipeIngredients.Add(recipeIngredient);
+            }
+
+            _mapper.Map(recipeDTO, existingRecipe);
+
+            if (await _uow.Complete())
+            {
+                return Ok("Recipe updated successfully");
+            }
+
+            return BadRequest("Problem updating recipe");
         }
 
 

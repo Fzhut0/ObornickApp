@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { Ingredient } from 'src/app/_models/ingredient';
 import { Recipe } from 'src/app/_models/recipe';
+import { AccountService } from 'src/app/_services/account.service';
 import { MessagesService } from 'src/app/_services/messages.service';
 import { RecipesService } from 'src/app/_services/recipes.service';
 
@@ -15,7 +16,7 @@ export class RecipeIngredientsComponent implements OnInit {
   ingredients: Ingredient[] = [];
   message: string = '';
 
-  constructor(private recipeService: RecipesService, public bsModalRef: BsModalRef, private messagesService: MessagesService) {
+  constructor(private recipeService: RecipesService, public bsModalRef: BsModalRef, private messagesService: MessagesService, private accountService: AccountService) {
    
   }
 

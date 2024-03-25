@@ -9,5 +9,6 @@ namespace API.DTOs
     {
         public int IngredientId { get; set; }
         public string Name { get; set; }
+
     }
 }

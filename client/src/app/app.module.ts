@@ -14,6 +14,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowseRecipesComponent } from './browse-recipes/browse-recipes.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { RecipeIngredientsComponent } from './modals/recipe-ingredients/recipe-ingredients.component';
+import { HasRoleDirective } from './_directives/has-role.directive';
+import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { RecipeIngredientsComponent } from './modals/recipe-ingredients/recipe-i
     MembersComponent,
     TextInputComponent,
     BrowseRecipesComponent,
-    RecipeIngredientsComponent
+    RecipeIngredientsComponent,
+    HasRoleDirective
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,9 @@ import { RecipeIngredientsComponent } from './modals/recipe-ingredients/recipe-i
     BsDropdownModule.forRoot(),
     ModalModule.forRoot()
   ],
-  providers: [],
+  providers: [
+      { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

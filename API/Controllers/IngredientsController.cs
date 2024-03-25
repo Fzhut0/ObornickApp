@@ -20,12 +20,12 @@ namespace API.Controllers
             _uow = uow;
             _mapper = mapper;
         }
+
         [HttpGet("getrecipeingredients")]
         public async Task<ActionResult<List<RecipeIngredientDto>>> GetRecipeIngredients(string name)
         {
             var recipe = await _uow.RecipeRepository.GetRecipeByName(name);
             
-
             if (recipe == null)
             {
                 return NotFound("Recipe not found");
@@ -42,7 +42,7 @@ namespace API.Controllers
 
             foreach(var ingredient in ingredients)
             {
-                var recipeIngredient = await _uow.IngredientRepository.GetRecipeIngredientById(ingredient.IngredientId);
+                var recipeIngredient = await _uow.IngredientRepository.GetRecipeIngredientById(ingredient.IngredientId, recipe.RecipeId);
                 var ingredientDto = new RecipeIngredientDto
                 {
                     IngredientName = ingredient.Name,

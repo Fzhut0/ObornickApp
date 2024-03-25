@@ -11,6 +11,6 @@
     </li>
   </ul>
 </div>
-    <div class="modal-footer">
+    <div class="modal-footer" *appHasRole="['Admin']">
       <button class="btn-send" (click)="sendIngredientsAsList()">Send ingredients list</button>
     </div>

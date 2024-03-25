@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace API.Data.Repositories
 {
@@ -46,9 +47,9 @@ namespace API.Data.Repositories
             return ingredients;
         }
 
-        public async Task<RecipeIngredient> GetRecipeIngredientById(int id)
+        public async Task<RecipeIngredient> GetRecipeIngredientById(int id, int recipeId)
         {
-            return await _context.RecipeIngredients.FirstOrDefaultAsync(r => r.IngredientId == id);
+            return await _context.RecipeIngredients.FirstOrDefaultAsync(r => r.IngredientId == id && r.RecipeId == recipeId);
         }
     }
 }

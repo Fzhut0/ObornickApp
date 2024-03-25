@@ -3,13 +3,9 @@ using API.Entities;
 using API.Extensions;
 using API.Middleware;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Writers;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 var connString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DataContext>(opt =>
@@ -34,16 +30,11 @@ builder.Services.Configure<IdentityOptions>(opt =>
 
 });
 
-// var facebookApiKey = builder.Configuration["Facebook:ServiceApiKey"];
-// var facebookPageId = builder.Configuration["Facebook:SenderPageId"];
-// var facebookRecipientId = builder.Configuration["Facebook:RecipientId"];
-
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseHttpsRedirection();
 app.UseCors(builder => builder
     .AllowAnyHeader()
     .AllowAnyMethod()
@@ -66,7 +57,7 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<DataContext>();
-        var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
     await Seed.SeedUsers(userManager, roleManager);
