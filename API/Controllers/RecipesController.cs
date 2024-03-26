@@ -151,7 +151,7 @@ public class RecipesController : BaseApiController
             return BadRequest("Invalid input");
         }
 
-        var existingRecipe = await _uow.RecipeRepository.GetRecipeByName(recipeDTO.Name);
+        var existingRecipe = await _uow.RecipeRepository.GetRecipeByName(recipeDTO.OriginalName);
 
         if (existingRecipe == null)
         {
@@ -159,6 +159,7 @@ public class RecipesController : BaseApiController
         }
 
         existingRecipe.RecipeIngredients.Clear();
+        existingRecipe.Name = recipeDTO.Name;
 
 
         foreach (var ing in recipeDTO.Ingredients)
@@ -182,8 +183,7 @@ public class RecipesController : BaseApiController
                 Ingredient = ingredient,
                 IngredientQuantity = ing.Quantity
             };
-            existingRecipe.RecipeIngredients.Add(recipeIngredient);      
-                    
+            existingRecipe.RecipeIngredients.Add(recipeIngredient);                  
         }
         if (await _uow.Complete())
         {

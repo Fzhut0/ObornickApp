@@ -66,13 +66,19 @@ export class RecipeIngredientsComponent implements OnInit {
     modalRef.onHide?.subscribe({
       next: () => {
         this.listRecipeIngredients(modalRef.content?.recipeName)
+        this.changeRecipeName(modalRef.content?.recipeName)
       }
     })
   }
 
-  deleteRecipe(recipe: Recipe)
+  changeRecipeName(name: string)
   {
-    this.recipeService.deleteRecipe(recipe.name).subscribe({
+    this.recipeName = name;
+  }
+
+  deleteRecipe(name: string)
+  {
+    this.recipeService.deleteRecipe(name).subscribe({
       next: () => {
         this.bsModalRef.hide()
         this.bsModalRef.onHide?.subscribe({

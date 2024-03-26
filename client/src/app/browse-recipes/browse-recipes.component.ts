@@ -40,7 +40,11 @@ export class BrowseRecipesComponent implements OnInit {
         }
       }
     this.bsModalRef = this.modalService.show(RecipeIngredientsComponent, config);
-    
+    this.bsModalRef.onHide?.subscribe({
+      next: () => {
+        this.listAddedRecipes()
+      }
+    })
   }
 
 }
