@@ -1,5 +1,7 @@
 using API.DTOs;
+using API.DTOs.CheckLaterLinksModuleDTOS;
 using API.Entities;
+using API.Entities.CheckLaterLinksModuleEntities;
 using API.Extensions;
 using AutoMapper;
 
@@ -16,17 +18,19 @@ public class AutoMapperProfiles : Profile
             .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.RecipeIngredients.Select(ri => ri.Ingredient)));
         
         CreateMap<RecipeDto, Recipe>()
-    .ForMember(dest => dest.RecipeIngredients, opt => opt.MapFrom(src => src.Ingredients.Select(i => new RecipeIngredient 
-    { 
-        Ingredient = new Ingredient 
+        .ForMember(dest => dest.RecipeIngredients, opt => opt.MapFrom(src => src.Ingredients.Select(i => new RecipeIngredient 
         { 
-            Name = i.IngredientName 
-        }, 
-        IngredientQuantity = i.Quantity 
-    })));
+            Ingredient = new Ingredient 
+            { 
+                Name = i.IngredientName 
+            }, 
+            IngredientQuantity = i.Quantity 
+        })));
 
         CreateMap<RecipeIngredientDto, RecipeIngredient>();
         CreateMap<RecipeIngredient, RecipeIngredientDto>();
+
+        CreateMap<CheckLaterLinkDto, CheckLaterLink>();
 
         CreateMap<Ingredient, IngredientDto>();
         CreateMap<Ingredient, RecipeIngredientDto>();

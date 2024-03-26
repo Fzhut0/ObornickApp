@@ -1,4 +1,5 @@
 using API.Entities;
+using API.Entities.CheckLaterLinksModuleEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,28 +18,37 @@ namespace API.Data
 
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
 
+        public DbSet<CheckLaterLink> CheckLaterLinks { get; set; }
+
+        public DbSet<CheckLaterLinkCategory> CheckLaterLinkCategories { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+        {
+            base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<AppUser>().HasMany(ur => ur.UserRoles).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).IsRequired();
+            modelBuilder.Entity<AppUser>().HasMany(ur => ur.UserRoles).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).IsRequired();
 
-        modelBuilder.Entity<AppRole>().HasMany(ur => ur.UserRoles).WithOne(u => u.Role).HasForeignKey(ur => ur.RoleId).IsRequired();
+            modelBuilder.Entity<AppRole>().HasMany(ur => ur.UserRoles).WithOne(u => u.Role).HasForeignKey(ur => ur.RoleId).IsRequired();
+                
+            modelBuilder.Entity<RecipeIngredient>()
+            .HasKey(ri => new { ri.RecipeId, ri.IngredientId });
 
-            
-        modelBuilder.Entity<RecipeIngredient>()
-        .HasKey(ri => new { ri.RecipeId, ri.IngredientId });
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(ri => ri.Recipe)
+                .WithMany(r => r.RecipeIngredients)
+                .HasForeignKey(ri => ri.RecipeId);
 
-        modelBuilder.Entity<RecipeIngredient>()
-            .HasOne(ri => ri.Recipe)
-            .WithMany(r => r.RecipeIngredients)
-            .HasForeignKey(ri => ri.RecipeId);
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(ri => ri.Ingredient)
+                .WithMany(i => i.RecipeIngredients)
+                .HasForeignKey(ri => ri.IngredientId);
 
-        modelBuilder.Entity<RecipeIngredient>()
-            .HasOne(ri => ri.Ingredient)
-            .WithMany(i => i.RecipeIngredients)
-            .HasForeignKey(ri => ri.IngredientId);
-    }
+            modelBuilder.Entity<CheckLaterLink>()
+            .HasOne<CheckLaterLinkCategory>() 
+            .WithMany(clc => clc.CheckLaterLinks) 
+            .HasForeignKey(cll => cll.CategoryId) 
+            .IsRequired();
+        }
     }
 }

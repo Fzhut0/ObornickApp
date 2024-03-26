@@ -5,26 +5,25 @@
 
 .recipe-list {
   list-style: none;
-  padding: 0;
+  padding: 5px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
 
 .recipe-list li {
-  flex: 0 0 calc(25% - 30px);
-  max-width: calc(25% - 30px);
-  margin: 15px;
+
 }
 
 .recipe-button {
-  margin: 20px;
+  margin: 15px;
   padding: 20px;
   background-color: #add8e6;
   border: none;
   border-radius: 10px;
   font-family: Arial, sans-serif;
   cursor: pointer;
+  width: auto;
 }
 
 .recipe-button:hover {

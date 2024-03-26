@@ -1,3 +1,5 @@
+using API.Interfaces.CheckLaterLinksModuleInterfaces;
+
 namespace API.Interfaces
 {
     public interface IUnitOfWork
@@ -7,6 +9,10 @@ namespace API.Interfaces
         IRecipeRepository RecipeRepository{ get; }
 
         IIngredientRepository IngredientRepository { get; }
+
+        ICheckLaterLinkRepository CheckLaterLinkRepository { get; }
+
+        ICheckLaterLinkCategoryRepository CheckLaterLinkCategoryRepository { get; }
 
         Task<bool> Complete();
 

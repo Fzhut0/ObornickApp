@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data.Repositories;
+using API.Data.Repositories.CheckLaterLinksRepositories;
 using API.Entities;
 using API.Interfaces;
+using API.Interfaces.CheckLaterLinksModuleInterfaces;
 using AutoMapper;
 
 namespace API.Data
@@ -25,6 +27,10 @@ namespace API.Data
         public IRecipeRepository RecipeRepository => new RecipeRepository(_context);
 
         public IIngredientRepository IngredientRepository => new IngredientRepository(_context);
+
+        public ICheckLaterLinkRepository CheckLaterLinkRepository => new CheckLaterLinkRepository(_context);
+
+        public ICheckLaterLinkCategoryRepository CheckLaterLinkCategoryRepository => new CheckLaterLinkCategoryRepository(_context);
 
         public async Task<bool> Complete()
         {

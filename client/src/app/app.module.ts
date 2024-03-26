@@ -21,6 +21,7 @@ import { EditRecipeComponent } from './modals/edit-recipe/edit-recipe.component'
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AddRecipesComponent } from './recipe-components/add-recipes/add-recipes.component';
 import { BrowseRecipesComponent } from './recipe-components/browse-recipes/browse-recipes.component';
+import { BaseRecipesComponent } from './recipe-components/base-recipes/base-recipes.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { BrowseRecipesComponent } from './recipe-components/browse-recipes/brows
     HasRoleDirective,
     EditRecipeComponent,
     AddRecipesComponent,
+    BaseRecipesComponent,
 
   ],
   imports: [
