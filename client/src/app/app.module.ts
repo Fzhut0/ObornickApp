@@ -16,6 +16,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { RecipeIngredientsComponent } from './modals/recipe-ingredients/recipe-ingredients.component';
 import { HasRoleDirective } from './_directives/has-role.directive';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
+import { ToastrModule } from 'ngx-toastr';
+import { ErrorInterceptor } from './_interceptors/error.interceptor';
+import { EditRecipeComponent } from './modals/edit-recipe/edit-recipe.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,9 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
     TextInputComponent,
     BrowseRecipesComponent,
     RecipeIngredientsComponent,
-    HasRoleDirective
+    HasRoleDirective,
+    EditRecipeComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -37,9 +42,13 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
     FormsModule,
     ReactiveFormsModule,
     BsDropdownModule.forRoot(),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    ToastrModule.forRoot({
+    positionClass: 'toast-bottom-right'
+    })
   ],
   providers: [
+      { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
       { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]

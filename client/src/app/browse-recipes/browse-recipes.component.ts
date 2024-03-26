@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RecipesService } from '../_services/recipes.service';
 import { RecipeIngredientsComponent } from '../modals/recipe-ingredients/recipe-ingredients.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Recipe } from '../_models/recipe';
 
 @Component({
   selector: 'app-browse-recipes',
@@ -28,13 +29,14 @@ export class BrowseRecipesComponent implements OnInit {
     });
   }
 
-  openRolesModal(name: string)
+  openRolesModal(recipe: Recipe)
   {
     const config =
     {
       initialState: {
         
-        recipeName: name
+        recipeName: recipe.name,
+        selectedRecipe: recipe
         }
       }
     this.bsModalRef = this.modalService.show(RecipeIngredientsComponent, config);

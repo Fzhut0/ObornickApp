@@ -1,5 +1,5 @@
 <ul class="recipe-list">
   <li *ngFor="let recipe of recipes">
-    <button class="recipe-button" (click)="openRolesModal(recipe.name)">{{ recipe.name }}</button>
+    <button class="recipe-button" (click)="openRolesModal(recipe)">{{ recipe.name }}</button>
   </li>
 </ul>

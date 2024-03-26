@@ -1,16 +1,16 @@
-  <div class="modal-header">
-    <h4 class="modal-title pull-left">{{recipeName}}</h4>
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{ recipeName }}</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
-  </div>
-<div class="modal-body">
-  <ul>
-    <li *ngFor="let ingredient of ingredients">
-      <span class="ingredient-name">{{ ingredient.ingredientName }} {{ ingredient.quantity }}</span>
-    </li>
-  </ul>
 </div>
-    <div class="modal-footer" *appHasRole="['Admin']">
-      <button class="btn-send" (click)="sendIngredientsAsList()">Send ingredients list</button>
-    </div>
+<div class="modal-body">
+    <h6>Ingredients:</h6>
+    <ul>
+        <li *ngFor="let ingredient of ingredients">{{ ingredient.ingredientName }} - {{ ingredient.quantity }}</li>
+    </ul>
+</div>
+<div class="modal-footer" *appHasRole="['Admin']">
+    <button class="btn-send" (click)="sendIngredientsAsList()">Send ingredients list</button>
+    <button class="btn btn-primary" (click)="openEditRecipeModal(selectedRecipe)">Edit Recipe</button>
+</div>

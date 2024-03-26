@@ -14,7 +14,7 @@ export class RecipesService {
 
   addRecipe(model: any)
   {
-    return this.httpClient.post<Recipe>(this.baseUrl + 'recipes/addrecipe', model);
+    return this.httpClient.post(this.baseUrl + 'recipes/addrecipe', model, {responseType: 'text'});
   }
 
   getAllRecipes()
@@ -30,5 +30,9 @@ export class RecipesService {
       }
     })
     return this.httpClient.get<Ingredient[]>(this.baseUrl + 'Ingredients/getrecipeingredients', {params: params})
+  }
+
+  editRecipe(model: any) {
+    return this.httpClient.put(this.baseUrl + 'recipes/updaterecipe', model, {responseType: 'text'});
   }
 }

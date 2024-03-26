@@ -5,6 +5,7 @@ import { Recipe } from 'src/app/_models/recipe';
 import { AccountService } from 'src/app/_services/account.service';
 import { MessagesService } from 'src/app/_services/messages.service';
 import { RecipesService } from 'src/app/_services/recipes.service';
+import { EditRecipeComponent } from '../edit-recipe/edit-recipe.component';
 
 @Component({
   selector: 'app-recipe-ingredients',
@@ -15,8 +16,9 @@ export class RecipeIngredientsComponent implements OnInit {
   recipeName: any;
   ingredients: Ingredient[] = [];
   message: string = '';
+  selectedRecipe!: Recipe;
 
-  constructor(private recipeService: RecipesService, public bsModalRef: BsModalRef, private messagesService: MessagesService, private accountService: AccountService) {
+  constructor(private recipeService: RecipesService, public bsModalRef: BsModalRef, private messagesService: MessagesService, private modalService: BsModalService) {
    
   }
 
@@ -33,14 +35,12 @@ export class RecipeIngredientsComponent implements OnInit {
   sendIngredientsAsList() {
     var message = '';
 
-    if (this.ingredients.length > 0 && this.recipeName.length > 0)
-    {
-      message = `Do zrobienia ${this.recipeName} potrzebujesz:\\n`   
+    if (this.ingredients.length > 0 && this.recipeName.length > 0) {
+      message = `Do zrobienia ${this.recipeName} potrzebujesz:\\n`
     }
-      for (let i = 0; i < this.ingredients.length; i++)
-      {
-        message = message.concat(`${this.ingredients[i].ingredientName} ${this.ingredients[i].quantity}\\n`);
-      }
+    for (let i = 0; i < this.ingredients.length; i++) {
+      message = message.concat(`${this.ingredients[i].ingredientName} ${this.ingredients[i].quantity}\\n`);
+    }
     
     message = encodeURIComponent(message);
 
@@ -52,5 +52,22 @@ export class RecipeIngredientsComponent implements OnInit {
     });
   }
 
+  openEditRecipeModal(recipe: Recipe) {
+    const config =
+    {
+      initialState: {
+        
+        recipeName: recipe.name,
+        selectedRecipe: recipe,
+        ingredients: this.ingredients
+      }
+    }
+    const modalRef = this.modalService.show(EditRecipeComponent, config);
+    modalRef.onHide?.subscribe({
+      next: () => {
+        this.listRecipeIngredients(modalRef.content?.recipeName)
+      }
+    })
+  }
 }
 

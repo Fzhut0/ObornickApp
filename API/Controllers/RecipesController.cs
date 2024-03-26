@@ -187,7 +187,7 @@ namespace API.Controllers
 
             if (await _uow.Complete())
             {
-                return Ok("Recipe updated successfully");
+                return Ok("Recipe updated");
             }
 
             return BadRequest("Problem updating recipe");

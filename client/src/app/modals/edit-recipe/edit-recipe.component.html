@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{ recipeName }}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+
+<form [formGroup]="recipeForm" (ngSubmit)="editRecipe()" class="recipe-form">
+  <label>
+    Recipe Name:
+    <input type="text" formControlName="name" class="form-control">
+  </label>
+  <br>
+  <div formArrayName="ingredients" class="ingredient-container">
+    <div *ngFor="let ingredient of ingredientsArray.controls; let i = index" class="ingredient-row">
+      <div [formGroupName]="i">
+        <label>
+          Ingredient Name:
+          <input type="text" formControlName="ingredientName" class="form-control">
+        </label>
+        <label>
+          Quantity:
+          <input type="text" formControlName="quantity" class="form-control">
+        </label>
+        <button type="button" (click)="removeIngredient(i)" class="remove-btn">Remove Ingredient</button>
+      </div>
+    </div>
+  </div>
+  <button type="button" (click)="addIngredientInForm()" class="add-ingredient-btn">Add Ingredient</button>
+  <br>
+  <button type="submit" class="submit-btn">Update recipe</button>
+  <button type="button" (click)="cancel()" class="cancel-btn">Cancel</button>
+</form>
