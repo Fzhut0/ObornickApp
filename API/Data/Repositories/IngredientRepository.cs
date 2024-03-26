@@ -35,7 +35,7 @@ namespace API.Data.Repositories
 
         public async Task<Ingredient> GetIngredientByName(string name)
         {
-            return await _context.Ingredients.FirstOrDefaultAsync(i => i.Name == name);
+            return await _context.Ingredients.FirstOrDefaultAsync(i => i.Name.ToLower() == name.ToLower());
         }
 
         public async Task<IEnumerable<Ingredient>> GetIngredientsForRecipe(int recipeId)
