@@ -11,7 +11,6 @@ import { HomeComponent } from './home/home.component';
 import { MembersComponent } from './members/members.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { BrowseRecipesComponent } from './browse-recipes/browse-recipes.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { RecipeIngredientsComponent } from './modals/recipe-ingredients/recipe-ingredients.component';
 import { HasRoleDirective } from './_directives/has-role.directive';
@@ -19,6 +18,9 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { ErrorInterceptor } from './_interceptors/error.interceptor';
 import { EditRecipeComponent } from './modals/edit-recipe/edit-recipe.component';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { AddRecipesComponent } from './recipe-components/add-recipes/add-recipes.component';
+import { BrowseRecipesComponent } from './recipe-components/browse-recipes/browse-recipes.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { EditRecipeComponent } from './modals/edit-recipe/edit-recipe.component'
     RecipeIngredientsComponent,
     HasRoleDirective,
     EditRecipeComponent,
+    AddRecipesComponent,
 
   ],
   imports: [
@@ -45,7 +48,8 @@ import { EditRecipeComponent } from './modals/edit-recipe/edit-recipe.component'
     ModalModule.forRoot(),
     ToastrModule.forRoot({
     positionClass: 'toast-bottom-right'
-    })
+    }),
+    TabsModule.forRoot()
   ],
   providers: [
       { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
