@@ -1,6 +1,6 @@
 <div class="modal-header">
-    <h4 class="modal-title pull-left">{{ recipeName }}</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <h4 class="modal-title">{{ recipeName }}</h4>
+    <button type="button" class="btn-close close" aria-label="Close" (click)="bsModalRef.hide()">
         <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
 </div>
@@ -13,4 +13,6 @@
 <div class="modal-footer" *appHasRole="['Admin']">
     <button class="btn-send" (click)="sendIngredientsAsList()">Send ingredients list</button>
     <button class="btn btn-primary" (click)="openEditRecipeModal(selectedRecipe)">Edit Recipe</button>
+    <button class="btn btn-danger" (click)="deleteRecipe(selectedRecipe)">Delete Recipe</button>
+
 </div>

@@ -1,14 +1,16 @@
-.modal-footer{
+.modal-footer {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.btn-send {
-    background-color: #4CAF50; 
+.btn-send,
+.btn-edit,
+.btn-delete {
+    background-color: #4CAF50;
     border: none;
     color: white;
-    padding: 15px 15px;
+    padding: 10px 15px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -16,12 +18,44 @@
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 10px;
+    transition: background-color 0.3s ease;
+    line-height: 1;
 }
 
-    .btn-send:hover {
+.modal-title {
+    flex: 1;
+    overflow-wrap: break-word;
+    max-width: 90%;
+}
+
+.btn-send:hover {
     background-color: #45a049;
-    }
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.btn-send:active,
+.btn-edit:active,
+.btn-delete:active {
+    transform: translateY(1px);
+}
+
 .ingredient-name {
-  display: inline-block;
-  width: 70%; 
+    display: inline-block;
+    width: 70%;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+}
+
+.btn-close {
+    margin-left: auto;
 }

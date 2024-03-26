@@ -19,7 +19,7 @@ public class RecipesController : BaseApiController
         _mapper = mapper;
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdminRole")]
     [HttpPost("addrecipe")]
     public async Task<ActionResult> AddRecipe([FromBody] RecipeDto recipeDTO)
     {
@@ -146,7 +146,7 @@ public class RecipesController : BaseApiController
     [HttpPut("updaterecipe")]
     public async Task<ActionResult> UpdateRecipe([FromBody] RecipeDto recipeDTO)
     {
-        if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any())
+        if (recipeDTO == null || recipeDTO.Ingredients == null)
         {
             return BadRequest("Invalid input");
         }
@@ -158,7 +158,7 @@ public class RecipesController : BaseApiController
             return BadRequest("Recipe not found");
         }
 
-            existingRecipe.RecipeIngredients.Clear();
+        existingRecipe.RecipeIngredients.Clear();
 
 
         foreach (var ing in recipeDTO.Ingredients)

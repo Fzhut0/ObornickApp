@@ -35,4 +35,14 @@ export class RecipesService {
   editRecipe(model: any) {
     return this.httpClient.put(this.baseUrl + 'recipes/updaterecipe', model, {responseType: 'text'});
   }
+
+  deleteRecipe(model: string)
+  {
+    const params = new HttpParams({
+      fromObject: {
+        name: model
+      }
+    })
+    return this.httpClient.delete(this.baseUrl + 'recipes/deleterecipe', {params: params})
+  }
 }

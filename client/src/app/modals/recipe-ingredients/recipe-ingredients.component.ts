@@ -69,5 +69,19 @@ export class RecipeIngredientsComponent implements OnInit {
       }
     })
   }
+
+  deleteRecipe(recipe: Recipe)
+  {
+    this.recipeService.deleteRecipe(recipe.name).subscribe({
+      next: () => {
+        this.bsModalRef.hide()
+        this.bsModalRef.onHide?.subscribe({
+          next: () => {
+            window.location.reload();
+          }
+        })
+      }
+    });
+  }
 }
 
