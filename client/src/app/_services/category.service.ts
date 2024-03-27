@@ -23,4 +23,14 @@ export class CategoryService {
     return this.httpClient.post(this.baseUrl + 'CheckLaterLinksCategories/addcategory', category, {responseType: 'text'})
   }
 
+  deleteCategory(name: string)
+  {
+    const params = new HttpParams({
+      fromObject: {
+        name: name
+      }
+    })
+    return this.httpClient.delete(this.baseUrl + 'CheckLaterLinksCategories/deletecategory', {params: params})
+  }
+
 }

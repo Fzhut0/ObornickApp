@@ -62,6 +62,29 @@ namespace API.Controllers.CheckLaterLinksControllers
             return Ok("link added");
         }
 
+        [HttpPut("setlinkviewed")]
+        public async Task<ActionResult> SetLinkAsViewed([FromBody] CheckLaterLinkDto checkLaterLinkDto)
+        {
+            var link = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(checkLaterLinkDto.CustomName);
+
+            if(link == null)
+            {
+                return BadRequest("link doesn't exist");
+            }
+
+            var viewedCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(2); // id = 2 is viewed category, id = 1 is default category
+
+            link.CategoryId = viewedCategory.CategoryId;
+
+            if(await _uow.Complete())
+            {
+                return Ok();
+            }
+
+            return BadRequest("something wrong with updating link");
+
+        }
+
         [HttpDelete("deletelink")]
         public async Task<ActionResult> DeleteLink(string name)
         {

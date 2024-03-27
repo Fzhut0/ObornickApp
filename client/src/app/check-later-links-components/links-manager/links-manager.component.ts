@@ -36,12 +36,20 @@ export class LinksManagerComponent implements OnInit {
 
   addCategory(name: string) {
     this.categoryService.addCategory(name).subscribe({
+      next: () => {
+        this.getCategories()
+      },
       error: error => console.log(error)
     });
   }
 
   markAsWatched(link: Link) {
-    
+    this.linksService.markLinkAsWatched(link).subscribe({
+      next: () => {
+        this.getCategories()
+      },
+      error: error => console.log(error)
+    })
   }
 
   removeLink(name: string) {
@@ -66,9 +74,14 @@ export class LinksManagerComponent implements OnInit {
     );
   }
 
-  openPopup()
+  openPopup(name: string)
   {
-    console.log("dupa")
+    this.categoryService.deleteCategory(name).subscribe({
+      next: () => {
+        this.getCategories()
+      },
+      error: error => console.log(error)
+    })
   }
 
 }
