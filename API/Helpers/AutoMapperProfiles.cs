@@ -1,3 +1,4 @@
+using API.Data.Repositories.CheckLaterLinksRepositories;
 using API.DTOs;
 using API.DTOs.CheckLaterLinksModuleDTOS;
 using API.Entities;
@@ -31,6 +32,11 @@ public class AutoMapperProfiles : Profile
         CreateMap<RecipeIngredient, RecipeIngredientDto>();
 
         CreateMap<CheckLaterLinkDto, CheckLaterLink>();
+        CreateMap<CheckLaterLink, CheckLaterLinkDto>();
+
+        CreateMap<CheckLaterLinkCategory, CheckLaterLinkCategoryDto>()
+                .ForMember(dest => dest.CustomName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Links, opt => opt.MapFrom(src => src.CheckLaterLinks));
 
         CreateMap<Ingredient, IngredientDto>();
         CreateMap<Ingredient, RecipeIngredientDto>();

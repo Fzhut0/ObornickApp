@@ -37,9 +37,14 @@ namespace API.Data.Repositories.CheckLaterLinksRepositories
             return await _context.CheckLaterLinks.FirstOrDefaultAsync(r => r.CustomName == name);
         }
 
-        public async Task<bool> LinkExists(string name)
+        public async Task<CheckLaterLink> GetCheckLaterLinkByUrl(string url)
         {
-            return await _context.CheckLaterLinks.AnyAsync(t => t.CustomName == name);
+            return await _context.CheckLaterLinks.FirstOrDefaultAsync(r => r.SavedUrl == url);
+        }
+
+        public async Task<bool> LinkExists(string url)
+        {
+            return await _context.CheckLaterLinks.AnyAsync(t => t.SavedUrl == url);
         }
     }
 }

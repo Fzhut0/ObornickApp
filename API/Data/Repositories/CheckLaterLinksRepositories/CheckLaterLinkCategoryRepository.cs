@@ -27,6 +27,11 @@ namespace API.Data.Repositories.CheckLaterLinksRepositories
             return await _context.CheckLaterLinkCategories.AnyAsync(t => t.Name == name);
         }
 
+        public async Task<ICollection<CheckLaterLinkCategory>> GetAllCategories()
+        {
+            return await _context.CheckLaterLinkCategories.Include(t => t.CheckLaterLinks).ToListAsync();
+        }
+
         public async Task<CheckLaterLinkCategory> GetCategoryByName(string name)
         {
             return await _context.CheckLaterLinkCategories.FirstOrDefaultAsync(t => t.Name == name);

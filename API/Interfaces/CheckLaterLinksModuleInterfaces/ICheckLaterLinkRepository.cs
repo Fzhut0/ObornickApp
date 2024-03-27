@@ -17,6 +17,8 @@ namespace API.Interfaces.CheckLaterLinksModuleInterfaces
 
         Task<CheckLaterLink> GetCheckLaterLinkById(int id);
 
+        Task<CheckLaterLink> GetCheckLaterLinkByUrl(string url);
+
         void DeleteLink(CheckLaterLink checkLaterLink);
     }
 }

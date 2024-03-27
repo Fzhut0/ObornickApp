@@ -22,6 +22,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AddRecipesComponent } from './recipe-components/add-recipes/add-recipes.component';
 import { BrowseRecipesComponent } from './recipe-components/browse-recipes/browse-recipes.component';
 import { BaseRecipesComponent } from './recipe-components/base-recipes/base-recipes.component';
+import { LinksManagerComponent } from './check-later-links-components/links-manager/links-manager.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { BaseRecipesComponent } from './recipe-components/base-recipes/base-reci
     EditRecipeComponent,
     AddRecipesComponent,
     BaseRecipesComponent,
+    LinksManagerComponent,
 
   ],
   imports: [

@@ -13,5 +13,7 @@ namespace API.Interfaces.CheckLaterLinksModuleInterfaces
         Task AddCategory(CheckLaterLinkCategory checkLaterLinkCategory);
 
         Task<CheckLaterLinkCategory> GetCategoryByName(string name);
+
+        Task<ICollection<CheckLaterLinkCategory>> GetAllCategories();
     }
 }

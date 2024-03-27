@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs.CheckLaterLinksModuleDTOS;
 using API.Entities.CheckLaterLinksModuleEntities;
+using API.Extensions;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -28,12 +29,21 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             if(!categoryExists)
             {
-                var newCategory = new CheckLaterLinkCategory
-                {
-                    Name = laterLinkDto.CategoryName
-                };
-                await _uow.CheckLaterLinkCategoryRepository.AddCategory(newCategory);
-                await _uow.Complete();
+                return BadRequest("Category doesn't exist");
+            }
+
+            if(!HttpExtensions.CheckLinkValidity(laterLinkDto.SavedUrl))
+            {
+                return BadRequest("link is incorrect");
+            }
+
+            var existingLinkName = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(laterLinkDto.CustomName);
+            var existingLinkUrl = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByUrl(laterLinkDto.SavedUrl);
+
+            if(existingLinkName != null || existingLinkUrl != null)
+            {
+                
+                return BadRequest("Link is already added with name:" + existingLinkName.CustomName);
             }
 
             var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryByName(laterLinkDto.CategoryName);
@@ -50,7 +60,6 @@ namespace API.Controllers.CheckLaterLinksControllers
             await _uow.Complete();
 
             return Ok("link added");
-
         }
     }
 }

@@ -1,0 +1,44 @@
+<div class="container">
+  <tabset>
+    <tab heading="Add Link">
+      <div class="link-form">
+        <input type="text" [(ngModel)]="newLink.savedUrl" name="savedUrl" #savedUrl="ngModel" placeholder="URL" required pattern="https?://.+">
+        <div *ngIf="savedUrl.invalid && (savedUrl.dirty || savedUrl.touched)" class="text-danger">
+          <div *ngIf="savedUrl.errors?.['required']">
+            URL is required.
+          </div>
+          <div *ngIf="savedUrl.errors?.['pattern']">
+            Please enter a valid URL.
+          </div>
+        </div>
+        <input type="text" [(ngModel)]="newLink.customName" name="customName" placeholder="Link Name">
+        <p>Select category:</p>
+        <select [(ngModel)]="newLink.categoryName">
+          <option *ngFor="let category of categories">{{ category.customName }}</option>
+        </select>
+        <button class="btn btn-primary" [disabled]="savedUrl.invalid" (click)="addLink()">Add Link</button>
+      </div>
+    </tab>
+    <tab heading="Add Category">
+      <div class="category-form">
+        <input type="text" [(ngModel)]="newCategory" placeholder="New Category">
+        <button class="btn btn-primary" (click)="addCategory()">Add Category</button>
+      </div>
+    </tab>
+    <tab heading="Manage Links">
+      <tabset>
+        <ng-container *ngFor="let category of categories">
+          <tab [heading]="category.customName">
+            <div class="links">
+              <div *ngFor="let link of category.links" class="link">
+                <a href="{{ link.savedUrl }}" target="_blank">{{ link.customName }}</a>
+                <button class="btn btn-primary" (click)="markAsWatched(link)">Mark as Watched</button>
+                <button class="btn btn-danger">Remove</button>
+              </div>
+            </div>
+          </tab>
+        </ng-container>
+      </tabset>
+    </tab>
+  </tabset>
+</div>

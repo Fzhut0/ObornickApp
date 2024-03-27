@@ -1,0 +1,78 @@
+.link-manager {
+  display: flex;
+  justify-content: space-between;
+}
+
+.link-form,
+.category-form {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.link-form input,
+.category-form input,
+.link-form select {
+  width: calc(100% - 20px);
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.link-form button,
+.category-form button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.link-form button:hover,
+.category-form button:hover {
+  background-color: #0056b3;
+}
+
+.links {
+  height: 300px;
+  overflow-y: auto;
+}
+
+.link {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.link a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  flex-grow: 1;
+}
+
+.link button {
+  margin-left: 10px;
+}
+
+.link button.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.link button.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}

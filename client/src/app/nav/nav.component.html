@@ -6,6 +6,9 @@
             <li class="nav-item">
               <a class="nav-link" routerLink="/recipes">Recipes module</a>
             </li>
+            <li>
+              <a class="nav-link" routerLink="/link-manager">Nata module</a>
+            </li>
             
           </ng-container>
         </ul>
@@ -15,7 +18,6 @@
           <div class="dropdown-menu" *dropdownMenu>
             <a class="dropdown-item" (click)="logout()">Logout</a>
           </div>
-
         </div>
 
         <form #loginForm="ngForm" *ngIf="!(accountService.currentUser$ | async)" class="d-flex" (ngSubmit)="login()">
