@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Category } from '../_models/category';
@@ -17,10 +17,14 @@ export class LinksService {
     return this.httpClient.post(this.baseUrl + 'CheckLaterLink/addlink', model, {responseType: 'text'});
   }
 
-  getCategories()
+  deleteLink(model: string)
   {
-    return this.httpClient.get<Category[]>(this.baseUrl + 'CheckLaterLinksCategories/getcategories');
+    const params = new HttpParams({
+      fromObject: {
+        name: model
+      }
+    })
+    return this.httpClient.delete(this.baseUrl + 'CheckLaterLink/deletelink', {params: params})
   }
-
-  
+ 
 }

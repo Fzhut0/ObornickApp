@@ -48,7 +48,7 @@ namespace API.Data
             .HasOne<CheckLaterLinkCategory>() 
             .WithMany(clc => clc.CheckLaterLinks) 
             .HasForeignKey(cll => cll.CategoryId) 
-            .IsRequired();
+            .IsRequired().OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

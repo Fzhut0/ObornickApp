@@ -61,5 +61,25 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             return Ok("link added");
         }
+
+        [HttpDelete("deletelink")]
+        public async Task<ActionResult> DeleteLink(string name)
+        {
+            var link = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(name);
+
+            if(link == null)
+            {
+                return BadRequest("link doesn't exist");
+            }
+
+            _uow.CheckLaterLinkRepository.DeleteLink(link);
+
+            if(await _uow.Complete())
+            {
+                return Ok();
+            }
+
+            return BadRequest("link wasn't deleted");
+        }
     }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from 'src/app/_models/category';
 import { Link } from 'src/app/_models/link';
+import { CategoryService } from 'src/app/_services/category.service';
 import { LinksService } from 'src/app/_services/links.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class LinksManagerComponent implements OnInit {
   };
   newCategory: string = '';
 
-  constructor(private linksService: LinksService) { }
+  constructor(private linksService: LinksService, private categoryService: CategoryService) { }
 
   ngOnInit(): void {
     this.getCategories();
@@ -33,16 +34,22 @@ export class LinksManagerComponent implements OnInit {
    })  
   }
 
-  addCategory() {
-    
+  addCategory(name: string) {
+    this.categoryService.addCategory(name).subscribe({
+      error: error => console.log(error)
+    });
   }
 
   markAsWatched(link: Link) {
     
   }
 
-  removeLink(index: number) {
-    this.links.splice(index, 1);
+  removeLink(name: string) {
+    this.linksService.deleteLink(name).subscribe({
+      next: () => {
+        this.getCategories();
+      }    
+    })
   }
 
   filteredLinks(category: Category): Link[] {
@@ -51,12 +58,17 @@ export class LinksManagerComponent implements OnInit {
 
   getCategories()
   {
-    this.linksService.getCategories().subscribe(
+    this.categoryService.getCategories().subscribe(
       response => {
         this.categories = response;
         console.log(response)
       }
     );
+  }
+
+  openPopup()
+  {
+    console.log("dupa")
   }
 
 }

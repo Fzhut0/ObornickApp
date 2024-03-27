@@ -44,6 +44,31 @@ namespace API.Controllers.CheckLaterLinksControllers
             return BadRequest("something wrong with adding category");
         }
 
+        [HttpDelete("deletecategory")]
+        public async Task<ActionResult> DeleteCategory(string name)
+        {
+            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryByName(name);
+
+            if(category == null)
+            {
+                return BadRequest("category doesn't exist");
+            }
+
+            if(category.CategoryId == 1 || category.CategoryId == 2)
+            {
+                return BadRequest("can't delete this");
+            }
+
+            _uow.CheckLaterLinkCategoryRepository.DeleteCategory(category);
+
+            if(await _uow.Complete())
+            {
+                return Ok();
+            }
+
+            return BadRequest("problem deleting category");
+        }
+
         [HttpGet("getcategories")]
         public async Task<ActionResult<List<CheckLaterLinkCategoryDto>>> GetAllCategories()
         {

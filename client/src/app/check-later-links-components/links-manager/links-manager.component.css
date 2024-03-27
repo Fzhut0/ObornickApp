@@ -76,3 +76,38 @@
   color: #fff;
   border-color: #dc3545;
 }
+
+.tab-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-name {
+  margin-right: 25px;
+}
+
+.close-button {
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  background-color: rgba(0, 0, 0, 0.1);
+  font-size: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  line-height: 0;
+}
+
+.close-button:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.close-button:focus {
+  outline: none;
+}
+
