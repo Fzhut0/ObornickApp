@@ -15,6 +15,8 @@ namespace API.Interfaces.CheckLaterLinksModuleInterfaces
 
         Task<CheckLaterLinkCategory> GetCategoryByName(string name);
 
+        Task<CheckLaterLinkCategory> GetCategoryById(int id);
+
         Task<ICollection<CheckLaterLinkCategory>> GetAllCategories();
 
         void DeleteCategory(CheckLaterLinkCategory checkLaterLinkCategory);

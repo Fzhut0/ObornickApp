@@ -59,6 +59,17 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("can't delete this");
             }
 
+            if(category.CheckLaterLinks.Count > 0)
+            {
+                var defaultCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(1);
+
+                foreach(var link in category.CheckLaterLinks)
+                {
+                    link.CategoryId = defaultCategory.CategoryId;
+                    defaultCategory.CheckLaterLinks.Add(link);
+                }
+            }
+
             _uow.CheckLaterLinkCategoryRepository.DeleteCategory(category);
 
             if(await _uow.Complete())

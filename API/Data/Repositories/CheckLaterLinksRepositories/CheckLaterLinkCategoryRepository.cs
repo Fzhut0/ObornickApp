@@ -37,9 +37,14 @@ namespace API.Data.Repositories.CheckLaterLinksRepositories
             return await _context.CheckLaterLinkCategories.Include(t => t.CheckLaterLinks).ToListAsync();
         }
 
+        public async Task<CheckLaterLinkCategory> GetCategoryById(int id)
+        {
+            return await _context.CheckLaterLinkCategories.Include(l => l.CheckLaterLinks).FirstOrDefaultAsync(t => t.CategoryId == id);
+        }
+
         public async Task<CheckLaterLinkCategory> GetCategoryByName(string name)
         {
-            return await _context.CheckLaterLinkCategories.FirstOrDefaultAsync(t => t.Name == name);
+            return await _context.CheckLaterLinkCategories.Include(l => l.CheckLaterLinks).FirstOrDefaultAsync(t => t.Name == name);
         }
     }
 }
