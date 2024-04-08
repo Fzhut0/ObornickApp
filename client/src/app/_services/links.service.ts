@@ -13,16 +13,23 @@ export class LinksService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addLink(model: any)
+  addLink(link: Link, username: string)
   {
-    return this.httpClient.post(this.baseUrl + 'CheckLaterLink/addlink', model, {responseType: 'text'});
+    const requestBody = {
+      customName: link.customName,
+      savedUrl: link.savedUrl,
+      categoryName: link.categoryName,
+      username: username
+    }
+    return this.httpClient.post(this.baseUrl + 'CheckLaterLink/addlink', requestBody, {responseType: 'text'});
   }
 
-  deleteLink(model: string)
+  deleteLink(name: string, username: string)
   {
     const params = new HttpParams({
       fromObject: {
-        name: model
+        name: name,
+        username: username
       }
     })
     return this.httpClient.delete(this.baseUrl + 'CheckLaterLink/deletelink', {params: params})

@@ -6,6 +6,7 @@ import { AccountService } from 'src/app/_services/account.service';
 import { MessagesService } from 'src/app/_services/messages.service';
 import { RecipesService } from 'src/app/_services/recipes.service';
 import { EditRecipeComponent } from '../edit-recipe/edit-recipe.component';
+import { User } from 'src/app/_models/user';
 
 @Component({
   selector: 'app-recipe-ingredients',
@@ -17,8 +18,10 @@ export class RecipeIngredientsComponent implements OnInit {
   ingredients: Ingredient[] = [];
   message: string = '';
   selectedRecipe!: Recipe;
+  user: User | undefined;
 
-  constructor(private recipeService: RecipesService, public bsModalRef: BsModalRef, private messagesService: MessagesService, private modalService: BsModalService) {
+  constructor(private recipeService: RecipesService, public bsModalRef: BsModalRef, private messagesService: MessagesService,
+    private modalService: BsModalService, public accountService: AccountService) {
    
   }
 
@@ -32,7 +35,7 @@ export class RecipeIngredientsComponent implements OnInit {
     })
   }
 
-  sendIngredientsAsList() {
+  sendIngredientsAsList(username: string) {
     var message = '';
 
     if (this.ingredients.length > 0 && this.recipeName.length > 0) {
@@ -45,8 +48,10 @@ export class RecipeIngredientsComponent implements OnInit {
     message = encodeURIComponent(message);
 
     console.log(message);
+
     
-    this.messagesService.sendMessage(message).subscribe({
+    
+    this.messagesService.sendMessage(message, username).subscribe({
       next: response => console.log(response),
       error: error => console.log(error)
     });

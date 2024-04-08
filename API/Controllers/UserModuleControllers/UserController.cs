@@ -4,7 +4,8 @@
     using System.Threading.Tasks;
     using API.Data;
     using API.Entities;
-    using Microsoft.AspNetCore.Mvc;
+using API.Interfaces;
+using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
@@ -13,10 +14,12 @@ namespace API.Controllers
     public class UserController : BaseApiController
     {
         private readonly DataContext _context;
+        private readonly IUnitOfWork _uow;
 
-        public UserController(DataContext context)
+        public UserController(DataContext context, IUnitOfWork uow)
         {
             _context = context;
+            _uow = uow;
         } 
 
         [HttpGet]
@@ -26,5 +29,8 @@ namespace API.Controllers
 
             return await users;
         }
+
+
+
     }
 }

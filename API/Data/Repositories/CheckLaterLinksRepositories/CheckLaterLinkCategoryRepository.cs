@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Entities;
 using API.Entities.CheckLaterLinksModuleEntities;
 using API.Interfaces.CheckLaterLinksModuleInterfaces;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +23,10 @@ namespace API.Data.Repositories.CheckLaterLinksRepositories
             await _context.CheckLaterLinkCategories.AddAsync(checkLaterLinkCategory);
         }
 
-        public async Task<bool> CategoryExists(string name)
+        public async Task<bool> CategoryExists(string name, int userId)
         {
-            return await _context.CheckLaterLinkCategories.AnyAsync(t => t.Name == name);
+            
+            return await _context.CheckLaterLinkCategories.AnyAsync(t => t.Name == name && t.UserId == userId);
         }
 
         public void DeleteCategory(CheckLaterLinkCategory checkLaterLinkCategory)
@@ -32,19 +34,25 @@ namespace API.Data.Repositories.CheckLaterLinksRepositories
             _context.CheckLaterLinkCategories.Remove(checkLaterLinkCategory);
         }
 
-        public async Task<ICollection<CheckLaterLinkCategory>> GetAllCategories()
+        public async Task<ICollection<CheckLaterLinkCategory>> GetAllCategories(int userId)
         {
-            return await _context.CheckLaterLinkCategories.Include(t => t.CheckLaterLinks).ToListAsync();
+            return await _context.CheckLaterLinkCategories.Include(t => t.CheckLaterLinks).Where(u => u.UserId == userId).ToListAsync();
         }
 
-        public async Task<CheckLaterLinkCategory> GetCategoryById(int id)
+        public async Task<CheckLaterLinkCategory> GetCategoryById(int id, int userId)
         {
-            return await _context.CheckLaterLinkCategories.Include(l => l.CheckLaterLinks).FirstOrDefaultAsync(t => t.CategoryId == id);
+            return await _context.CheckLaterLinkCategories.Include(l => l.CheckLaterLinks).FirstOrDefaultAsync(t => t.CategoryId == id && t.UserId == userId);
         }
 
-        public async Task<CheckLaterLinkCategory> GetCategoryByName(string name)
+        public async Task<CheckLaterLinkCategory> GetCategoryByName(string name, int userId)
         {
-            return await _context.CheckLaterLinkCategories.Include(l => l.CheckLaterLinks).FirstOrDefaultAsync(t => t.Name == name);
+            return await _context.CheckLaterLinkCategories.Include(l => l.CheckLaterLinks).FirstOrDefaultAsync(t => t.Name == name && t.UserId == userId);
+        }
+
+        public async Task<CheckLaterLinkCategory> GetUserDefaultCategory(int userId)
+        {
+            var categories = await GetAllCategories(userId);
+            return categories.MinBy(c => c.CategoryId);
         }
     }
 }

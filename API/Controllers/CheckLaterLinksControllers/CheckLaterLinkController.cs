@@ -7,10 +7,13 @@ using API.Entities.CheckLaterLinksModuleEntities;
 using API.Extensions;
 using API.Interfaces;
 using AutoMapper;
+using AutoMapper.Configuration.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.CheckLaterLinksControllers
 {
+    [Authorize]
     public class CheckLaterLinkController : BaseApiController
     {
         private readonly IUnitOfWork _uow;
@@ -25,7 +28,16 @@ namespace API.Controllers.CheckLaterLinksControllers
         [HttpPost("addlink")]
         public async Task<ActionResult> AddLink([FromBody] CheckLaterLinkDto laterLinkDto)
         {
-            var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(laterLinkDto.CategoryName);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(laterLinkDto.Username);
+
+            if(user == null)
+            {
+                return BadRequest("no user");
+            }
+
+            var userId = user.Id;
+
+            var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(laterLinkDto.CategoryName, userId);
 
             if(!categoryExists)
             {
@@ -37,8 +49,8 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("link is incorrect");
             }
 
-            var existingLinkName = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(laterLinkDto.CustomName);
-            var existingLinkUrl = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByUrl(laterLinkDto.SavedUrl);
+            var existingLinkName = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(laterLinkDto.CustomName, userId);
+            var existingLinkUrl = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByUrl(laterLinkDto.SavedUrl, userId);
 
             if(existingLinkName != null || existingLinkUrl != null)
             {
@@ -46,13 +58,15 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("Link is already added with name:" + existingLinkName.CustomName);
             }
 
-            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryByName(laterLinkDto.CategoryName);
+            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryByName(laterLinkDto.CategoryName, userId);
+            
 
             var newLink = new CheckLaterLink
             {
                 CustomName = laterLinkDto.CustomName,
                 SavedUrl = laterLinkDto.SavedUrl,
-                CategoryId = category.CategoryId
+                CategoryId = category.CategoryId,
+                UserId = userId
             };
 
             await _uow.CheckLaterLinkRepository.AddLink(newLink);
@@ -65,14 +79,25 @@ namespace API.Controllers.CheckLaterLinksControllers
         [HttpPut("setlinkviewed")]
         public async Task<ActionResult> SetLinkAsViewed([FromBody] CheckLaterLinkDto checkLaterLinkDto)
         {
-            var link = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(checkLaterLinkDto.CustomName);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(checkLaterLinkDto.Username);
+
+            if(user == null)
+            {
+                return BadRequest("no user");
+            }
+
+            var userId = user.Id;
+
+            var link = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(checkLaterLinkDto.CustomName, userId);
 
             if(link == null)
             {
                 return BadRequest("link doesn't exist");
             }
 
-            var viewedCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(2); // id = 2 is viewed category, id = 1 is default category
+            var defaultCategory = await _uow.CheckLaterLinkCategoryRepository.GetUserDefaultCategory(userId);
+
+            var viewedCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(defaultCategory.CategoryId, userId); // id = 2 is viewed category, id = 1 is default category
 
             link.CategoryId = viewedCategory.CategoryId;
 
@@ -86,9 +111,17 @@ namespace API.Controllers.CheckLaterLinksControllers
         }
 
         [HttpDelete("deletelink")]
-        public async Task<ActionResult> DeleteLink(string name)
+        public async Task<ActionResult> DeleteLink(string name, string username)
         {
-            var link = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(name);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
+            var userId = user.Id;
+
+            if(user == null)
+            {
+                return BadRequest("no user");
+            }
+
+            var link = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(name, userId);
 
             if(link == null)
             {

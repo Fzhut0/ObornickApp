@@ -14,5 +14,8 @@ namespace API.Entities.CheckLaterLinksModuleEntities
         public string Name { get; set; }
 
         public ICollection<CheckLaterLink> CheckLaterLinks { get; set; }
+
+        public int UserId { get; set; }
+
     }
 }

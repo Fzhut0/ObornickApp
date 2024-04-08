@@ -16,5 +16,8 @@ namespace API.Entities.CheckLaterLinksModuleEntities
         public string SavedUrl { get; set; }
 
         public int CategoryId { get; set; }
+
+        public int UserId { get; set; }
+
     }
 }

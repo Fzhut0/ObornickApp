@@ -12,22 +12,33 @@ export class CategoryService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getCategories()
-  {
-    return this.httpClient.get<Category[]>(this.baseUrl + 'CheckLaterLinksCategories/getcategories');
-  }
-
-  addCategory(name: string)
-  {
-    const category: Category = { customName: name, links: [] };
-    return this.httpClient.post(this.baseUrl + 'CheckLaterLinksCategories/addcategory', category, {responseType: 'text'})
-  }
-
-  deleteCategory(name: string)
+  getCategories(username: string)
   {
     const params = new HttpParams({
       fromObject: {
-        name: name
+        username: username
+      }
+    })
+    return this.httpClient.get<Category[]>(this.baseUrl + 'CheckLaterLinksCategories/getcategories', {params: params});
+  }
+
+  addCategory(categoryName: string, username: string)
+  {
+    //const category: Category = { customName: name, links: []};
+    const requestBody = {
+      username: username,
+      customName: categoryName,
+      links: []
+    }
+    return this.httpClient.post(this.baseUrl + 'CheckLaterLinksCategories/addcategory', requestBody, {responseType: 'text'})
+  }
+
+  deleteCategory(name: string, username: string)
+  {
+    const params = new HttpParams({
+      fromObject: {
+        name: name,
+        username: username
       }
     })
     return this.httpClient.delete(this.baseUrl + 'CheckLaterLinksCategories/deletecategory', {params: params})

@@ -11,5 +11,7 @@ namespace API.DTOs.CheckLaterLinksModuleDTOS
         public string CustomName { get; set; }
 
         public List<CheckLaterLink> Links { get; set; }
+
+        public string Username { get; set; }
     }
 }

@@ -49,6 +49,19 @@ namespace API.Data
             .WithMany(clc => clc.CheckLaterLinks) 
             .HasForeignKey(cll => cll.CategoryId) 
             .IsRequired().OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(u => u.Categories)
+                .WithOne()
+                .HasForeignKey(clc => clc.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AppUser>()
+            .HasMany(u => u.Links)
+            .WithOne()
+            .HasForeignKey(clc => clc.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

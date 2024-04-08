@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from 'src/app/_models/category';
 import { Link } from 'src/app/_models/link';
+import { AccountService } from 'src/app/_services/account.service';
 import { CategoryService } from 'src/app/_services/category.service';
 import { LinksService } from 'src/app/_services/links.service';
+import { MessagesService } from 'src/app/_services/messages.service';
 
 @Component({
   selector: 'app-links-manager',
@@ -13,6 +15,8 @@ export class LinksManagerComponent implements OnInit {
   links: Link[] = [];
   categories: Category[] = [];
 
+  username: string | undefined;
+
   newLink: Link = {
     customName: '',
     savedUrl: '',
@@ -20,24 +24,28 @@ export class LinksManagerComponent implements OnInit {
   };
   newCategory: string = '';
 
-  constructor(private linksService: LinksService, private categoryService: CategoryService) { }
+  constructor(private linksService: LinksService, private categoryService: CategoryService, private messagesService: MessagesService,
+    public accountService: AccountService) { }
 
   ngOnInit(): void {
-    this.getCategories();
+    this.accountService.currentUser$.subscribe({
+      next: response => this.username = response?.username
+    })
+    this.getCategories(this.username!);
   }
 
-  addLink() {
-    this.linksService.addLink(this.newLink).subscribe({
+  addLink(username: string) {
+    this.linksService.addLink(this.newLink, username).subscribe({
       next: () => {
-        this.getCategories();
+        this.getCategories(this.username!);
       }  
    })  
   }
 
-  addCategory(name: string) {
-    this.categoryService.addCategory(name).subscribe({
+  addCategory(name: string, username: string) {
+    this.categoryService.addCategory(name, username).subscribe({
       next: () => {
-        this.getCategories()
+        this.getCategories(this.username!)
       },
       error: error => console.log(error)
     });
@@ -46,16 +54,16 @@ export class LinksManagerComponent implements OnInit {
   markAsWatched(link: Link) {
     this.linksService.markLinkAsWatched(link).subscribe({
       next: () => {
-        this.getCategories()
+        this.getCategories(this.username!)
       },
       error: error => console.log(error)
     })
   }
 
-  removeLink(name: string) {
-    this.linksService.deleteLink(name).subscribe({
+  removeLink(name: string, username: string) {
+    this.linksService.deleteLink(name, username).subscribe({
       next: () => {
-        this.getCategories();
+        this.getCategories(this.username!);
       }    
     })
   }
@@ -64,9 +72,9 @@ export class LinksManagerComponent implements OnInit {
     return this.links.filter(link => link.categoryName === category.customName);
   }
 
-  getCategories()
+  getCategories(username: string)
   {
-    this.categoryService.getCategories().subscribe(
+    this.categoryService.getCategories(username).subscribe(
       response => {
         this.categories = response;
         console.log(response)
@@ -74,12 +82,31 @@ export class LinksManagerComponent implements OnInit {
     );
   }
 
-  openPopup(name: string)
+  openPopup(name: string, username: string)
   {
-    this.categoryService.deleteCategory(name).subscribe({
+    this.categoryService.deleteCategory(name, username).subscribe({
       next: () => {
-        this.getCategories()
+        this.getCategories(this.username!)
       },
+      error: error => console.log(error)
+    })
+  }
+
+  sendMessage(link: Link, username: string)
+  {
+    var message = '';
+
+    message = `Link o nazwie: ${link.customName} z kategorii: ${link.categoryName} \\n Link:${link.savedUrl}`
+   
+    console.log(message);
+    console.log(username);
+
+
+
+    message = encodeURIComponent(message);
+
+    this.messagesService.sendMessage(message, username).subscribe({
+      next: response => console.log(response),
       error: error => console.log(error)
     })
   }

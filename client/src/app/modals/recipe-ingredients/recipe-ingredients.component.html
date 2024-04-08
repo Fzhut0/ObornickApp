@@ -11,7 +11,7 @@
     </ul>
 </div>
 <div class="modal-footer" *appHasRole="['Admin']">
-    <button class="btn-send" (click)="sendIngredientsAsList()">Send ingredients list</button>
+    <button class="btn-send" *ngIf="(accountService.currentUser$ | async) as user" (click)="sendIngredientsAsList(user.username)">Send ingredients list</button>
     <button class="btn btn-primary" (click)="openEditRecipeModal(selectedRecipe)">Edit Recipe</button>
     <button class="btn btn-danger" (click)="deleteRecipe(recipeName)">Delete Recipe</button>
 

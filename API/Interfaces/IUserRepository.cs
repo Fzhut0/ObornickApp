@@ -15,5 +15,7 @@ namespace API.Interfaces
 
         Task<AppUser> GetUserByUsernameAsync(string username);
 
+        Task<string> GetUserMessageRecipientIdByUsername(string username);
+
     }
 }

@@ -7,16 +7,16 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class MessagesService {
-  baseUrl = environment.apiUrl;
+    baseUrl = environment.apiUrl;
 
-  constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient) { }
 
-  sendMessage(message: string): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    const body = JSON.stringify({ message: message }); 
+    sendMessage(message: string, name: string): Observable<any> {
+      const headers = new HttpHeaders().set('Content-Type', 'application/json');
+      const body = JSON.stringify({ message: message, messageRecipientUsername : name }); 
 
-    return this.httpClient.post<any>(this.baseUrl + 'FacebookMessage/sendmessage', body, { headers: headers });
-  }
+      return this.httpClient.post<any>(this.baseUrl + 'FacebookMessage/sendmessage', body, { headers: headers });
+    }
   }
     
 

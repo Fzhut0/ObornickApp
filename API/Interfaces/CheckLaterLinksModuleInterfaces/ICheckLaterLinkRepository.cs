@@ -13,11 +13,11 @@ namespace API.Interfaces.CheckLaterLinksModuleInterfaces
 
         Task AddLink(CheckLaterLink checkLaterLink);
 
-        Task<CheckLaterLink> GetCheckLaterLinkByName(string name);
+        Task<CheckLaterLink> GetCheckLaterLinkByName(string name, int userId);
 
         Task<CheckLaterLink> GetCheckLaterLinkById(int id);
 
-        Task<CheckLaterLink> GetCheckLaterLinkByUrl(string url);
+        Task<CheckLaterLink> GetCheckLaterLinkByUrl(string url, int userId);
 
         void DeleteLink(CheckLaterLink checkLaterLink);
     }

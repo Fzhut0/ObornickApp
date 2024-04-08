@@ -19,7 +19,7 @@ public class RecipesController : BaseApiController
         _mapper = mapper;
     }
 
-    [Authorize(Policy = "RequireAdminRole")]
+    [Authorize(Roles = "Admin")]
     [HttpPost("addrecipe")]
     public async Task<ActionResult> AddRecipe([FromBody] RecipeDto recipeDTO)
     {

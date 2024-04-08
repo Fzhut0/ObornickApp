@@ -24,7 +24,7 @@ public class RecipeRepository : IRecipeRepository
         return await _context.Recipes.AnyAsync(x => x.Name == dishName);
     }
 
-        public async Task<IEnumerable<Recipe>> GetRecipesByIngredientId(int ingredientId)
+    public async Task<IEnumerable<Recipe>> GetRecipesByIngredientId(int ingredientId)
     {
         var recipes = await _context.Recipes
             .Where(r => r.RecipeIngredients.Any(ri => ri.IngredientId == ingredientId))

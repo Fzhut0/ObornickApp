@@ -12,5 +12,7 @@ namespace API.DTOs.CheckLaterLinksModuleDTOS
         public string SavedUrl { get; set; }
 
         public string CategoryName { get; set; }
+
+        public string Username { get; set; }
     }
 }
