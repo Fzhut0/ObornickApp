@@ -28,41 +28,13 @@ namespace API.Data
             }
 
             var admin = new AppUser
-            {
+            {  
                 UserName = "admin",
-                MessageServiceRecipientId = "24830443579936750" 
-            };
+                MessageServiceRecipientId = "24830443579936750",
+            };            
 
             await userManager.CreateAsync(admin, "123456");
-            await userManager.AddToRolesAsync(admin, new[] { "Admin", "Member" });
+            await userManager.AddToRolesAsync(admin, new[] { "Admin", "Member" });                   
         }
-
-        // public static async Task AddCategory(DataContext context, UserManager<AppUser> userManager)
-        // {
-        //     var user = await userManager.FindByNameAsync("admin");
-
-        //     if(user == null)
-        //     {
-        //         return;
-        //     }
-        //     var categories = new List<CheckLaterLinkCategory>
-        //     {
-        //         new CheckLaterLinkCategory{Name = "Bez kategorii", UserId = user.Id},
-        //         new CheckLaterLinkCategory{Name = "Obejrzane", UserId = user.Id}
-        //     };
-
-        //     context.Entry(user).Collection(u => u.Categories).CurrentValue = categories;
-
-        //     if(await context.CheckLaterLinkCategories.AnyAsync(t => t.Name == categories.First().Name))
-        //     {
-        //         return;
-        //     }
-
-        //     await context.CheckLaterLinkCategories.AddRangeAsync(categories);
-            
-
-        //     await context.SaveChangesAsync();
-
-        // }
     }
 }

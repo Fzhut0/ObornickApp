@@ -12,10 +12,9 @@
           </div>
         </div>
         <input type="text" [(ngModel)]="newLink.customName" name="customName" placeholder="Link Name">
-        <p>Select category:</p>
-        <select [(ngModel)]="newLink.categoryName">
-          <option *ngFor="let category of categories">{{ category.customName }}</option>
-        </select>
+        <p>Dodajesz do kategorii: {{this.selectedCategory?.customName}}</p>
+          <app-recursive-category-options [categories]="categories"></app-recursive-category-options>
+          <h5>Dodajesz do kategorii: {{this.selectedCategory?.customName}}</h5>
         <button class="btn btn-primary" [disabled]="savedUrl.invalid" (click)="addLink(user.username)">Add Link</button>
       </div>
     </tab>
@@ -25,29 +24,17 @@
         <button class="btn btn-primary"  (click)="addCategory(newCategory, user.username)">Add Category</button>
       </div>
     </tab>
+    <tab heading="Add Subcategory">
+      <div class="category-form">
+        <input type="text" [(ngModel)]="newCategory" placeholder="New Category">
+        <p>Select category:</p>
+          <app-recursive-category-options [categories]="categories"></app-recursive-category-options>
+          <h5>Dodaj do kategorii: {{this.selectedCategory?.customName}}</h5>
+        <button class="btn btn-primary" *ngIf="this.selectedCategory" (click)="addSubcategory(newCategory, this.selectedCategory.customName, user.username)">Add Subcategory</button>
+    </div>
+    </tab>
     <tab heading="Manage Links">
-      <tabset>
-        <ng-container *ngFor="let category of categories; let i = index">
-          <tab>
-            <ng-template tabHeading>
-              <div class="tab-heading">
-                <span class="category-name">{{ category.customName }}</span>
-                <button class="close-button" (click)="openPopup(category.customName, user.username)">
-                <i class="fa fa-close"></i>
-                </button>
-              </div>
-            </ng-template>
-            <div class="links">
-              <div *ngFor="let link of category.links" class="link">
-                <a href="{{ link.savedUrl }}" target="_blank">{{ link.customName }}</a>
-                <button class="btn btn-primary" (click)="sendMessage(link, user.username)">Send as msg</button>
-                <button class="btn btn-primary" (click)="markAsWatched(link)" *ngIf="category.customName !=='Obejrzane'">Mark as Watched</button>
-                <button class="btn btn-danger" (click)="removeLink(link.customName, user.username)">Remove</button>
-              </div>
-            </div>
-          </tab>
-        </ng-container>
-      </tabset>
+      <app-recursive-category [categories]="categories"></app-recursive-category>
     </tab>
   </tabset>
 </div>

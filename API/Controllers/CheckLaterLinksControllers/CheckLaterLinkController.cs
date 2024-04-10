@@ -28,7 +28,7 @@ namespace API.Controllers.CheckLaterLinksControllers
         [HttpPost("addlink")]
         public async Task<ActionResult> AddLink([FromBody] CheckLaterLinkDto laterLinkDto)
         {
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(laterLinkDto.Username);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
 
             if(user == null)
             {
@@ -97,7 +97,12 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             var defaultCategory = await _uow.CheckLaterLinkCategoryRepository.GetUserDefaultCategory(userId);
 
-            var viewedCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(defaultCategory.CategoryId, userId); // id = 2 is viewed category, id = 1 is default category
+            var viewedCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(defaultCategory.CategoryId, userId);
+
+            if(defaultCategory == viewedCategory)
+            {
+                return BadRequest("you can't move to the same category");
+            }
 
             link.CategoryId = viewedCategory.CategoryId;
 
@@ -111,9 +116,9 @@ namespace API.Controllers.CheckLaterLinksControllers
         }
 
         [HttpDelete("deletelink")]
-        public async Task<ActionResult> DeleteLink(string name, string username)
+        public async Task<ActionResult> DeleteLink(string name)
         {
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
             var userId = user.Id;
 
             if(user == null)

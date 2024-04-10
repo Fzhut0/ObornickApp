@@ -47,8 +47,10 @@ namespace API.Controllers.CheckLaterLinksControllers
                 Name = checkLaterLinkCategoryDto.CustomName,
                 UserId = userId
             };
+
             await _uow.CheckLaterLinkCategoryRepository.AddCategory(newCategory);
             user.Categories.Add(newCategory);
+
             if(await _uow.Complete())
             {
                 return Ok("category added");
@@ -56,10 +58,45 @@ namespace API.Controllers.CheckLaterLinksControllers
             return BadRequest("something wrong with adding category");
         }
 
-        [HttpDelete("deletecategory")]
-        public async Task<ActionResult> DeleteCategory(string name, string username)
+        [HttpPost("addsubcategory")]
+        public async Task<ActionResult> AddSubcategory([FromBody]CheckLaterLinkCategoryDto checkLaterLinkCategoryDto)
         {
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(checkLaterLinkCategoryDto.Username);
+            var userId = user.Id;
+
+            if(user == null)
+            {
+                return BadRequest("no user");
+            }
+
+            var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(checkLaterLinkCategoryDto.CustomName, userId);
+
+            if(categoryExists)
+            {
+                return BadRequest("Category exists");
+            }
+
+            var parentCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryByName(checkLaterLinkCategoryDto.ParentCategoryName, userId);
+
+            var newCategory = new CheckLaterLinkCategory
+            {
+                Name = checkLaterLinkCategoryDto.CustomName,
+                UserId = userId
+            };
+
+            await _uow.CheckLaterLinkCategoryRepository.AddSubcategory(newCategory, parentCategory.Name);
+
+            if(await _uow.Complete())
+            {
+                return Ok("sub category added");
+            }
+            return BadRequest("something wrong with adding category");
+        }
+
+        [HttpDelete("deletecategory")]
+        public async Task<ActionResult> DeleteCategory(string name)
+        {
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
             var userId = user.Id;
 
             if(user == null)
@@ -74,7 +111,7 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("category doesn't exist");
             }
 
-            if(category.CategoryId == 1 || category.CategoryId == 2)
+            if(name == "Bez kategorii")
             {
                 return BadRequest("can't delete this");
             }
@@ -101,10 +138,10 @@ namespace API.Controllers.CheckLaterLinksControllers
         }
 
         [HttpGet("getcategories")]
-        public async Task<ActionResult<List<CheckLaterLinkCategoryDto>>> GetAllCategories(string username)
+        public async Task<ActionResult<List<CheckLaterLinkCategoryDto>>> GetAllCategories()
         {
 
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
 
             if(user == null)
             {
@@ -124,10 +161,43 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             foreach(var category in categories)
             {
+                if(category.ParentCategoryId.HasValue)
+                {
+                    continue;
+                }
                 var categoryDto = _mapper.Map<CheckLaterLinkCategoryDto>(category);
                 categoryDtoList.Add(categoryDto);
             }
 
+            return Ok(categoryDtoList);
+        }
+
+        [HttpGet("getsubcategories")]
+        public async Task<ActionResult<List<CheckLaterLinkCategoryDto>>> GetSubcategories(string parentCategoryName)
+        {
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+
+            if(user == null)
+            {
+                return BadRequest("no user");
+            }
+
+            var userId = user.Id;
+
+            var subcategories = await _uow.CheckLaterLinkCategoryRepository.GetSubcategories(parentCategoryName, userId);
+
+            // if(subcategories.IsNullOrEmpty() && parentCategoryName != null)
+            // {
+            //     return NotFound("no subcategories");
+            // }
+
+            var categoryDtoList = new List<CheckLaterLinkCategoryDto>();
+
+            foreach(var category in subcategories)
+            {
+                var categoryDto = _mapper.Map<CheckLaterLinkCategoryDto>(category);
+                categoryDtoList.Add(categoryDto);
+            }
             return Ok(categoryDtoList);
         }
     }

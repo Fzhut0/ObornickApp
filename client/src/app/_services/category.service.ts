@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Category } from '../_models/category';
 
@@ -10,16 +10,29 @@ export class CategoryService {
 
   baseUrl = environment.apiUrl;
 
+  @Output() categorySelectedEvent = new EventEmitter<Category>();
+
   constructor(private httpClient: HttpClient) { }
 
-  getCategories(username: string)
+  getCategories()
+  {
+    // const params = new HttpParams({
+    //   fromObject: {
+    //     username: username
+    //   }
+    // })
+    return this.httpClient.get<Category[]>(this.baseUrl + 'CheckLaterLinksCategories/getcategories');
+  }
+
+  getSubcategories(parentCategoryName: string)
   {
     const params = new HttpParams({
       fromObject: {
-        username: username
+        parentCategoryName: parentCategoryName
       }
     })
-    return this.httpClient.get<Category[]>(this.baseUrl + 'CheckLaterLinksCategories/getcategories', {params: params});
+
+    return this.httpClient.get<Category[]>(this.baseUrl + 'CheckLaterLinksCategories/getsubcategories', {params: params});
   }
 
   addCategory(categoryName: string, username: string)
@@ -33,15 +46,28 @@ export class CategoryService {
     return this.httpClient.post(this.baseUrl + 'CheckLaterLinksCategories/addcategory', requestBody, {responseType: 'text'})
   }
 
-  deleteCategory(name: string, username: string)
-  {
+  deleteCategory(name: string) {
     const params = new HttpParams({
       fromObject: {
-        name: name,
-        username: username
+        name: name
       }
     })
-    return this.httpClient.delete(this.baseUrl + 'CheckLaterLinksCategories/deletecategory', {params: params})
+    return this.httpClient.delete(this.baseUrl + 'CheckLaterLinksCategories/deletecategory', { params: params })
+  }
+
+  addSubcategory(subcategoryName: string, parentCategory: string, username: string) {
+    const requestBody = {
+      username: username,
+      customName: subcategoryName,
+      parentCategoryName: parentCategory
+    };
+    return this.httpClient.post(`${this.baseUrl}CheckLaterLinksCategories/addsubcategory`, requestBody, { responseType: 'text' });
+  }
+
+  categorySelected(category: Category)
+  {
+    this.categorySelectedEvent.emit(category);
   }
 
 }
+

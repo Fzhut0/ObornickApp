@@ -14,83 +14,110 @@ import { MessagesService } from 'src/app/_services/messages.service';
 export class LinksManagerComponent implements OnInit {
   links: Link[] = [];
   categories: Category[] = [];
+  subcategories: Category[] = [];
+
+  selectedCategory: Category | null = null;
+  selectedSubcategory: Category | null = null;
+
+  oneAtATime = true;
 
   username: string | undefined;
 
   newLink: Link = {
     customName: '',
     savedUrl: '',
-    categoryName: 'string'
+    categoryName: ''
   };
   newCategory: string = '';
+  newSubcategory: string = '';
 
   constructor(private linksService: LinksService, private categoryService: CategoryService, private messagesService: MessagesService,
     public accountService: AccountService) { }
 
   ngOnInit(): void {
-    this.accountService.currentUser$.subscribe({
-      next: response => this.username = response?.username
+    this.getCategories();
+    this.categoryService.categorySelectedEvent.subscribe((data: Category) => {
+      this.selectedCategory = data;
     })
-    this.getCategories(this.username!);
   }
 
   addLink(username: string) {
-    this.linksService.addLink(this.newLink, username).subscribe({
-      next: () => {
-        this.getCategories(this.username!);
-      }  
-   })  
+    if (this.selectedCategory)
+    {
+        this.newLink.categoryName = this.selectedCategory.customName
+        this.linksService.addLink(this.newLink, username).subscribe({
+        next: () => {
+          this.getCategories();
+        }  
+      }) 
+    } 
   }
 
   addCategory(name: string, username: string) {
     this.categoryService.addCategory(name, username).subscribe({
       next: () => {
-        this.getCategories(this.username!)
+        this.getCategories()
       },
       error: error => console.log(error)
     });
   }
 
-  markAsWatched(link: Link) {
-    this.linksService.markLinkAsWatched(link).subscribe({
+  hasNestedSubcategories(subcategories: Category[]): boolean {
+    return subcategories && subcategories.length > 0;
+  }
+
+  addSubcategory(name: string, parentCategory: string, username: string)
+  {
+    console.log(name, parentCategory, username)
+    this.categoryService.addSubcategory(name, parentCategory, username).subscribe({
       next: () => {
-        this.getCategories(this.username!)
+        this.getCategories()
       },
       error: error => console.log(error)
     })
   }
 
-  removeLink(name: string, username: string) {
-    this.linksService.deleteLink(name, username).subscribe({
+  markAsWatched(link: Link) {
+    this.linksService.markLinkAsWatched(link).subscribe({
       next: () => {
-        this.getCategories(this.username!);
-      }    
+        this.getCategories()
+      },
+      error: error => console.log(error)
     })
   }
+
 
   filteredLinks(category: Category): Link[] {
     return this.links.filter(link => link.categoryName === category.customName);
   }
 
-  getCategories(username: string)
-  {
-    this.categoryService.getCategories(username).subscribe(
-      response => {
-        this.categories = response;
-        console.log(response)
-      }
-    );
+  getCategories() {
+    this.categoryService.getCategories().subscribe({
+      next: response => {
+        this.categories = response
+        this.categories.forEach(category => {
+          this.getSubcategories(category)
+        })
+      },   
+      error: error => console.log(error)
+    })
   }
 
-  openPopup(name: string, username: string)
+  getSubcategories(category: Category)
   {
-    this.categoryService.deleteCategory(name, username).subscribe({
-      next: () => {
-        this.getCategories(this.username!)
+    this.categoryService.getSubcategories(category.customName).subscribe({
+      next: (response: Category[]) => {
+        category.subcategories = response;
+        category.subcategories.forEach(subcategory => {
+          this.getSubcategories(subcategory)
+        });
+        
       },
       error: error => console.log(error)
     })
   }
+
+  
 
   sendMessage(link: Link, username: string)
   {
@@ -101,14 +128,46 @@ export class LinksManagerComponent implements OnInit {
     console.log(message);
     console.log(username);
 
-
-
     message = encodeURIComponent(message);
 
     this.messagesService.sendMessage(message, username).subscribe({
       next: response => console.log(response),
       error: error => console.log(error)
     })
+  }
+
+  selectCategory(category: Category) {
+    if (this.selectedCategory === category) {
+      this.selectedCategory = null; 
+    } else {
+      this.selectedCategory = category;
+      this.selectedSubcategory = null; 
+    }
+  }
+
+  selectSubcategory(subcategory: Category) {
+    if (this.selectedSubcategory === subcategory) {
+      this.selectedSubcategory = null; 
+    } else {
+      this.selectedSubcategory = subcategory;
+      this.selectedCategory = null; 
+    }
+  }
+
+  isCategorySelected(category: Category): boolean {
+    return this.selectedCategory === category;
+  }
+
+  isSubcategorySelected(subcategory: Category): boolean {
+    return this.selectedSubcategory === subcategory;
+  }
+
+  toggleCategory(category: Category) {
+    category.expanded = !category.expanded;
+  }
+
+  isCategoryExpanded(category: Category): boolean {
+    return category.expanded ?? false;
   }
 
 }

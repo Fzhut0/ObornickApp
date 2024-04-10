@@ -23,6 +23,9 @@ import { AddRecipesComponent } from './recipe-components/add-recipes/add-recipes
 import { BrowseRecipesComponent } from './recipe-components/browse-recipes/browse-recipes.component';
 import { BaseRecipesComponent } from './recipe-components/base-recipes/base-recipes.component';
 import { LinksManagerComponent } from './check-later-links-components/links-manager/links-manager.component';
+import { RecursiveCategoryComponent } from './check-later-links-components/recursive-category/recursive-category.component';
+import { RecursiveCategoryOptionsComponent } from './check-later-links-components/recursive-category-options/recursive-category-options.component';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 @NgModule({
   declarations: [
@@ -39,6 +42,8 @@ import { LinksManagerComponent } from './check-later-links-components/links-mana
     AddRecipesComponent,
     BaseRecipesComponent,
     LinksManagerComponent,
+    RecursiveCategoryComponent,
+    RecursiveCategoryOptionsComponent,
 
   ],
   imports: [
@@ -53,7 +58,8 @@ import { LinksManagerComponent } from './check-later-links-components/links-mana
     ToastrModule.forRoot({
     positionClass: 'toast-bottom-right'
     }),
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+    AccordionModule.forRoot()
   ],
   providers: [
       { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

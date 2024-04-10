@@ -23,5 +23,10 @@ namespace API.Interfaces.CheckLaterLinksModuleInterfaces
         void DeleteCategory(CheckLaterLinkCategory checkLaterLinkCategory);
 
         Task<CheckLaterLinkCategory> GetUserDefaultCategory(int userId);
+
+        Task AddSubcategory(CheckLaterLinkCategory checkLaterLinkCategory, string parentCategoryName);
+
+        Task<ICollection<CheckLaterLinkCategory>> GetSubcategories(string parentCategoryName, int userId);
+
     }
 }

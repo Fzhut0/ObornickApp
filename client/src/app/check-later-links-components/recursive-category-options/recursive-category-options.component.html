@@ -1,0 +1,5 @@
+<accordion [closeOthers]="oneAtATime" class="my-accordion" *ngFor="let category of categories">
+  <accordion-group heading="{{category.customName}}" (isOpenChange)="selectCategory(category)">
+    <app-recursive-category-options [categories]="category.subcategories"></app-recursive-category-options>
+  </accordion-group>
+</accordion>

@@ -62,6 +62,13 @@ namespace API.Data
             .HasForeignKey(clc => clc.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<CheckLaterLinkCategory>()
+            .HasMany(clc => clc.Subcategories)
+            .WithOne(c => c.ParentCategory)
+            .HasForeignKey(clc => clc.ParentCategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+  
         }
     }
 }

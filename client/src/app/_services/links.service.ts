@@ -24,12 +24,11 @@ export class LinksService {
     return this.httpClient.post(this.baseUrl + 'CheckLaterLink/addlink', requestBody, {responseType: 'text'});
   }
 
-  deleteLink(name: string, username: string)
+  deleteLink(name: string)
   {
     const params = new HttpParams({
       fromObject: {
         name: name,
-        username: username
       }
     })
     return this.httpClient.delete(this.baseUrl + 'CheckLaterLink/deletelink', {params: params})
