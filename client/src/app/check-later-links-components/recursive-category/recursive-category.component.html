@@ -5,7 +5,7 @@
         <ng-template tabHeading>
               <div class="tab-heading">
                 <span class="category-name">{{ category.customName }}</span>
-                <button class="close-button" (click)="openPopup(category.customName)">
+                <button class="close-button" (click)="openRemoveCategoryPopup(category) ">
                 <i class="fa fa-close"></i>
                 </button>
               </div>
@@ -13,7 +13,7 @@
         <div class="links-container">        
           <div *ngFor="let link of category.links" class="link">
             <a href="{{ link.savedUrl }}" target="_blank">{{ link.customName }}</a>  
-            <button class="btn btn-danger" (click)="removeLink(link.customName)">Remove</button>
+            <button class="btn btn-danger" (click)="openRemoveLinkPopup(link)">Remove</button>
           </div>
         </div> 
         <app-recursive-category [categories]="category.subcategories"></app-recursive-category>

@@ -26,6 +26,8 @@ import { LinksManagerComponent } from './check-later-links-components/links-mana
 import { RecursiveCategoryComponent } from './check-later-links-components/recursive-category/recursive-category.component';
 import { RecursiveCategoryOptionsComponent } from './check-later-links-components/recursive-category-options/recursive-category-options.component';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { DeleteLinkComponent } from './modals/delete-link/delete-link.component';
+import { DeleteCategoryComponent } from './modals/delete-category/delete-category.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
     LinksManagerComponent,
     RecursiveCategoryComponent,
     RecursiveCategoryOptionsComponent,
+    DeleteLinkComponent,
+    DeleteCategoryComponent,
 
   ],
   imports: [
