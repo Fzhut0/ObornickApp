@@ -13,13 +13,12 @@ export class LinksService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addLink(link: Link, username: string)
+  addLink(link: Link)
   {
     const requestBody = {
       customName: link.customName,
       savedUrl: link.savedUrl,
-      categoryName: link.categoryName,
-      username: username
+      categoryId: link.categoryId
     }
     return this.httpClient.post(this.baseUrl + 'CheckLaterLink/addlink', requestBody, {responseType: 'text'});
   }

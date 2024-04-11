@@ -15,7 +15,7 @@
         <p>Dodajesz do kategorii: {{this.selectedCategory?.customName}}</p>
           <app-recursive-category-options [categories]="categories"></app-recursive-category-options>
           <h5>Dodajesz do kategorii: {{this.selectedCategory?.customName}}</h5>
-        <button class="btn btn-primary" [disabled]="savedUrl.invalid" (click)="addLink(user.username)">Add Link</button>
+        <button class="btn btn-primary" [disabled]="savedUrl.invalid" (click)="addLink()">Add Link</button>
       </div>
     </tab>
     <tab heading="Add Category">

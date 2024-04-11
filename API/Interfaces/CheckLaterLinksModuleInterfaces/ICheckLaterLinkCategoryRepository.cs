@@ -10,7 +10,7 @@ namespace API.Interfaces.CheckLaterLinksModuleInterfaces
 {
     public interface ICheckLaterLinkCategoryRepository
     {
-        Task<bool> CategoryExists(string name, int userId);
+        Task<bool> CategoryExists(int categoryId, int userId);
 
         Task AddCategory(CheckLaterLinkCategory checkLaterLinkCategory);
 

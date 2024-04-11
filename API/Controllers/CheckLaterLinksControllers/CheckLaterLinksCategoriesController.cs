@@ -35,7 +35,7 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("no user");
             }
 
-            var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(checkLaterLinkCategoryDto.CustomName, userId);
+            // var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(checkLaterLinkCategoryDto.CategoryId, userId);
 
             // if(categoryExists)
             // {
@@ -69,12 +69,12 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("no user");
             }
 
-            var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(checkLaterLinkCategoryDto.CustomName, userId);
+            // var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(checkLaterLinkCategoryDto.CategoryId, userId);
 
-            // if(categoryExists)
-            // {
-            //     return BadRequest("Category exists");
-            // }
+            // // if(categoryExists)
+            // // {
+            // //     return BadRequest("Category exists");
+            // // }
 
             var parentCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(checkLaterLinkCategoryDto.CategoryId, userId);
 

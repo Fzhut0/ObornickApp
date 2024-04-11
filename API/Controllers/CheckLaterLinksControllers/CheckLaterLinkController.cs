@@ -37,7 +37,7 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             var userId = user.Id;
 
-            var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(laterLinkDto.CategoryName, userId);
+            var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(laterLinkDto.CategoryId, userId);
 
             if(!categoryExists)
             {
@@ -49,16 +49,16 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("link is incorrect");
             }
 
-            var existingLinkName = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(laterLinkDto.CustomName, userId);
-            var existingLinkUrl = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByUrl(laterLinkDto.SavedUrl, userId);
+            // var existingLinkName = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(laterLinkDto.CustomName, userId);
+            // var existingLinkUrl = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByUrl(laterLinkDto.SavedUrl, userId);
 
-            if(existingLinkName != null || existingLinkUrl != null)
-            {
+            // if(existingLinkName != null || existingLinkUrl != null)
+            // {
                 
-                return BadRequest("Link is already added with name:" + existingLinkName.CustomName);
-            }
+            //     return BadRequest("Link is already added with name:" + existingLinkName.CustomName);
+            // }
 
-            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryByName(laterLinkDto.CategoryName, userId);
+            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(laterLinkDto.CategoryId, userId);
             
 
             var newLink = new CheckLaterLink

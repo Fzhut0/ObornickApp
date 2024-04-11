@@ -26,7 +26,8 @@ export class LinksManagerComponent implements OnInit {
   newLink: Link = {
     customName: '',
     savedUrl: '',
-    categoryName: ''
+    categoryName: '',
+    categoryId: 0
   };
   newCategory: string = '';
   newSubcategory: string = '';
@@ -46,11 +47,12 @@ export class LinksManagerComponent implements OnInit {
     })
   }
 
-  addLink(username: string) {
+  addLink() {
     if (this.selectedCategory)
     {
-        this.newLink.categoryName = this.selectedCategory.customName
-        this.linksService.addLink(this.newLink, username).subscribe({
+      this.newLink.categoryName = this.selectedCategory.customName;
+      this.newLink.categoryId = this.selectedCategory.categoryId;
+        this.linksService.addLink(this.newLink).subscribe({
         next: () => {
           this.getCategories();
         }  

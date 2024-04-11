@@ -29,10 +29,10 @@ namespace API.Data.Repositories.CheckLaterLinksRepositories
             parentC.Subcategories.Add(checkLaterLinkCategory);
         }
 
-        public async Task<bool> CategoryExists(string name, int userId)
+        public async Task<bool> CategoryExists(int categoryId, int userId)
         {
             
-            return await _context.CheckLaterLinkCategories.AnyAsync(t => t.Name == name && t.UserId == userId);
+            return await _context.CheckLaterLinkCategories.AnyAsync(t => t.CategoryId == categoryId && t.UserId == userId);
         }
 
         public void DeleteCategory(CheckLaterLinkCategory checkLaterLinkCategory)
