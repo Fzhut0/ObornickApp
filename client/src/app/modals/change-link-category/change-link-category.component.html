@@ -1,0 +1,8 @@
+<div class="modal-body text-center" >
+    <p>Przenieś do kategorii: {{selectedCategory?.customName}}</p>
+    <app-recursive-category-options [categories]="categories"></app-recursive-category-options>
+    <div class="button-container">
+        <button type="button" class="btn btn-default" (click)="updateLinkCategory(link!, selectedCategory!.categoryId)">Yes</button>
+        <button type="button" class="btn btn-primary" (click)="bsModalRef.hide()">No</button>
+    </div>
+</div>

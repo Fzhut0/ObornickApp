@@ -39,6 +39,11 @@ export class LinksManagerComponent implements OnInit {
     this.categoryService.categorySelectedEvent.subscribe((data: Category) => {
       this.selectedCategory = data;
     })
+    this.categoryService.fetchCategoriesEvent.subscribe({
+      next: () => {
+        this.getCategories()
+      }
+    })
   }
 
   addLink(username: string) {
@@ -66,10 +71,10 @@ export class LinksManagerComponent implements OnInit {
     return subcategories && subcategories.length > 0;
   }
 
-  addSubcategory(name: string, parentCategory: string, username: string)
+  addSubcategory(name: string, username: string, id: number)
   {
-    console.log(name, parentCategory, username)
-    this.categoryService.addSubcategory(name, parentCategory, username).subscribe({
+    console.log(name, username, id)
+    this.categoryService.addSubcategory(name,  username, id).subscribe({
       next: () => {
         this.getCategories()
       },
@@ -105,7 +110,7 @@ export class LinksManagerComponent implements OnInit {
 
   getSubcategories(category: Category)
   {
-    this.categoryService.getSubcategories(category.customName).subscribe({
+    this.categoryService.getSubcategories(category.categoryId).subscribe({
       next: (response: Category[]) => {
         category.subcategories = response;
         category.subcategories.forEach(subcategory => {
@@ -116,8 +121,6 @@ export class LinksManagerComponent implements OnInit {
       error: error => console.log(error)
     })
   }
-
-  
 
   sendMessage(link: Link, username: string)
   {
@@ -135,39 +138,4 @@ export class LinksManagerComponent implements OnInit {
       error: error => console.log(error)
     })
   }
-
-  selectCategory(category: Category) {
-    if (this.selectedCategory === category) {
-      this.selectedCategory = null; 
-    } else {
-      this.selectedCategory = category;
-      this.selectedSubcategory = null; 
-    }
-  }
-
-  selectSubcategory(subcategory: Category) {
-    if (this.selectedSubcategory === subcategory) {
-      this.selectedSubcategory = null; 
-    } else {
-      this.selectedSubcategory = subcategory;
-      this.selectedCategory = null; 
-    }
-  }
-
-  isCategorySelected(category: Category): boolean {
-    return this.selectedCategory === category;
-  }
-
-  isSubcategorySelected(subcategory: Category): boolean {
-    return this.selectedSubcategory === subcategory;
-  }
-
-  toggleCategory(category: Category) {
-    category.expanded = !category.expanded;
-  }
-
-  isCategoryExpanded(category: Category): boolean {
-    return category.expanded ?? false;
-  }
-
 }

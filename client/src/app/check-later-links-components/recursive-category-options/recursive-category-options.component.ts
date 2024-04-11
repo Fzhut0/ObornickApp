@@ -24,6 +24,7 @@ export class RecursiveCategoryOptionsComponent {
   selectCategory(category: Category)
   {
     this.categoryService.categorySelected(category);
+    console.log(category)
   }
 
 }

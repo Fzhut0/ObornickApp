@@ -11,6 +11,7 @@ export class CategoryService {
   baseUrl = environment.apiUrl;
 
   @Output() categorySelectedEvent = new EventEmitter<Category>();
+  @Output() fetchCategoriesEvent = new EventEmitter();
 
   constructor(private httpClient: HttpClient) { }
 
@@ -24,11 +25,11 @@ export class CategoryService {
     return this.httpClient.get<Category[]>(this.baseUrl + 'CheckLaterLinksCategories/getcategories');
   }
 
-  getSubcategories(parentCategoryName: string)
+  getSubcategories(parentCategoryId: number)
   {
     const params = new HttpParams({
       fromObject: {
-        parentCategoryName: parentCategoryName
+        parentCategoryId: parentCategoryId
       }
     })
 
@@ -46,20 +47,20 @@ export class CategoryService {
     return this.httpClient.post(this.baseUrl + 'CheckLaterLinksCategories/addcategory', requestBody, {responseType: 'text'})
   }
 
-  deleteCategory(name: string) {
+  deleteCategory(categoryId: number) {
     const params = new HttpParams({
       fromObject: {
-        name: name
+        categoryId: categoryId
       }
     })
     return this.httpClient.delete(this.baseUrl + 'CheckLaterLinksCategories/deletecategory', { params: params })
   }
 
-  addSubcategory(subcategoryName: string, parentCategory: string, username: string) {
+  addSubcategory(subcategoryName: string, username: string, id: number) {
     const requestBody = {
       username: username,
       customName: subcategoryName,
-      parentCategoryName: parentCategory
+      categoryId: id 
     };
     return this.httpClient.post(`${this.baseUrl}CheckLaterLinksCategories/addsubcategory`, requestBody, { responseType: 'text' });
   }
@@ -67,6 +68,11 @@ export class CategoryService {
   categorySelected(category: Category)
   {
     this.categorySelectedEvent.emit(category);
+  }
+
+  fetchCategories()
+  {
+    this.fetchCategoriesEvent.emit();
   }
 
 }

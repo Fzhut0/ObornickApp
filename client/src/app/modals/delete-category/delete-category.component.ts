@@ -23,10 +23,10 @@ export class DeleteCategoryComponent implements OnInit {
     {
       return;
       }
-    this.categoryService.deleteCategory(this.category.customName).subscribe({
+    this.categoryService.deleteCategory(this.category.categoryId).subscribe({
       next: () => {
         this.bsModalRef.hide(),
-          window.location.reload()
+        this.categoryService.fetchCategories()
       },
       error: error => console.log(error)
     })

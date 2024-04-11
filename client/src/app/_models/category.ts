@@ -4,5 +4,5 @@ export interface Category {
     customName: string;
     links: Link[];
     subcategories: Category[];
-    expanded: boolean
+    categoryId: number
 }

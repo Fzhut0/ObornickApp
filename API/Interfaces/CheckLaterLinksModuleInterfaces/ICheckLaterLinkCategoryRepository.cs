@@ -24,9 +24,9 @@ namespace API.Interfaces.CheckLaterLinksModuleInterfaces
 
         Task<CheckLaterLinkCategory> GetUserDefaultCategory(int userId);
 
-        Task AddSubcategory(CheckLaterLinkCategory checkLaterLinkCategory, string parentCategoryName);
+        Task AddSubcategory(CheckLaterLinkCategory checkLaterLinkCategory, int parentCategoryId);
 
-        Task<ICollection<CheckLaterLinkCategory>> GetSubcategories(string parentCategoryName, int userId);
+        Task<ICollection<CheckLaterLinkCategory>> GetSubcategories(int parentCategoryId, int userId);
 
     }
 }

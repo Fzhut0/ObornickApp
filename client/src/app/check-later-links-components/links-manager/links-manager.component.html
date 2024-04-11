@@ -30,7 +30,7 @@
         <p>Select category:</p>
           <app-recursive-category-options [categories]="categories"></app-recursive-category-options>
           <h5>Dodaj do kategorii: {{this.selectedCategory?.customName}}</h5>
-        <button class="btn btn-primary" *ngIf="this.selectedCategory" (click)="addSubcategory(newCategory, this.selectedCategory.customName, user.username)">Add Subcategory</button>
+        <button class="btn btn-primary" *ngIf="this.selectedCategory" (click)="addSubcategory(newCategory, user.username, this.selectedCategory.categoryId)">Add Subcategory</button>
     </div>
     </tab>
     <tab heading="Manage Links">

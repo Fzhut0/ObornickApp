@@ -37,10 +37,10 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(checkLaterLinkCategoryDto.CustomName, userId);
 
-            if(categoryExists)
-            {
-                return BadRequest("Category exists");
-            }
+            // if(categoryExists)
+            // {
+            //     return BadRequest("Category exists");
+            // }
 
             var newCategory = new CheckLaterLinkCategory
             {
@@ -71,12 +71,12 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(checkLaterLinkCategoryDto.CustomName, userId);
 
-            if(categoryExists)
-            {
-                return BadRequest("Category exists");
-            }
+            // if(categoryExists)
+            // {
+            //     return BadRequest("Category exists");
+            // }
 
-            var parentCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryByName(checkLaterLinkCategoryDto.ParentCategoryName, userId);
+            var parentCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(checkLaterLinkCategoryDto.CategoryId, userId);
 
             var newCategory = new CheckLaterLinkCategory
             {
@@ -84,7 +84,7 @@ namespace API.Controllers.CheckLaterLinksControllers
                 UserId = userId
             };
 
-            await _uow.CheckLaterLinkCategoryRepository.AddSubcategory(newCategory, parentCategory.Name);
+            await _uow.CheckLaterLinkCategoryRepository.AddSubcategory(newCategory, parentCategory.CategoryId);
 
             if(await _uow.Complete())
             {
@@ -94,7 +94,7 @@ namespace API.Controllers.CheckLaterLinksControllers
         }
 
         [HttpDelete("deletecategory")]
-        public async Task<ActionResult> DeleteCategory(string name)
+        public async Task<ActionResult> DeleteCategory(int categoryId)
         {
             var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
             var userId = user.Id;
@@ -104,16 +104,21 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("no user");
             }
 
-            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryByName(name, userId);
+            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(categoryId, userId);
 
             if(category == null)
             {
                 return BadRequest("category doesn't exist");
             }
 
-            if(name == "Bez kategorii")
+            if(category.Name == "Bez kategorii")
             {
                 return BadRequest("can't delete this");
+            }
+
+            if(!category.Subcategories.IsNullOrEmpty())
+            {
+                return BadRequest("Can't delete because subcategories are present");
             }
 
             if(category.CheckLaterLinks.Count > 0)
@@ -173,7 +178,7 @@ namespace API.Controllers.CheckLaterLinksControllers
         }
 
         [HttpGet("getsubcategories")]
-        public async Task<ActionResult<List<CheckLaterLinkCategoryDto>>> GetSubcategories(string parentCategoryName)
+        public async Task<ActionResult<List<CheckLaterLinkCategoryDto>>> GetSubcategories(int parentCategoryId)
         {
             var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
 
@@ -184,12 +189,7 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             var userId = user.Id;
 
-            var subcategories = await _uow.CheckLaterLinkCategoryRepository.GetSubcategories(parentCategoryName, userId);
-
-            // if(subcategories.IsNullOrEmpty() && parentCategoryName != null)
-            // {
-            //     return NotFound("no subcategories");
-            // }
+            var subcategories = await _uow.CheckLaterLinkCategoryRepository.GetSubcategories(parentCategoryId, userId);
 
             var categoryDtoList = new List<CheckLaterLinkCategoryDto>();
 

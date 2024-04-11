@@ -142,5 +142,34 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             return BadRequest("link wasn't deleted");
         }
+
+        [HttpPut("updatelinkcategory")]
+        public async Task<ActionResult> UpdateLinkCategory([FromBody]CheckLaterLinkDto checkLaterLinkDto)
+        {
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+            var userId = user.Id;
+
+            if(user == null)
+            {
+                return BadRequest("no user");
+            }
+
+            if(checkLaterLinkDto == null)
+            {
+                return BadRequest("invalid input");
+            }
+
+            var existingLink = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(checkLaterLinkDto.CustomName, userId);
+            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(checkLaterLinkDto.CategoryId, userId);
+
+            existingLink.CategoryId = category.CategoryId;
+
+            if(await _uow.Complete())
+            {
+                return Ok("link category updated");
+            }
+
+            return BadRequest("problem updating link");
+        }
     }
 }

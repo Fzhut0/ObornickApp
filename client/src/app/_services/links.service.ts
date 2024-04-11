@@ -38,5 +38,15 @@ export class LinksService {
   {
     return this.httpClient.put(this.baseUrl + 'CheckLaterLink/setlinkviewed', link);
   }
+
+  updateLinkCategory(link: Link, newCategoryId: number)
+  {
+     const requestBody = {
+      customName: link.customName,
+      savedUrl: link.savedUrl,
+      categoryId: newCategoryId
+    }
+    return this.httpClient.put(this.baseUrl + 'CheckLaterLink/updatelinkcategory', requestBody, {responseType: 'text'});
+  }
  
 }

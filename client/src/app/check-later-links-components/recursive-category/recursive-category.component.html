@@ -12,7 +12,8 @@
             </ng-template>
         <div class="links-container">        
           <div *ngFor="let link of category.links" class="link">
-            <a href="{{ link.savedUrl }}" target="_blank">{{ link.customName }}</a>  
+            <a href="{{ link.savedUrl }}" target="_blank">{{ link.customName }}</a>
+            <button  class="btn btn-primary" (click)="openChangeLinkCategoryPopup(link)">Przenieś do innej kategorii</button> 
             <button class="btn btn-danger" (click)="openRemoveLinkPopup(link)">Remove</button>
           </div>
         </div> 

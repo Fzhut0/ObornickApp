@@ -23,9 +23,9 @@ namespace API.Data.Repositories.CheckLaterLinksRepositories
             await _context.CheckLaterLinkCategories.AddAsync(checkLaterLinkCategory);
         }
 
-        public async Task AddSubcategory(CheckLaterLinkCategory checkLaterLinkCategory, string parentCategoryName)
+        public async Task AddSubcategory(CheckLaterLinkCategory checkLaterLinkCategory, int parentCategoryId)
         {
-            var parentC = await _context.CheckLaterLinkCategories.FirstOrDefaultAsync(t => t.Name == parentCategoryName);
+            var parentC = await _context.CheckLaterLinkCategories.FirstOrDefaultAsync(t => t.CategoryId == parentCategoryId);
             parentC.Subcategories.Add(checkLaterLinkCategory);
         }
 
@@ -55,9 +55,9 @@ namespace API.Data.Repositories.CheckLaterLinksRepositories
             return await _context.CheckLaterLinkCategories.Include(l => l.CheckLaterLinks).Include(c => c.Subcategories).ThenInclude(sub => sub.CheckLaterLinks).FirstOrDefaultAsync(t => t.Name == name && t.UserId == userId);
         }
 
-        public async Task<ICollection<CheckLaterLinkCategory>> GetSubcategories(string parentCategoryName, int userId)
+        public async Task<ICollection<CheckLaterLinkCategory>> GetSubcategories(int parentCategoryId, int userId)
         {
-            var parentCategory = await GetCategoryByName(parentCategoryName, userId);
+            var parentCategory = await GetCategoryById(parentCategoryId, userId);
             return parentCategory.Subcategories;
         }
 
