@@ -13,13 +13,16 @@ import { DeleteLinkComponent } from 'src/app/modals/delete-link/delete-link.comp
   templateUrl: './recursive-category.component.html',
   styleUrls: ['./recursive-category.component.css']
 })
-export class RecursiveCategoryComponent {
+export class RecursiveCategoryComponent implements OnInit {
   @Input() categories: Category[] = [];
   bsCategoryModalRef: BsModalRef<DeleteCategoryComponent> = new BsModalRef<DeleteCategoryComponent>();
   bsLinkModalRef: BsModalRef<DeleteLinkComponent> = new BsModalRef<DeleteLinkComponent>();
   bsChangeLinkCategoryModalRef: BsModalRef<ChangeLinkCategoryComponent> = new BsModalRef<ChangeLinkCategoryComponent>();
 
   constructor(private modalService: BsModalService, private categoryService: CategoryService) {}
+  ngOnInit(): void {
+ 
+  }
 
   openRemoveCategoryPopup(category: Category)
   {

@@ -47,7 +47,7 @@ namespace API.Data.Repositories.CheckLaterLinksRepositories
 
         public async Task<CheckLaterLinkCategory> GetCategoryById(int id, int userId)
         {
-            return await _context.CheckLaterLinkCategories.Include(l => l.CheckLaterLinks).Include(c => c.Subcategories).FirstOrDefaultAsync(t => t.CategoryId == id && t.UserId == userId);
+            return await _context.CheckLaterLinkCategories.Include(l => l.CheckLaterLinks).Include(c => c.Subcategories).ThenInclude(sub => sub.CheckLaterLinks).FirstOrDefaultAsync(t => t.CategoryId == id && t.UserId == userId);
         }
 
         public async Task<CheckLaterLinkCategory> GetCategoryByName(string name, int userId)
