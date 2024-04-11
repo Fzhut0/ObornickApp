@@ -44,6 +44,11 @@ export class RecursiveCategoryComponent implements OnInit {
       }
     }
     this.bsLinkModalRef = this.modalService.show(DeleteLinkComponent, config)
+    this.bsLinkModalRef.onHide?.subscribe({
+      next: () => {
+        this.categoryService.fetchCategories();
+      }
+    })
   }
 
   openChangeLinkCategoryPopup(link: Link) {

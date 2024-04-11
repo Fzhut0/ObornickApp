@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Link } from 'src/app/_models/link';
+import { CategoryService } from 'src/app/_services/category.service';
 import { LinksService } from 'src/app/_services/links.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { LinksService } from 'src/app/_services/links.service';
 export class DeleteLinkComponent implements OnInit {
   link: Link | null = null;
 
-  constructor(public bsModalRef: BsModalRef, private linkService: LinksService) {}
+  constructor(public bsModalRef: BsModalRef, private linkService: LinksService, private categoryService: CategoryService) {}
 
   ngOnInit(): void {
     
@@ -25,8 +26,7 @@ export class DeleteLinkComponent implements OnInit {
       }
     this.linkService.deleteLink(this.link.customName).subscribe({
       next: () => {
-        this.bsModalRef.hide(),
-          window.location.reload()
+        this.bsModalRef.hide()
       },
       error: error => console.log(error)
     })
