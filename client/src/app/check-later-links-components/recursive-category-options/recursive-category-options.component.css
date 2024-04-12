@@ -31,3 +31,21 @@
 .card-header {
   padding: 0px;
 }
+
+.accordion-item {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.right-content {
+  text-align: right;
+}
+
+.panel-open {
+  background-color: #1e7fe0; 
+}
+
+.panel-closed {
+  background-color: #e70707; 
+}

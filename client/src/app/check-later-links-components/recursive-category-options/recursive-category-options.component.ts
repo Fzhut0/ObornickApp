@@ -11,6 +11,7 @@ export class RecursiveCategoryOptionsComponent {
 
   @Input() categories: Category[] = [];
   
+  
 
   selectedCategory: Category | null = null;
   selectedSubcategory: Category | null = null;
@@ -24,7 +25,12 @@ export class RecursiveCategoryOptionsComponent {
   selectCategory(category: Category)
   {
     this.categoryService.categorySelected(category);
-    console.log(category)
+    this.selectedCategory = category;
+    console.log(this.isCategoryOpen)
+  }
+
+  isCategoryOpen(category: any): boolean {
+    return category.isOpen;
   }
 
 }

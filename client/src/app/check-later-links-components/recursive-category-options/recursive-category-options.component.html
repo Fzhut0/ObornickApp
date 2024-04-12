@@ -1,5 +1,18 @@
-<accordion [closeOthers]="oneAtATime" class="my-accordion" *ngFor="let category of categories">
-  <accordion-group heading="{{category.customName}}" (isOpenChange)="selectCategory(category)">
-    <app-recursive-category-options [categories]="category.subcategories"></app-recursive-category-options>
+<accordion [closeOthers]="oneAtATime" class="my-accordion">
+  <accordion-group *ngFor="let category of categories" [isOpen]="isCategoryOpen(category)" >
+    <div *ngIf="category.subcategories && category.subcategories.length === 0" accordion-heading (click)="selectCategory(category)"> 
+      {{ category.customName }}
+    </div>
+        <div *ngIf="category.subcategories && category.subcategories.length > 0" accordion-heading (click)="selectCategory(category)">
+      <div class="left-content">
+    {{ category.customName }}
+      </div>
+      <div class="right-content">
+        Ilość podkategorii: {{ category.subcategories.length }}
+      </div>
+    </div>
+    <app-recursive-category-options *ngIf="category.subcategories?.length"
+                                    [categories]="category.subcategories">
+    </app-recursive-category-options>
   </accordion-group>
 </accordion>
