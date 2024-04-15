@@ -19,7 +19,7 @@ export class EditRecipeComponent implements OnInit {
 
   recipeForm: FormGroup = new FormGroup({})
 
-  recipeName: any;
+  recipeName: string = '';
   ingredients: Ingredient[] = [];
 
   selectedRecipe!: Recipe;
@@ -80,7 +80,6 @@ export class EditRecipeComponent implements OnInit {
   {
     const values = { ...this.recipeForm.value };
     const newName = values.name;
-    console.log(values);
 
     this.recipeService.editRecipe(values).subscribe({
       next: () => {
@@ -89,9 +88,6 @@ export class EditRecipeComponent implements OnInit {
           this.recipeName = newName;
           }
         this.cancel();
-      },
-      error: error => {
-        console.log(error)
         }
       })
   }

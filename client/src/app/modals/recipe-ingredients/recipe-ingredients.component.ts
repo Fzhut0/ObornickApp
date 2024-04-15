@@ -63,8 +63,8 @@ export class RecipeIngredientsComponent implements OnInit {
     const modalRef = this.modalService.show(EditRecipeComponent, config);
     modalRef.onHide?.subscribe({
       next: () => {
-        this.listRecipeIngredients(modalRef.content?.recipeName)
-        this.changeRecipeName(modalRef.content?.recipeName)
+        this.listRecipeIngredients(modalRef.content!.recipeName)
+        this.changeRecipeName(modalRef.content!.recipeName)
       }
     })
   }

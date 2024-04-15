@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Recipe } from '../_models/recipe';
 import { Ingredient } from '../_models/ingredient';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class RecipesService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addRecipe(model: any)
+  addRecipe(model: FormGroup)
   {
     return this.httpClient.post(this.baseUrl + 'recipes/addrecipe', model, {responseType: 'text'});
   }
@@ -32,7 +33,7 @@ export class RecipesService {
     return this.httpClient.get<Ingredient[]>(this.baseUrl + 'Ingredients/getrecipeingredients', {params: params})
   }
 
-  editRecipe(model: any) {
+  editRecipe(model: FormGroup) {
     return this.httpClient.put(this.baseUrl + 'recipes/updaterecipe', model, {responseType: 'text'});
   }
 
