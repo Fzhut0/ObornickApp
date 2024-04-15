@@ -1,3 +1,4 @@
+using System.Reflection;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
@@ -31,7 +32,7 @@ public class RecipesController : BaseApiController
             return BadRequest("Brak użytkownika");
         }
 
-        if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any())
+        if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any() || recipeDTO.Name.IsNullOrEmpty())
         {
             return BadRequest("Nieprawidłowe dane");
         }
@@ -147,7 +148,6 @@ public class RecipesController : BaseApiController
         return Ok(recipeDtoList);
     }
 
-    [Authorize(Policy = "RequireAdminRole")]
     [HttpDelete("deleterecipe")]
     public async Task<ActionResult> DeleteRecipe(string name)
     {
