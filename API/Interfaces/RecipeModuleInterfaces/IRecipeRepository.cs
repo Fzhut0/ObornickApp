@@ -13,13 +13,15 @@ namespace API.Interfaces
 
         Task AddRecipe(Recipe recipe);
 
-        Task<Recipe> GetRecipeByName(string name);
+        Task<Recipe> GetRecipeByName(string name, int userId);
 
         Task<Recipe> GetRecipeById(int id);
 
         Task<IEnumerable<Recipe>> GetRecipesByIngredientId(int ingredientId);
 
         Task<List<Recipe>> GetAllRecipes();
+
+        Task<ICollection<Recipe>> GetUserRecipes(int userId);
 
         void DeleteRecipe(Recipe recipe);
 

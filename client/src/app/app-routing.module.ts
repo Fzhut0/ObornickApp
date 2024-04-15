@@ -15,7 +15,7 @@ const routes: Routes = [
       runGuardsAndResolvers: 'always',
       canActivate: [authGuard],
       children: [
-        { path: 'add-recipes', component: AddRecipesComponent, canActivate: [adminGuard] },
+        { path: 'add-recipes', component: AddRecipesComponent },
         { path: 'register', component: RegisterComponent },
         { path: 'browse-recipes', component: BrowseRecipesComponent },
         { path: 'recipes', component: BaseRecipesComponent },

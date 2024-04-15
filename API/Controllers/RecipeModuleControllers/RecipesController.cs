@@ -19,24 +19,33 @@ public class RecipesController : BaseApiController
         _mapper = mapper;
     }
 
-    [Authorize(Roles = "Admin")]
+
     [HttpPost("addrecipe")]
     public async Task<ActionResult> AddRecipe([FromBody] RecipeDto recipeDTO)
     {
+        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+        var userId = user.Id;
+
+        if(user == null)
+        {
+            return BadRequest("Brak użytkownika");
+        }
+
         if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any())
         {
-            return BadRequest("Invalid input");
+            return BadRequest("Nieprawidłowe dane");
         }
 
         if(await _uow.RecipeRepository.RecipeExists(recipeDTO.Name))
         {
-            return BadRequest("recipe exists");
+            return BadRequest("Przepis o tej nazwie już istnieje");
         }
 
         var newRecipe = new Recipe
         {
             Name = recipeDTO.Name,
-            RecipeIngredients = new List<RecipeIngredient>()
+            RecipeIngredients = new List<RecipeIngredient>(),
+            UserId = userId
         };
 
 
@@ -73,7 +82,16 @@ public class RecipesController : BaseApiController
     [HttpGet("getrecipe-byname")]
     public async Task<ActionResult<RecipeDto>> GetRecipeByName(string name)
     {
-        var recipe = await _uow.RecipeRepository.GetRecipeByName(name);
+
+        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+        var userId = user.Id;
+
+        if(user == null)
+        {
+            return BadRequest("Brak użytkownika");
+        }
+
+        var recipe = await _uow.RecipeRepository.GetRecipeByName(name, userId);
 
         if(recipe == null)
         {
@@ -88,6 +106,13 @@ public class RecipesController : BaseApiController
     [HttpGet("getrecipe-byid")]
     public async Task<ActionResult<RecipeDto>> GetRecipeById(int id)
     {
+        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+
+        if(user == null)
+        {
+            return BadRequest("Brak użytkownika");
+        }
+
         var recipe = await _uow.RecipeRepository.GetRecipeById(id);
 
         if(recipe == null)
@@ -126,7 +151,16 @@ public class RecipesController : BaseApiController
     [HttpDelete("deleterecipe")]
     public async Task<ActionResult> DeleteRecipe(string name)
     {
-        var recipe = await _uow.RecipeRepository.GetRecipeByName(name);
+
+        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+        var userId = user.Id;
+
+        if(user == null)
+        {
+            return BadRequest("Brak użytkownika");
+        }
+
+        var recipe = await _uow.RecipeRepository.GetRecipeByName(name, userId);
 
         if(recipe == null)
         {
@@ -146,12 +180,21 @@ public class RecipesController : BaseApiController
     [HttpPut("updaterecipe")]
     public async Task<ActionResult> UpdateRecipe([FromBody] RecipeDto recipeDTO)
     {
+
+        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+        var userId = user.Id;
+
+        if(user == null)
+        {
+            return BadRequest("Brak użytkownika");
+        }
+
         if (recipeDTO == null || recipeDTO.Ingredients == null)
         {
             return BadRequest("Invalid input");
         }
 
-        var existingRecipe = await _uow.RecipeRepository.GetRecipeByName(recipeDTO.OriginalName);
+        var existingRecipe = await _uow.RecipeRepository.GetRecipeByName(recipeDTO.OriginalName, userId);
 
         if (existingRecipe == null)
         {
@@ -193,6 +236,27 @@ public class RecipesController : BaseApiController
         return BadRequest("Problem updating recipe");
         }
 
+        
+        [HttpGet("userhasrecipe")]
+        public async Task<ActionResult<bool>> GetRecipeBelongsToUser(string recipeName)
+        {
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+            var userId = user.Id;
+
+            if(user == null)
+            {
+                return BadRequest("Brak użytkownika");
+            }
+
+            var recipe = await _uow.RecipeRepository.GetRecipeByName(recipeName, userId);
+
+            if(recipe != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
+
 }
 

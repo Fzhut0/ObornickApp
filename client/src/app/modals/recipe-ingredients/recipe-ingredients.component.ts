@@ -19,6 +19,9 @@ export class RecipeIngredientsComponent implements OnInit {
   message: string = '';
   selectedRecipe!: Recipe;
   user: User | undefined;
+  recipeId: number = 0;
+
+  userHasRecipe: boolean = false;
 
   constructor(private recipeService: RecipesService, public bsModalRef: BsModalRef, private messagesService: MessagesService,
     private modalService: BsModalService, public accountService: AccountService) {
@@ -26,11 +29,12 @@ export class RecipeIngredientsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listRecipeIngredients(this.recipeName);
+    this.listRecipeIngredients(this.recipeId);
+    this.checkHasUserRecipe(this.recipeName);
   }
 
-  listRecipeIngredients(name: string) {
-    this.recipeService.getRecipeIngredients(name).subscribe({
+  listRecipeIngredients(recipeId: number) {
+    this.recipeService.getRecipeIngredients(recipeId).subscribe({
       next: response => this.ingredients = response
     })
   }
@@ -57,13 +61,14 @@ export class RecipeIngredientsComponent implements OnInit {
         
         recipeName: recipe.name,
         selectedRecipe: recipe,
-        ingredients: this.ingredients
+        ingredients: this.ingredients,
+        recipeId: recipe.recipeId
       }
     }
     const modalRef = this.modalService.show(EditRecipeComponent, config);
     modalRef.onHide?.subscribe({
       next: () => {
-        this.listRecipeIngredients(modalRef.content!.recipeName)
+        this.listRecipeIngredients(modalRef.content!.recipeId)
         this.changeRecipeName(modalRef.content!.recipeName)
       }
     })
@@ -86,6 +91,21 @@ export class RecipeIngredientsComponent implements OnInit {
         })
       }
     });
+  }
+
+  checkHasUserRecipe(name: string)
+  {
+    this.recipeService.checkUserRecipe(name).subscribe({
+      next: response => {
+        if (response == true)
+        {
+          this.userHasRecipe = true;
+        }
+        else {
+          this.userHasRecipe = false;
+        }
+      }
+    })
   }
 }
 

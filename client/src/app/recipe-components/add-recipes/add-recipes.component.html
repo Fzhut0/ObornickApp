@@ -1,6 +1,6 @@
 <form [formGroup]="recipeForm" (ngSubmit)="addRecipe()" class="recipe-form">
   <label>
-    Recipe Name:
+    Nazwa przepisu:
     <input type="text" formControlName="name" class="form-control">
   </label>
   <br>
@@ -8,19 +8,19 @@
     <div *ngFor="let ingredient of ingredientsArray.controls; let i = index" class="ingredient-row">
       <div [formGroupName]="i">
         <label>
-          Ingredient Name:
+          Nazwa składnika:
           <input type="text" formControlName="ingredientName" class="form-control">
         </label>
         <label>
-          Quantity:
+          Ilość:
           <input type="text" formControlName="quantity" class="form-control">
         </label>
-        <button type="button" (click)="removeIngredient(i)" class="remove-btn">Remove Ingredient</button>
+        <button type="button" (click)="removeIngredient(i)" class="remove-btn">Usuń składnik</button>
       </div>
     </div>
   </div>
-  <button type="button" (click)="addIngredientInForm()" class="add-ingredient-btn">Add Ingredient</button>
+  <button type="button" (click)="addIngredientInForm()" class="add-ingredient-btn">Dodaj składnik</button>
   <br>
-  <button type="submit" class="submit-btn">Add Recipe</button>
-  <button type="button" (click)="cancel()" class="cancel-btn">Cancel</button>
+  <button type="submit" class="submit-btn">Dodaj przepis</button>
+  <button type="button" (click)="cancel()" class="cancel-btn">Anuluj</button>
 </form>

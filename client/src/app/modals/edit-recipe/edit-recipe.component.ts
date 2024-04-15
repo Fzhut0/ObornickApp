@@ -20,6 +20,7 @@ export class EditRecipeComponent implements OnInit {
   recipeForm: FormGroup = new FormGroup({})
 
   recipeName: string = '';
+  recipeId: number = 0;
   ingredients: Ingredient[] = [];
 
   selectedRecipe!: Recipe;
@@ -48,7 +49,8 @@ export class EditRecipeComponent implements OnInit {
     this.recipeForm = this.fb.group({
       originalName: this.recipeName,
       name: [this.recipeName, Validators.required],
-      ingredients: this.fb.array([])
+      ingredients: this.fb.array([]),
+      recipeId: this.recipeId
     });
   }
 

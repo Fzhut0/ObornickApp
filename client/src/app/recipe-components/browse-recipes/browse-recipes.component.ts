@@ -36,7 +36,8 @@ export class BrowseRecipesComponent implements OnInit {
       initialState: {
         
         recipeName: recipe.name,
-        selectedRecipe: recipe
+        selectedRecipe: recipe,
+        recipeId: recipe.recipeId
         }
       }
     this.bsModalRef = this.modalService.show(RecipeIngredientsComponent, config);

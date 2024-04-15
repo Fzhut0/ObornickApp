@@ -22,16 +22,24 @@ public class IngredientsController : BaseApiController
     }
 
     [HttpGet("getrecipeingredients")]
-    public async Task<ActionResult<List<RecipeIngredientDto>>> GetRecipeIngredients(string name)
+    public async Task<ActionResult<List<RecipeIngredientDto>>> GetRecipeIngredients(int recipeId)
     {
-        var recipe = await _uow.RecipeRepository.GetRecipeByName(name);
+        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+        var userId = user.Id;
+
+        if(user == null)
+        {
+            return BadRequest("Brak użytkownika");
+        }
+
+        var recipe = await _uow.RecipeRepository.GetRecipeById(recipeId);
         
         if (recipe == null)
         {
             return NotFound("Recipe not found");
         }
 
-        var ingredients = await _uow.IngredientRepository.GetIngredientsForRecipe(recipe.RecipeId);
+        var ingredients = await _uow.IngredientRepository.GetIngredientsForRecipe(recipeId);
 
         if(ingredients == null)
         {

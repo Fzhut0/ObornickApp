@@ -23,11 +23,11 @@ export class RecipesService {
     return this.httpClient.get<Recipe>(this.baseUrl + 'recipes/getrecipes');
   }
 
-  getRecipeIngredients(model: string)
+  getRecipeIngredients(model: number)
   {
     const params = new HttpParams({
       fromObject: {
-        name: model
+        recipeId: model
       }
     })
     return this.httpClient.get<Ingredient[]>(this.baseUrl + 'Ingredients/getrecipeingredients', {params: params})
@@ -45,5 +45,15 @@ export class RecipesService {
       }
     })
     return this.httpClient.delete(this.baseUrl + 'recipes/deleterecipe', {params: params})
+  }
+
+  checkUserRecipe(name: string)
+  {
+    const params = new HttpParams({
+      fromObject: {
+        recipeName: name
+      }
+    })
+    return this.httpClient.get(this.baseUrl + 'recipes/userhasrecipe', {params: params})
   }
 }
