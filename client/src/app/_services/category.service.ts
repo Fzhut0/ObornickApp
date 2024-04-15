@@ -36,11 +36,10 @@ export class CategoryService {
     return this.httpClient.get<Category[]>(this.baseUrl + 'CheckLaterLinksCategories/getsubcategories', {params: params});
   }
 
-  addCategory(categoryName: string, username: string)
+  addCategory(categoryName: string)
   {
     //const category: Category = { customName: name, links: []};
     const requestBody = {
-      username: username,
       customName: categoryName,
       links: []
     }
@@ -56,13 +55,12 @@ export class CategoryService {
     return this.httpClient.delete(this.baseUrl + 'CheckLaterLinksCategories/deletecategory', { params: params })
   }
 
-  addSubcategory(subcategoryName: string, username: string, id: number) {
+  addSubcategory(subcategoryName: string, id: number) {
     const requestBody = {
-      username: username,
       customName: subcategoryName,
       categoryId: id 
     };
-    return this.httpClient.post(`${this.baseUrl}CheckLaterLinksCategories/addsubcategory`, requestBody, { responseType: 'text' });
+    return this.httpClient.post(`${this.baseUrl}CheckLaterLinksCategories/addsubcategory`, requestBody, { responseType: 'text'});
   }
 
   categorySelected(category: Category)

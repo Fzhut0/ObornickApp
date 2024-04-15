@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 string connString = "";
 if (builder.Environment.IsDevelopment())
 {
-    connString = builder.Configuration.GetConnectionString("DefaultConnection");
+    connString = builder.Configuration.GetConnectionString("DefaultConnection"); 
 }
 else
 {

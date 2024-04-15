@@ -1,8 +1,3 @@
-
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography;
-using System.Text;
-using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Entities.CheckLaterLinksModuleEntities;
@@ -34,7 +29,7 @@ public class AccountController : BaseApiController
     {
         if (await UserExists(registerDto.Username))
         {
-            return BadRequest("User exists");
+            return BadRequest("Nazwa użytkownika zajęta");
         }
 
         var user = _mapper.Map<AppUser>(registerDto);
@@ -43,14 +38,14 @@ public class AccountController : BaseApiController
 
         if(!result.Succeeded)
         {
-            return BadRequest("To jest error nr1");
+            return BadRequest("Błąd rejestracji");
         }
 
         var rolesResults = await _userManager.AddToRoleAsync(user, "Member");
 
         if(!rolesResults.Succeeded)
         {
-            return BadRequest("to jest error nr2");
+            return BadRequest("Błąd rejestracji");
         }
 
         var newCategory = new CheckLaterLinkCategory
@@ -69,7 +64,6 @@ public class AccountController : BaseApiController
             Username = user.UserName,
             Token = await _tokenService.CreateToken(user),
         };
-
     }
 
 
@@ -81,14 +75,14 @@ public class AccountController : BaseApiController
 
          if(user == null)
          {
-            return Unauthorized("Invalid username or password");
+            return Unauthorized("Nieprawidłowa nazwa użytkownika lub hasło");
          }
 
         var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
         if(!result)
         {
-            return Unauthorized("Invalid username or password");
+            return Unauthorized("Nieprawidłowa nazwa użytkownika lub hasło");
         }
 
         return new UserDto

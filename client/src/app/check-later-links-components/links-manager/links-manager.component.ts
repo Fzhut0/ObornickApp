@@ -54,18 +54,29 @@ export class LinksManagerComponent implements OnInit {
       this.newLink.categoryId = this.selectedCategory.categoryId;
         this.linksService.addLink(this.newLink).subscribe({
         next: () => {
-          this.getCategories();
+            this.getCategories();
+            this.resetLinkForm();
         }  
       }) 
     } 
   }
 
-  addCategory(name: string, username: string) {
-    this.categoryService.addCategory(name, username).subscribe({
+  resetLinkForm()
+  {
+    this.newLink = {
+      customName: '',
+      savedUrl: '',
+      categoryName: '',
+      categoryId: 0
+      }
+  }
+
+  addCategory(name: string) {
+    this.categoryService.addCategory(name).subscribe({
       next: () => {
-        this.getCategories()
-      },
-      error: error => console.log(error)
+        this.getCategories();
+        this.newCategory = '';
+      }
     });
   }
 
@@ -73,14 +84,14 @@ export class LinksManagerComponent implements OnInit {
     return subcategories && subcategories.length > 0;
   }
 
-  addSubcategory(name: string, username: string, id: number)
+  addSubcategory(name: string, id: number)
   {
-    console.log(name, username, id)
-    this.categoryService.addSubcategory(name,  username, id).subscribe({
+    this.categoryService.addSubcategory(name, id).subscribe({
       next: () => {
-        this.getCategories()
-      },
-      error: error => console.log(error)
+        this.getCategories();
+        this.newSubcategory = '';
+        this.newCategory = '';
+      }
     })
   }
 
@@ -88,8 +99,7 @@ export class LinksManagerComponent implements OnInit {
     this.linksService.markLinkAsWatched(link).subscribe({
       next: () => {
         this.getCategories()
-      },
-      error: error => console.log(error)
+      }
     })
   }
 
@@ -105,8 +115,7 @@ export class LinksManagerComponent implements OnInit {
         this.categories.forEach(category => {
           this.getSubcategories(category)
         })
-      },   
-      error: error => console.log(error)
+      }
     })
   }
 
@@ -140,4 +149,5 @@ export class LinksManagerComponent implements OnInit {
       error: error => console.log(error)
     })
   }
+
 }

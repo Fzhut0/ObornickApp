@@ -79,7 +79,7 @@ namespace API.Controllers.CheckLaterLinksControllers
         [HttpPut("setlinkviewed")]
         public async Task<ActionResult> SetLinkAsViewed([FromBody] CheckLaterLinkDto checkLaterLinkDto)
         {
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(checkLaterLinkDto.Username);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
 
             if(user == null)
             {

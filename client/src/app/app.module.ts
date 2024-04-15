@@ -8,7 +8,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
-import { MembersComponent } from './members/members.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -36,7 +35,6 @@ import { ChangeLinkCategoryComponent } from './modals/change-link-category/chang
     NavComponent,
     RegisterComponent,
     HomeComponent,
-    MembersComponent,
     TextInputComponent,
     BrowseRecipesComponent,
     RecipeIngredientsComponent,

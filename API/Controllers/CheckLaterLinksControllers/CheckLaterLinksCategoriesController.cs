@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.DTOs.CheckLaterLinksModuleDTOS;
 using API.Entities.CheckLaterLinksModuleEntities;
 using API.Interfaces;
@@ -27,7 +23,7 @@ namespace API.Controllers.CheckLaterLinksControllers
         [HttpPost("addcategory")]
         public async Task<ActionResult> AddCategory([FromBody]CheckLaterLinkCategoryDto checkLaterLinkCategoryDto)
         {
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(checkLaterLinkCategoryDto.Username);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
             var userId = user.Id;
 
             if(user == null)
@@ -35,12 +31,10 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("no user");
             }
 
-            // var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(checkLaterLinkCategoryDto.CategoryId, userId);
-
-            // if(categoryExists)
-            // {
-            //     return BadRequest("Category exists");
-            // }
+            if(checkLaterLinkCategoryDto.CustomName.IsNullOrEmpty())
+            {
+                return BadRequest("Brak nazwy kategorii");
+            }
 
             var newCategory = new CheckLaterLinkCategory
             {
@@ -61,20 +55,18 @@ namespace API.Controllers.CheckLaterLinksControllers
         [HttpPost("addsubcategory")]
         public async Task<ActionResult> AddSubcategory([FromBody]CheckLaterLinkCategoryDto checkLaterLinkCategoryDto)
         {
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(checkLaterLinkCategoryDto.Username);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
             var userId = user.Id;
 
             if(user == null)
             {
-                return BadRequest("no user");
+                return BadRequest("Nieznany użytkownik");
             }
 
-            // var categoryExists = await _uow.CheckLaterLinkCategoryRepository.CategoryExists(checkLaterLinkCategoryDto.CategoryId, userId);
-
-            // // if(categoryExists)
-            // // {
-            // //     return BadRequest("Category exists");
-            // // }
+            if(checkLaterLinkCategoryDto.CustomName.IsNullOrEmpty())
+            {
+                return BadRequest("Brak nazwy kategorii");
+            }
 
             var parentCategory = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(checkLaterLinkCategoryDto.CategoryId, userId);
 
@@ -88,9 +80,9 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             if(await _uow.Complete())
             {
-                return Ok("sub category added");
+                return Ok("Podkategoria dodana");
             }
-            return BadRequest("something wrong with adding category");
+            return BadRequest("Coś poszło nie tak");
         }
 
         [HttpDelete("deletecategory")]
@@ -101,24 +93,24 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             if(user == null)
             {
-                return BadRequest("no user");
+                return BadRequest("Brak użytkownika");
             }
 
             var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(categoryId, userId);
 
             if(category == null)
             {
-                return BadRequest("category doesn't exist");
+                return BadRequest("Kategoria nie istnieje.");
             }
 
             if(category.Name == "Bez kategorii")
             {
-                return BadRequest("can't delete this");
+                return BadRequest("Nie możesz tego usunąć.");
             }
 
             if(!category.Subcategories.IsNullOrEmpty())
             {
-                return BadRequest("Can't delete because subcategories are present");
+                return BadRequest("Nie można usunąć ponieważ kategoria zawiera podkategorie. Najpierw usuń wszystkie podkategorie.");
             }
 
             if(category.CheckLaterLinks.Count > 0)
@@ -139,7 +131,7 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return Ok();
             }
 
-            return BadRequest("problem deleting category");
+            return BadRequest("Coś poszło nie tak");
         }
 
         [HttpGet("getcategories")]
@@ -159,7 +151,7 @@ namespace API.Controllers.CheckLaterLinksControllers
 
             if(categories.IsNullOrEmpty())
             {
-                return NotFound("no categories found");
+                return NotFound("Nie znaleziono kategorii");
             }
 
             var categoryDtoList = new List<CheckLaterLinkCategoryDto>();

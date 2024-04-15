@@ -45,16 +45,9 @@ export class RecipeIngredientsComponent implements OnInit {
       message = message.concat(`${this.ingredients[i].ingredientName} ${this.ingredients[i].quantity}\\n`);
     }
     
-    message = encodeURIComponent(message);
-
-    console.log(message);
-
+    message = encodeURIComponent(message);  
     
-    
-    this.messagesService.sendMessage(message, username).subscribe({
-      next: response => console.log(response),
-      error: error => console.log(error)
-    });
+    this.messagesService.sendMessage(message, username).subscribe();
   }
 
   openEditRecipeModal(recipe: Recipe) {

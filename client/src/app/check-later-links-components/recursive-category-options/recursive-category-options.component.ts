@@ -10,8 +10,6 @@ import { CategoryService } from 'src/app/_services/category.service';
 export class RecursiveCategoryOptionsComponent {
 
   @Input() categories: Category[] = [];
-  
-  
 
   selectedCategory: Category | null = null;
   selectedSubcategory: Category | null = null;
@@ -26,7 +24,6 @@ export class RecursiveCategoryOptionsComponent {
   {
     this.categoryService.categorySelected(category);
     this.selectedCategory = category;
-    console.log(this.isCategoryOpen)
   }
 
   isCategoryOpen(category: any): boolean {

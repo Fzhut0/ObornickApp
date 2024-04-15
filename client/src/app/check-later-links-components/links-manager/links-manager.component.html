@@ -1,40 +1,40 @@
 <div class="container" *ngIf="(accountService.currentUser$ | async) as user">
   <tabset>
-    <tab heading="Add Link">
+    <tab heading="Przeglądaj linki">
+      <app-recursive-category [categories]="categories"></app-recursive-category>
+    </tab>
+    <tab heading="Dodaj nowy link">
       <div class="link-form">
         <input type="text" [(ngModel)]="newLink.savedUrl" name="savedUrl" #savedUrl="ngModel" placeholder="URL" required pattern="https?://.+">
         <div *ngIf="savedUrl.invalid && (savedUrl.dirty || savedUrl.touched)" class="text-danger">
           <div *ngIf="savedUrl.errors?.['required']">
-            URL is required.
+            Wymagany URL.
           </div>
           <div *ngIf="savedUrl.errors?.['pattern']">
-            Please enter a valid URL.
+            Proszę wpisać prawidłowy format linku URL.
           </div>
         </div>
-        <input type="text" [(ngModel)]="newLink.customName" name="customName" placeholder="Link Name">
+        <input type="text" [(ngModel)]="newLink.customName" name="customName" placeholder="Nazwa linku">
         <p>Dodajesz do kategorii: {{this.selectedCategory?.customName}}</p>
           <app-recursive-category-options [categories]="categories"></app-recursive-category-options>
           <h5>Dodajesz do kategorii: {{this.selectedCategory?.customName}}</h5>
-        <button class="btn btn-primary" [disabled]="savedUrl.invalid" (click)="addLink()">Add Link</button>
+        <button class="btn btn-primary" [disabled]="savedUrl.invalid" (click)="addLink()">Dodaj link</button>
       </div>
     </tab>
-    <tab heading="Add Category">
+    <tab heading="Dodaj kategorię główną">
       <div class="category-form">
-        <input type="text" [(ngModel)]="newCategory" placeholder="New Category">
-        <button class="btn btn-primary"  (click)="addCategory(newCategory, user.username)">Add Category</button>
+        <input type="text" [(ngModel)]="newCategory" placeholder="Wpisz nazwę kategorii">
+        <button class="btn btn-primary"  (click)="addCategory(newCategory)">Dodaj kategorię</button>
       </div>
     </tab>
-    <tab heading="Add Subcategory">
+    <tab heading="Dodaj podkategorię">
       <div class="category-form">
-        <input type="text" [(ngModel)]="newCategory" placeholder="New Category">
-        <p>Select category:</p>
+        <input type="text" [(ngModel)]="newCategory" placeholder="Wpisz nazwę podkategorii">
+        <p>Wybierz kategorię:</p>
           <app-recursive-category-options [categories]="categories"></app-recursive-category-options>
           <h5>Dodaj do kategorii: {{this.selectedCategory?.customName}}</h5>
-        <button class="btn btn-primary" *ngIf="this.selectedCategory" (click)="addSubcategory(newCategory, user.username, this.selectedCategory.categoryId)">Add Subcategory</button>
+        <button class="btn btn-primary" *ngIf="this.selectedCategory" (click)="addSubcategory(newCategory, this.selectedCategory.categoryId)">Dodaj podkategorię</button>
     </div>
-    </tab>
-    <tab heading="Manage Links">
-      <app-recursive-category [categories]="categories"></app-recursive-category>
     </tab>
   </tabset>
 </div>
