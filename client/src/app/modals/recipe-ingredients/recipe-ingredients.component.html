@@ -14,3 +14,7 @@
     <button class="btn btn-primary" (click)="openEditRecipeModal(selectedRecipe)">Edytuj przepis</button>
     <button class="btn btn-danger" (click)="deleteRecipe(recipeName)">Usuń przepis</button>
 </div>
+<div class="modal-footer" *appHasRole="['Admin']">
+    <button class="btn btn-primary" (click)="openEditRecipeModal(selectedRecipe)">Edytuj przepis</button>
+    <button class="btn btn-danger" (click)="deleteRecipe(recipeName)">Usuń przepis</button>
+</div>
