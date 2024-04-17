@@ -14,11 +14,19 @@ namespace API.Services
 
         public string RecipientId { get; set; }
 
-        public FacebookMessageService(IConfiguration configuration)
+        public FacebookMessageService(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            ServiceApiKey = configuration["Facebook:ServiceApiKey"];
-            SenderPageId = configuration["Facebook:SenderPageId"];
-            RecipientId = configuration["Facebook:RecipientId"];
+            if(environment.IsDevelopment())
+            {
+                ServiceApiKey = configuration["Facebook:ServiceApiKey"];
+                SenderPageId = configuration["Facebook:SenderPageId"];
+            }
+            else
+            {
+                ServiceApiKey = Environment.GetEnvironmentVariable("FACEBOOK_APIKEY");
+                SenderPageId = Environment.GetEnvironmentVariable("FACEBOOK_PAGEID");
+            }
+            
         }
     }
 }

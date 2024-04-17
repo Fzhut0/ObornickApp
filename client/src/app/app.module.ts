@@ -28,6 +28,8 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { DeleteLinkComponent } from './modals/delete-link/delete-link.component';
 import { DeleteCategoryComponent } from './modals/delete-category/delete-category.component';
 import { ChangeLinkCategoryComponent } from './modals/change-link-category/change-link-category.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,8 @@ import { ChangeLinkCategoryComponent } from './modals/change-link-category/chang
     DeleteLinkComponent,
     DeleteCategoryComponent,
     ChangeLinkCategoryComponent,
+    AdminPanelComponent,
+    UserManagementComponent
 
   ],
   imports: [

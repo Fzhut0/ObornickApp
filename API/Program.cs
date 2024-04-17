@@ -40,7 +40,7 @@ builder.Services.AddDbContext<DataContext>(opt =>
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.Configure<IdentityOptions>(opt =>
 {
@@ -89,6 +89,5 @@ catch(Exception e)
     var logger = services.GetService<ILogger<Program>>();
     logger.LogError(e, "Migration error");
 }
-var adminPw = builder.Configuration["Admin:Adminpw"];
 
 app.Run();

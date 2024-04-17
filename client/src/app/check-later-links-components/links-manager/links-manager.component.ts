@@ -133,21 +133,5 @@ export class LinksManagerComponent implements OnInit {
     })
   }
 
-  sendMessage(link: Link, username: string)
-  {
-    var message = '';
-
-    message = `Link o nazwie: ${link.customName} z kategorii: ${link.categoryName} \\n Link:${link.savedUrl}`
-   
-    console.log(message);
-    console.log(username);
-
-    message = encodeURIComponent(message);
-
-    this.messagesService.sendMessage(message, username).subscribe({
-      next: response => console.log(response),
-      error: error => console.log(error)
-    })
-  }
 
 }

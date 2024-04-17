@@ -1,0 +1,49 @@
+<div class="container mt-4">
+  <h2>User Management</h2>
+
+  <div *ngIf="users.length > 0">
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Roles</th>
+          <th>Facebook ID</th>
+          <th>Select User</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.userName }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let role of user.roles">{{ role }}</li>
+            </ul>
+          </td>
+          <td>{{ user.messageServiceRecipientId ? user.messageServiceRecipientId : 'Not provided' }}</td>
+          <td>
+            <button class="btn btn-primary" (click)="selectUser(user.userName)">Select</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="users.length === 0">
+    <p>No users found.</p>
+  </div>
+
+  <div class="mt-4" *ngIf="this.selectedUsername">
+    <h4>Update Facebook ID for: {{this.selectedUsername}}</h4>
+    <div class="form-group">
+      <label for="newFacebookId">New Facebook ID:</label>
+      <input type="text" class="form-control" id="newFacebookId" [(ngModel)]="newFacebookId">
+    </div>
+    <button class="btn btn-primary" (click)="updateUserFacebookId()">Update</button>
+  </div>
+
+  <div class="mt-4" *ngIf="this.selectedUsername">
+    <h4>Clear Facebook IDs</h4>
+    <p>This action will clear Facebook IDs for all users.</p>
+    <button class="btn btn-danger" (click)="clearUserFacebookId()">Clear All</button>
+  </div>
+</div>

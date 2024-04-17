@@ -11,11 +11,11 @@ export class MessagesService {
 
     constructor(private httpClient: HttpClient) { }
 
-    sendMessage(message: string, name: string): Observable<any> {
+    sendMessage(message: string): Observable<any> {
       const headers = new HttpHeaders().set('Content-Type', 'application/json');
-      const body = JSON.stringify({ message: message, messageRecipientUsername : name }); 
+      const body = JSON.stringify({ message: message }); 
 
-      return this.httpClient.post<any>(this.baseUrl + 'FacebookMessage/sendmessage', body, { headers: headers });
+      return this.httpClient.post(this.baseUrl + 'FacebookMessage/sendmessage', body, { headers: headers} );
     }
   }
     

@@ -24,7 +24,6 @@ export class NavComponent implements OnInit {
   login()
   {
     this.accountService.login(this.model).subscribe(response => {
-      this.router.navigateByUrl('/add-recipes');
       this.model = {};
     });
   }

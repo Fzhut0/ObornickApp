@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
 import { User } from '../_models/user';
@@ -61,5 +61,10 @@ export class AccountService {
   getDecodedToken(token: string)
   {
     return JSON.parse(atob(token.split('.')[1]));
+  }
+
+  hasUserMessagingId()
+  {
+    return this.http.get(this.baseUrl + 'user/hasusermessageserviceid')
   }
 }

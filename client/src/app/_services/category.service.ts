@@ -17,11 +17,6 @@ export class CategoryService {
 
   getCategories()
   {
-    // const params = new HttpParams({
-    //   fromObject: {
-    //     username: username
-    //   }
-    // })
     return this.httpClient.get<Category[]>(this.baseUrl + 'CheckLaterLinksCategories/getcategories');
   }
 
@@ -38,7 +33,6 @@ export class CategoryService {
 
   addCategory(categoryName: string)
   {
-    //const category: Category = { customName: name, links: []};
     const requestBody = {
       customName: categoryName,
       links: []

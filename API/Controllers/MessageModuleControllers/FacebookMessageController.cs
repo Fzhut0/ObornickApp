@@ -1,7 +1,12 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Web;
 using API.DTOs;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
@@ -21,10 +26,9 @@ namespace API.Controllers
         public async Task<ActionResult> SendMessage([FromBody]MessageDto messageDto)
         {
             var pageId = _facebookMessageService.SenderPageId;
-            var recipientId = "";
             var accessApiKey = _facebookMessageService.ServiceApiKey;
 
-            recipientId = await _uow.UserRepository.GetUserMessageRecipientIdByUsername(messageDto.MessageRecipientUsername);
+            var recipientId = await _uow.UserRepository.GetUserMessageRecipientIdByUsername(User.Identity.Name);
 
             var msg = messageDto.Message;
 
@@ -58,18 +62,45 @@ namespace API.Controllers
             }
         }
 
-        
-        [HttpPost]
-        public async Task<ActionResult> SetRecipientIdForMessaging(string username, string id)
+        [HttpGet("getconversations")]
+        public async Task<ActionResult> GetConversations()
         {
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
+            var pageId = _facebookMessageService.SenderPageId;
+            var accessApiKey = _facebookMessageService.ServiceApiKey;
 
-            user.MessageServiceRecipientId = id;
+            using (var httpClient = new HttpClient())
+            {
+                var apiUrl = $"https://graph.facebook.com/v19.0/{pageId}/conversations?fields=participants&access_token={accessApiKey}";
 
-            await _uow.Complete();
+                var response = await httpClient.GetAsync(apiUrl);
 
-            return Ok();
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseAsString = await response.Content.ReadAsStringAsync();
+                    var conversations = MessageConversationReader.FromJson(responseAsString);
+
+                    var participantList = new List<string>();
+
+                    foreach(var conv in conversations.Data)
+                    {
+                        foreach(var participant in conv.Participants.Data)
+                        {
+                            if(participant.Id == pageId)
+                            {
+                                continue;
+                            }
+                            participantList.Add(participant.Name);
+                        }
+                    }      
+                    return Ok(participantList);
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    return BadRequest(errorMessage);
+                }
+            }
         }
-        
+
     }
 }

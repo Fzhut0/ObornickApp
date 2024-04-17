@@ -12,3 +12,11 @@
         </div>
     </div>
 </div>
+
+<div *ngIf="accountService.currentUser$ | async" class="container mt-5">
+    <div class="text-center">
+        <button class="btn btn-primary btn-lg me-2" *appHasRole="['Admin']" routerLink="/admin" routerLinkActive="active">Admin panel</button>
+        <button class="btn btn-primary btn-lg me-2" routerLink="/link-manager">Menedżer linków</button>
+        <button class="btn btn-primary btn-lg me-2" routerLink="/recipes">Przepisy</button>
+    </div>
+</div>

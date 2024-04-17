@@ -22,6 +22,7 @@ export class RecipeIngredientsComponent implements OnInit {
   recipeId: number = 0;
 
   userHasRecipe: boolean = false;
+  userHasMessagingId: boolean = false;
 
   constructor(private recipeService: RecipesService, public bsModalRef: BsModalRef, private messagesService: MessagesService,
     private modalService: BsModalService, public accountService: AccountService) {
@@ -31,6 +32,7 @@ export class RecipeIngredientsComponent implements OnInit {
   ngOnInit(): void {
     this.listRecipeIngredients(this.recipeId);
     this.checkHasUserRecipe(this.recipeName);
+    this.checkHasUserMessagingId();
   }
 
   listRecipeIngredients(recipeId: number) {
@@ -39,9 +41,11 @@ export class RecipeIngredientsComponent implements OnInit {
     })
   }
 
-  sendIngredientsAsList(username: string) {
+  sendIngredientsAsList() {
     var message = '';
 
+    
+    
     if (this.ingredients.length > 0 && this.recipeName.length > 0) {
       message = `Do zrobienia ${this.recipeName} potrzebujesz:\\n`
     }
@@ -51,7 +55,7 @@ export class RecipeIngredientsComponent implements OnInit {
     
     message = encodeURIComponent(message);  
     
-    this.messagesService.sendMessage(message, username).subscribe();
+    this.messagesService.sendMessage(message).subscribe();
   }
 
   openEditRecipeModal(recipe: Recipe) {
@@ -103,6 +107,21 @@ export class RecipeIngredientsComponent implements OnInit {
         }
         else {
           this.userHasRecipe = false;
+        }
+      }
+    })
+  }
+
+  checkHasUserMessagingId()
+  {
+    this.accountService.hasUserMessagingId().subscribe({
+      next: response => {
+        if (response == true)
+        {
+          this.userHasMessagingId = true;
+        }
+        else {
+          this.userHasMessagingId = false;
         }
       }
     })

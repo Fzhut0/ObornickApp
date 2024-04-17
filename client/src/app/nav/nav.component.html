@@ -9,7 +9,9 @@
             <li>
               <a class="nav-link" routerLink="/link-manager">Menedżer linków</a>
             </li>
-            
+            <li class="nav-item" *appHasRole="['Admin']">
+              <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin panel</a>
+            </li>
           </ng-container>
         </ul>
 
