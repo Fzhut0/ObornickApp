@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.DTOs.CheckLaterLinksModuleDTOS;
 using API.Entities.CheckLaterLinksModuleEntities;
 using API.Extensions;
 using API.Interfaces;
 using AutoMapper;
-using AutoMapper.Configuration.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,15 +1,14 @@
-using System.Reflection;
 using API.DTOs;
 using API.Entities;
+using API.Entities.RecipeModuleEntities;
 using API.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
-public class RecipesController : BaseApiController
+    public class RecipesController : BaseApiController
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _uow;
@@ -32,7 +31,8 @@ public class RecipesController : BaseApiController
             return BadRequest("Brak użytkownika");
         }
 
-        if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any() || recipeDTO.Name.IsNullOrEmpty())
+        if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any() 
+        || recipeDTO.Name.IsNullOrEmpty() || recipeDTO.RecipeDescriptionSteps == null)
         {
             return BadRequest("Nieprawidłowe dane");
         }
@@ -46,8 +46,15 @@ public class RecipesController : BaseApiController
         {
             Name = recipeDTO.Name,
             RecipeIngredients = new List<RecipeIngredient>(),
-            UserId = userId
+            UserId = userId,
+            RecipeDescriptionSteps = new List<RecipeDescriptionStep>()
         };
+
+        foreach(var step in recipeDTO.RecipeDescriptionSteps)
+        {
+                var descriptionStep = _mapper.Map<RecipeDescriptionStep>(step);
+            newRecipe.RecipeDescriptionSteps.Add(descriptionStep);
+        }
 
 
         foreach(var ing in recipeDTO.Ingredients)
@@ -202,8 +209,14 @@ public class RecipesController : BaseApiController
         }
 
         existingRecipe.RecipeIngredients.Clear();
-        existingRecipe.Name = recipeDTO.Name;
+        existingRecipe.RecipeDescriptionSteps.Clear();
 
+        existingRecipe.Name = recipeDTO.Name;
+        foreach(var step in recipeDTO.RecipeDescriptionSteps)
+        {
+            var descriptionStep = _mapper.Map<RecipeDescriptionStep>(step);
+            existingRecipe.RecipeDescriptionSteps.Add(descriptionStep);
+        }
 
         foreach (var ing in recipeDTO.Ingredients)
         {

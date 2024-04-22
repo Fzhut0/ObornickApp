@@ -5,10 +5,15 @@
     </button>
 </div>
 <div class="modal-body">
-    <h6>Składniki:</h6>
-    <ul>
-        <li *ngFor="let ingredient of ingredients">{{ ingredient.ingredientName }} - {{ ingredient.quantity }}</li>
-    </ul>
+  <h6>Składniki:</h6>
+  <ul>
+    <li *ngFor="let ingredient of ingredients">{{ ingredient.ingredientName }} - {{ ingredient.quantity }}</li>
+  </ul>
+
+  <h6>Kroki:</h6>
+  <ol>
+    <li *ngFor="let step of selectedRecipe.recipeDescriptionSteps">{{ step.description }}</li>
+  </ol>
 </div>
 <div class="modal-footer" *ngIf="userHasMessagingId || userHasRecipe">
     <button class="btn-send" *ngIf="userHasMessagingId" (click)="sendIngredientsAsList()">Send ingredients list</button>

@@ -13,9 +13,10 @@ export class RecipesService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addRecipe(model: FormGroup)
+  addRecipe(model: any)
   {
-    return this.httpClient.post(this.baseUrl + 'recipes/addrecipe', model, {responseType: 'text'});
+      console.log(model.value);
+     return this.httpClient.post(this.baseUrl + 'recipes/addrecipe', model, {responseType: 'text'});
   }
 
   getAllRecipes()

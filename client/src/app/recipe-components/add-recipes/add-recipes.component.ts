@@ -26,12 +26,17 @@ export class AddRecipesComponent {
   {
     this.recipeForm = this.fb.group({
       name: ['', Validators.required],
-      ingredients: this.fb.array([])
+      ingredients: this.fb.array([]),
+      recipeDescriptionSteps: this.fb.array([])
     });
   }
 
     get ingredientsArray() {
-    return this.recipeForm.get('ingredients') as FormArray;
+      return this.recipeForm.get('ingredients') as FormArray;
+  }
+
+  get stepsArray() {
+    return this.recipeForm.get('recipeDescriptionSteps') as FormArray;
   }
 
   addIngredientInForm()
@@ -46,16 +51,37 @@ export class AddRecipesComponent {
     this.ingredientsArray.removeAt(index);
   }
 
-  addRecipe()
-  {
-    const values = {...this.recipeForm.value};
-    console.log(values);
+  addStepInForm() {
+    this.stepsArray.push(this.fb.group({
+      description: ['', Validators.required]
+    }));
+  }
 
-      this.recipeService.addRecipe(values).subscribe({
-      error: error => {
-        console.log(error)
-        }
-      })
+  removeStep(index: number) {
+    this.stepsArray.removeAt(index);
+  }
+
+  addRecipe() {
+    if (this.recipeForm.invalid)
+    {
+      return;
+      }
+    const recipeData = {
+      name: this.recipeForm.get('name')?.value,
+      ingredients: this.recipeForm.get('ingredients')?.value,
+      recipeDescriptionSteps: this.recipeForm.get('recipeDescriptionSteps')?.value
+    };
+
+    this.recipeService.addRecipe(recipeData).subscribe({
+      next: () => {
+        console.log('Recipe added successfully');
+        this.resetForm();
+      },
+      error: (error) => {
+        console.error('Error adding recipe:', error);
+      }
+    });
+
     this.resetForm();
   }
 

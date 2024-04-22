@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using API.Entities.RecipeModuleEntities;
 
 namespace API.Entities
 {
@@ -14,6 +11,8 @@ namespace API.Entities
         public ICollection<RecipeIngredient> RecipeIngredients { get; set; }
 
         public int UserId { get; set; }
+
+        public ICollection<RecipeDescriptionStep> RecipeDescriptionSteps { get; set; }
         
     }
 }

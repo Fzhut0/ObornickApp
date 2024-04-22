@@ -21,6 +21,7 @@ export class RecipeIngredientsComponent implements OnInit {
   user: User | undefined;
   recipeId: number = 0;
 
+
   userHasRecipe: boolean = false;
   userHasMessagingId: boolean = false;
 
@@ -66,7 +67,8 @@ export class RecipeIngredientsComponent implements OnInit {
         recipeName: recipe.name,
         selectedRecipe: recipe,
         ingredients: this.ingredients,
-        recipeId: recipe.recipeId
+        recipeId: recipe.recipeId,
+        descriptionSteps: recipe.recipeDescriptionSteps
       }
     }
     const modalRef = this.modalService.show(EditRecipeComponent, config);

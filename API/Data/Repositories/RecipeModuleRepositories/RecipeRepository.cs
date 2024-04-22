@@ -1,4 +1,5 @@
 using API.Entities;
+using API.Entities.RecipeModuleEntities;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,7 +35,7 @@ namespace API.Data
 
         public async Task<Recipe> GetRecipeByName(string name, int userId)
         {
-            return await _context.Recipes.Include(r => r.RecipeIngredients).FirstOrDefaultAsync(x => x.Name == name && x.UserId == userId);
+            return await _context.Recipes.Include(r => r.RecipeIngredients).Include(d => d.RecipeDescriptionSteps).FirstOrDefaultAsync(x => x.Name == name && x.UserId == userId);
         }
 
         public async Task<Recipe> GetRecipeById(int id)
@@ -44,7 +45,7 @@ namespace API.Data
 
         public async Task<List<Recipe>> GetAllRecipes()
         {
-            return await _context.Recipes.Include(r => r.RecipeIngredients).ToListAsync();
+            return await _context.Recipes.Include(r => r.RecipeIngredients).Include(d => d.RecipeDescriptionSteps).ToListAsync();
         }
 
         public void DeleteRecipe(Recipe recipe)
@@ -55,6 +56,11 @@ namespace API.Data
         public async Task<ICollection<Recipe>> GetUserRecipes(int userId)
         {
            return await _context.Recipes.Include(r => r.RecipeIngredients).Where(r => r.UserId == userId).ToListAsync();
+        }
+
+        public async Task<ICollection<RecipeDescriptionStep>> GetRecipeDescriptionSteps(int recipeId)
+        {
+            return await _context.RecipeDescriptionSteps.Where(r => r.RecipeId == recipeId).ToListAsync();
         }
     }
 }

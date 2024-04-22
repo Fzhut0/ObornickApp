@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Entities;
+using API.DTOs.RecipeModuleDTOS;
 
 namespace API.DTOs
 {
@@ -11,6 +7,8 @@ namespace API.DTOs
         public string OriginalName { get; set; }
         public string Name { get; set; }
         public List<RecipeIngredientDto> Ingredients { get; set; }
+
+        public List<RecipeDescriptionStepDto> RecipeDescriptionSteps { get; set; }
 
         public int RecipeId { get; set; }
     }
