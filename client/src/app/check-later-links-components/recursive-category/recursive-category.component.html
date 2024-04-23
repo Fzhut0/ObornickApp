@@ -1,7 +1,7 @@
 <div class="category-container">
-  <tabset>
+  <tabset #tabSet>
     <ng-container *ngFor="let category of categories">      
-      <tab [heading]="" >
+      <tab [heading]="" [id]="category.customName" (selectTab)="selectTab($event)">
         <ng-template tabHeading>
               <div class="tab-heading">
                 <span class="category-name">{{ category.customName }}</span>
@@ -13,6 +13,7 @@
         <div class="links-container">        
           <div *ngFor="let link of category.links" class="link">
             <a href="{{ link.savedUrl }}" target="_blank">{{ link.customName }}</a>
+            <button class="btn btn-primary" *ngIf="userHasMessagingId" (click)="editLinkName(link)">Edytuj nazwę</button> 
             <button class="btn btn-primary" *ngIf="userHasMessagingId" (click)="sendMessage(link, category.customName)">Wyślij jako wiadomość</button> 
             <button class="btn btn-primary" (click)="openChangeLinkCategoryPopup(link)">Przenieś do innej kategorii</button> 
             <button class="btn btn-danger" (click)="openRemoveLinkPopup(link)">Usuń link</button>

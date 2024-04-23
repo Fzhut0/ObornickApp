@@ -1,14 +1,12 @@
-using API.Data.Repositories.CheckLaterLinksRepositories;
 using API.DTOs;
 using API.DTOs.CheckLaterLinksModuleDTOS;
 using API.Entities;
 using API.Entities.CheckLaterLinksModuleEntities;
-using API.Extensions;
 using AutoMapper;
 
 namespace API.Helpers
 {
-public class AutoMapperProfiles : Profile
+    public class AutoMapperProfiles : Profile
 {
     public AutoMapperProfiles()
     {

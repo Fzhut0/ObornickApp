@@ -12,6 +12,9 @@ export class CategoryService {
 
   @Output() categorySelectedEvent = new EventEmitter<Category>();
   @Output() fetchCategoriesEvent = new EventEmitter();
+  @Output() categoriesFetched = new EventEmitter();
+
+  lastSelectedCategoryId: string = '';
 
   constructor(private httpClient: HttpClient) { }
 

@@ -47,5 +47,15 @@ export class LinksService {
     }
     return this.httpClient.put(this.baseUrl + 'CheckLaterLink/updatelinkcategory', requestBody, {responseType: 'text'});
   }
+
+  updateLinkName(currentName: string, newName: string) {
+  const params = new HttpParams()
+    .set('currentName', currentName)
+    .set('newName', newName);
+
+  console.log(params.toString()); // Optional: Log the parameters as a string
+
+  return this.httpClient.put(this.baseUrl + 'CheckLaterLink/updatelinkname', null, { params: params, responseType: 'text' });
+}
  
 }

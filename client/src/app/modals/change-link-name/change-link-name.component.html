@@ -1,0 +1,14 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Obecna nazwa: {{this.link?.customName}}</h4>
+  <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true" class="visually-hidden">&times;</span>
+  </button>
+</div>
+
+<div class="change-link-form">
+  <form (ngSubmit)="updateLinkName(newName)" class="link-form">
+    <label for="newNameInput">Nowa nazwa linku:</label>
+    <input type="text" id="newNameInput" [(ngModel)]="newName" name="newNameInput" placeholder="Enter new name" class="form-control">
+    <button type="submit" [disabled]="!newName" class="btn btn-primary">Zaktualizuj nazwę</button>
+  </form>
+</div>

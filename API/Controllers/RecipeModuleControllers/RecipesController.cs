@@ -1,15 +1,13 @@
-using System.Reflection;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
-public class RecipesController : BaseApiController
+    public class RecipesController : BaseApiController
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _uow;

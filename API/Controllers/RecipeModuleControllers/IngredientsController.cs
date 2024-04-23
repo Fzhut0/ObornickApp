@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.DTOs;
-using API.Entities;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-public class IngredientsController : BaseApiController
+    public class IngredientsController : BaseApiController
 {
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;

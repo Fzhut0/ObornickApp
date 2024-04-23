@@ -30,6 +30,7 @@ import { DeleteCategoryComponent } from './modals/delete-category/delete-categor
 import { ChangeLinkCategoryComponent } from './modals/change-link-category/change-link-category.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { ChangeLinkNameComponent } from './modals/change-link-name/change-link-name.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { UserManagementComponent } from './admin/user-management/user-management
     DeleteCategoryComponent,
     ChangeLinkCategoryComponent,
     AdminPanelComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    ChangeLinkNameComponent
 
   ],
   imports: [
