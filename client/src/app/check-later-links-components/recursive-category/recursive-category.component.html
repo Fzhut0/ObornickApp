@@ -1,7 +1,7 @@
 <div class="category-container">
-  <tabset #tabSet>
+  <tabset #tabSet >
     <ng-container *ngFor="let category of categories">      
-      <tab [heading]="" [id]="category.customName" (selectTab)="selectTab($event)">
+      <tab [heading]="" [id]="category.customName" (selectTab)="selectTab($event)" [active]="">
         <ng-template tabHeading>
               <div class="tab-heading">
                 <span class="category-name">{{ category.customName }}</span>

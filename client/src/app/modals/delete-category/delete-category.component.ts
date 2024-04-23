@@ -27,8 +27,7 @@ export class DeleteCategoryComponent implements OnInit {
       next: () => {
         this.bsModalRef.hide(),
         this.categoryService.fetchCategories()
-      },
-      error: error => console.log(error)
+      }
     })
   }
 }

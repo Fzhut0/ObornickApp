@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { filter } from 'rxjs';
@@ -18,7 +18,7 @@ import { DeleteLinkComponent } from 'src/app/modals/delete-link/delete-link.comp
   templateUrl: './recursive-category.component.html',
   styleUrls: ['./recursive-category.component.css']
 })
-export class RecursiveCategoryComponent implements OnInit {
+export class RecursiveCategoryComponent implements OnInit, AfterViewChecked {
   @ViewChild(TabsetComponent) tabSet: TabsetComponent | undefined;
   @Input() categories: Category[] = [];
   bsCategoryModalRef: BsModalRef<DeleteCategoryComponent> = new BsModalRef<DeleteCategoryComponent>();
@@ -28,13 +28,32 @@ export class RecursiveCategoryComponent implements OnInit {
 
   userHasMessagingId: boolean = false;
 
-  constructor(private modalService: BsModalService, private categoryService: CategoryService, private accountService: AccountService, private messagesService: MessagesService)
+  constructor(private modalService: BsModalService, private categoryService: CategoryService,
+    private accountService: AccountService, private messagesService: MessagesService, private crf: ChangeDetectorRef)
   { }
   
+  ngAfterViewChecked()
+  {
+  
+    if (this.tabSet && this.tabSet.tabs && this.categoryService.lastSelectedCategoryId != null)
+        {
+      for (let i = 0; i < this.tabSet.tabs.length; i++) {
+        if (this.tabSet.tabs[i].id === null)
+        {
+          return;
+              }
+            if (this.tabSet.tabs[i].id === this.categoryService.lastSelectedCategoryId)
+            {
+              this.tabSet.tabs[i].active = true;
+              this.crf.detectChanges();
+            }    
+          }
+        }
+  }
 
   ngOnInit(): void {
     this.checkHasUserMessagingId();
-
+      
   }
 
   selectTab(event: TabDirective)
@@ -86,6 +105,11 @@ export class RecursiveCategoryComponent implements OnInit {
         this.categoryService.fetchCategories();
       }
     })
+    this.bsChangeLinkCategoryModalRef.onHidden?.subscribe({
+      next: () => {
+       
+      }
+    })
   }
 
   checkHasUserMessagingId()
@@ -123,6 +147,10 @@ export class RecursiveCategoryComponent implements OnInit {
       }
     }
     this.bsChangeLinkNameModalRef = this.modalService.show(ChangeLinkNameComponent, config)
-    this.bsChangeLinkNameModalRef.onHide?.subscribe({})
+    this.bsChangeLinkNameModalRef.onHide?.subscribe({
+      next: () => {
+        this.categoryService.fetchCategories();
+      }
+    })
   }
 }

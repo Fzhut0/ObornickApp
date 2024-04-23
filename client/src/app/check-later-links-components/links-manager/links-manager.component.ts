@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Category } from 'src/app/_models/category';
 import { Link } from 'src/app/_models/link';
@@ -115,14 +115,14 @@ export class LinksManagerComponent implements OnInit {
 
   getCategories() {
     this.categoryService.getCategories().subscribe({
-      next: response => {
+      next: response =>
+      {
         this.categories = response
         this.categories.forEach(category => {
           this.getSubcategories(category)
         })
       }
     })
-     this.categoryService.categoriesFetched.emit();
   }
 
   getSubcategories(category: Category)
@@ -133,9 +133,7 @@ export class LinksManagerComponent implements OnInit {
         category.subcategories.forEach(subcategory => {
           this.getSubcategories(subcategory)
         }); 
-      },
-      error: error => console.log(error),
+      }
     })
-    this.categoryService.categoriesFetched.emit();
   }
 }
