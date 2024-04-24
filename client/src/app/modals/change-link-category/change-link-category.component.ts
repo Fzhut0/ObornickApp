@@ -32,8 +32,7 @@ export class ChangeLinkCategoryComponent implements OnInit {
         this.categories.forEach(category => {
           this.getSubcategories(category)
         })
-      },   
-      error: error => console.log(error)
+      }   
     })
   }
 
@@ -46,8 +45,7 @@ export class ChangeLinkCategoryComponent implements OnInit {
           this.getSubcategories(subcategory)
         });
         
-      },
-      error: error => console.log(error)
+      }
     })
   }
 
@@ -56,8 +54,7 @@ export class ChangeLinkCategoryComponent implements OnInit {
     this.linksService.updateLinkCategory(link, newCategoryId).subscribe({
       next: () => {
         this.bsModalRef.hide()
-      },
-      error: error => console.log(error)
+      }
     })
   }
 }

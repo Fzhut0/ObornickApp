@@ -5,6 +5,7 @@ using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers.CheckLaterLinksControllers
 {
@@ -44,17 +45,12 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return BadRequest("link is incorrect");
             }
 
-            // var existingLinkName = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(laterLinkDto.CustomName, userId);
-            // var existingLinkUrl = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByUrl(laterLinkDto.SavedUrl, userId);
+            if(laterLinkDto.CustomName.IsNullOrEmpty())
+            {
+                return BadRequest("Brak nazwy linku");
+            }
 
-            // if(existingLinkName != null || existingLinkUrl != null)
-            // {
-                
-            //     return BadRequest("Link is already added with name:" + existingLinkName.CustomName);
-            // }
-
-            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(laterLinkDto.CategoryId, userId);
-            
+            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(laterLinkDto.CategoryId, userId);    
 
             var newLink = new CheckLaterLink
             {
@@ -164,6 +160,33 @@ namespace API.Controllers.CheckLaterLinksControllers
                 return Ok("link category updated");
             }
 
+            return BadRequest("problem updating link");
+        }
+
+        [HttpPut("updatelinkname")]
+        public async Task<ActionResult> UpdateLinkName(string currentName, string newName)
+        {
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+            var userId = user.Id;
+
+            if(user == null)
+            {
+                return BadRequest("no user");
+            }
+
+            var existingLink = await _uow.CheckLaterLinkRepository.GetCheckLaterLinkByName(currentName, userId);
+
+            if(existingLink == null)
+            {
+                return BadRequest("invalid input");
+            }
+
+            existingLink.CustomName = newName;
+
+            if(await _uow.Complete())
+            {
+                return Ok("link category updated");
+            }
             return BadRequest("problem updating link");
         }
     }

@@ -1,0 +1,73 @@
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.btn-close {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-close:hover {
+  color: #007bff;
+}
+
+.change-link-form {
+  padding: 20px;
+}
+
+.link-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.link-form input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.link-form button {
+  margin-top: 15px;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-primary:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  display: block;
+  margin-top: 5px;
+  font-size: 0.875rem;
+}
+

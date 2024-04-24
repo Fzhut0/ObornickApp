@@ -27,8 +27,7 @@ export class DeleteLinkComponent implements OnInit {
     this.linkService.deleteLink(this.link.customName).subscribe({
       next: () => {
         this.bsModalRef.hide()
-      },
-      error: error => console.log(error)
+      }
     })
   }
 }

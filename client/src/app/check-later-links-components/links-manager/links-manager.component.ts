@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Category } from 'src/app/_models/category';
 import { Link } from 'src/app/_models/link';
 import { AccountService } from 'src/app/_services/account.service';
@@ -32,19 +33,21 @@ export class LinksManagerComponent implements OnInit {
   newCategory: string = '';
   newSubcategory: string = '';
 
-  constructor(private linksService: LinksService, private categoryService: CategoryService, private messagesService: MessagesService,
+
+  constructor(private linksService: LinksService, private categoryService: CategoryService, private toastr: ToastrService,
     public accountService: AccountService) { }
 
   ngOnInit(): void {
     this.getCategories();
-    this.categoryService.categorySelectedEvent.subscribe((data: Category) => {
-      this.selectedCategory = data;
-    })
     this.categoryService.fetchCategoriesEvent.subscribe({
       next: () => {
         this.getCategories()
       }
     })
+    this.categoryService.categorySelectedEvent.subscribe((data: Category) => {
+      this.selectedCategory = data;
+    })
+    this.categoryService.categoriesFetched.emit();
   }
 
   addLink() {
@@ -52,10 +55,12 @@ export class LinksManagerComponent implements OnInit {
     {
       this.newLink.categoryName = this.selectedCategory.customName;
       this.newLink.categoryId = this.selectedCategory.categoryId;
+      var toastMsg = `Dodano link o nazwie: ${this.newLink.customName} do kategorii: ${this.newLink.categoryName}`
         this.linksService.addLink(this.newLink).subscribe({
         next: () => {
             this.getCategories();
-            this.resetLinkForm();
+            this.toastr.success(toastMsg);
+            this.resetLinkForm();      
         }  
       }) 
     } 
@@ -68,13 +73,16 @@ export class LinksManagerComponent implements OnInit {
       savedUrl: '',
       categoryName: '',
       categoryId: 0
-      }
+    }
+    this.selectedCategory = null;
   }
 
   addCategory(name: string) {
+    var toastMsg = `Dodano kategorię o nazwie: ${name}`
     this.categoryService.addCategory(name).subscribe({
       next: () => {
         this.getCategories();
+        this.toastr.success(toastMsg);
         this.newCategory = '';
       }
     });
@@ -86,9 +94,11 @@ export class LinksManagerComponent implements OnInit {
 
   addSubcategory(name: string, id: number)
   {
+    var toastMsg = `Dodano podkategorię o nazwie: ${name}`
     this.categoryService.addSubcategory(name, id).subscribe({
       next: () => {
         this.getCategories();
+        this.toastr.success(toastMsg);
         this.newSubcategory = '';
         this.newCategory = '';
       }
@@ -103,14 +113,10 @@ export class LinksManagerComponent implements OnInit {
     })
   }
 
-
-  filteredLinks(category: Category): Link[] {
-    return this.links.filter(link => link.categoryName === category.customName);
-  }
-
   getCategories() {
     this.categoryService.getCategories().subscribe({
-      next: response => {
+      next: response =>
+      {
         this.categories = response
         this.categories.forEach(category => {
           this.getSubcategories(category)
@@ -126,12 +132,8 @@ export class LinksManagerComponent implements OnInit {
         category.subcategories = response;
         category.subcategories.forEach(subcategory => {
           this.getSubcategories(subcategory)
-        });
-        
-      },
-      error: error => console.log(error)
+        }); 
+      }
     })
   }
-
-
 }
