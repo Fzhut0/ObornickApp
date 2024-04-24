@@ -28,6 +28,7 @@ export class RecursiveCategoryComponent implements OnInit, AfterViewChecked {
 
   userHasMessagingId: boolean = false;
 
+
   constructor(private modalService: BsModalService, private categoryService: CategoryService,
     private accountService: AccountService, private messagesService: MessagesService, private crf: ChangeDetectorRef)
   { }
@@ -41,7 +42,12 @@ export class RecursiveCategoryComponent implements OnInit, AfterViewChecked {
         if (this.tabSet.tabs[i].id === null)
         {
           return;
-              }
+        }
+        if (this.tabSet.tabs[i].id === this.categoryService.lastSelectedMainCategoryId)
+        {
+          this.tabSet.tabs[i].active = true;
+          this.crf.detectChanges();
+            }
             if (this.tabSet.tabs[i].id === this.categoryService.lastSelectedCategoryId)
             {
               this.tabSet.tabs[i].active = true;
@@ -53,14 +59,21 @@ export class RecursiveCategoryComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.checkHasUserMessagingId();
-      
   }
 
   selectTab(event: TabDirective)
   {
     if (event.id)
     {
-      this.categoryService.lastSelectedCategoryId = event.id;
+      if (event.customClass === 'false')
+      {
+        this.categoryService.lastSelectedMainCategoryId = event.id;
+      }
+      else
+      {
+        this.categoryService.lastSelectedCategoryId = event.id;
+      }
+      
     }
   }
 
@@ -83,11 +96,24 @@ export class RecursiveCategoryComponent implements OnInit, AfterViewChecked {
         link: link
       }
     }
-    this.bsLinkModalRef = this.modalService.show(DeleteLinkComponent, config)
-    this.bsLinkModalRef.onHide?.subscribe({
-      next: () => {
-        this.categoryService.fetchCategories();
-              
+
+
+    var categoryName = '';
+    this.categoryService.getCategoryName(link.categoryId).subscribe({
+      next: response => {
+        if (response.isSubcategory)
+        {
+          categoryName = response.customName
+          this.categoryService.lastSelectedCategoryId = categoryName;
+        }
+        this.categoryService.lastSelectedCategoryId = categoryName;
+        this.bsLinkModalRef = this.modalService.show(DeleteLinkComponent, config)
+        this.bsLinkModalRef.onHide?.subscribe({
+          next: () => {
+            this.categoryService.fetchCategories();
+                  
+          }
+        })
       }
     })
   }
@@ -99,15 +125,21 @@ export class RecursiveCategoryComponent implements OnInit, AfterViewChecked {
         link: link
       }
     }
-    this.bsChangeLinkCategoryModalRef = this.modalService.show(ChangeLinkCategoryComponent, config);
-    this.bsChangeLinkCategoryModalRef.onHide?.subscribe({
-      next: () => {
-        this.categoryService.fetchCategories();
-      }
-    })
-    this.bsChangeLinkCategoryModalRef.onHidden?.subscribe({
-      next: () => {
-       
+
+    var categoryName = '';
+    this.categoryService.getCategoryName(link.categoryId).subscribe({
+      next: response => {
+        if (response.isSubcategory)
+        {
+          categoryName = response.customName
+          this.categoryService.lastSelectedCategoryId = categoryName;
+        }
+        this.bsChangeLinkCategoryModalRef = this.modalService.show(ChangeLinkCategoryComponent, config);
+        this.bsChangeLinkCategoryModalRef.onHide?.subscribe({
+          next: () => {
+            this.categoryService.fetchCategories();
+          }
+        })
       }
     })
   }

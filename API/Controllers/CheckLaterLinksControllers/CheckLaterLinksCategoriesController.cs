@@ -188,9 +188,36 @@ namespace API.Controllers.CheckLaterLinksControllers
             foreach(var category in subcategories)
             {
                 var categoryDto = _mapper.Map<CheckLaterLinkCategoryDto>(category);
+                categoryDto.IsSubcategory = true;
                 categoryDtoList.Add(categoryDto);
             }
             return Ok(categoryDtoList);
+        }
+
+        [HttpGet("getcategorynamebyid")]
+        public async Task<ActionResult<CheckLaterLinkCategoryDto>> GetCategoryNameById(int categoryId)
+        {
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+
+            if(user == null)
+            {
+                return BadRequest("no user");
+            }
+
+            var userId = user.Id;
+            var category = await _uow.CheckLaterLinkCategoryRepository.GetCategoryById(categoryId, userId);
+
+            if(category == null)
+
+            {
+                return BadRequest();
+            }
+            var categoryDto = _mapper.Map<CheckLaterLinkCategoryDto>(category);
+            if(categoryDto.ParentCategoryName != null)
+            {
+                categoryDto.IsSubcategory = true;
+            }
+            return Ok(categoryDto);
         }
     }
 }

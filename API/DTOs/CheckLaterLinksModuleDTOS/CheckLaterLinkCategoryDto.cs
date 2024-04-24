@@ -13,5 +13,7 @@ namespace API.DTOs.CheckLaterLinksModuleDTOS
         public string ParentCategoryName { get; set; }
 
         public int ParentCategoryId { get; set; }
+
+        public bool IsSubcategory { get; set; }
     }
 }

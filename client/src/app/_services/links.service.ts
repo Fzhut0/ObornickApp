@@ -53,8 +53,6 @@ export class LinksService {
     .set('currentName', currentName)
     .set('newName', newName);
 
-  console.log(params.toString()); // Optional: Log the parameters as a string
-
   return this.httpClient.put(this.baseUrl + 'CheckLaterLink/updatelinkname', null, { params: params, responseType: 'text' });
 }
  

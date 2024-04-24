@@ -4,5 +4,8 @@ export interface Category {
     customName: string;
     links: Link[];
     subcategories: Category[];
-    categoryId: number
+    categoryId: number;
+    isSubcategory: boolean;
+    parentCategoryName: string;
+
 }

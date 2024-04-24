@@ -15,6 +15,7 @@ export class CategoryService {
   @Output() categoriesFetched = new EventEmitter();
 
   lastSelectedCategoryId: string = '';
+  lastSelectedMainCategoryId: string = '';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -68,6 +69,16 @@ export class CategoryService {
   fetchCategories()
   {
     this.fetchCategoriesEvent.emit();
+  }
+
+  getCategoryName(categoryId: number)
+  {
+    const params = new HttpParams({
+      fromObject: {
+        categoryId: categoryId
+      }
+    })
+    return this.httpClient.get<Category>(this.baseUrl + 'CheckLaterLinksCategories/getcategorynamebyid', {params: params});
   }
 
 }
