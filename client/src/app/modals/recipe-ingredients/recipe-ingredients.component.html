@@ -11,8 +11,8 @@
   </ul>
 
   <h6>Kroki:</h6>
-  <ol>
-    <li *ngFor="let step of selectedRecipe.recipeDescriptionSteps">{{ step.description }}</li>
+  <ol style="max-width: 100%;">
+    <li *ngFor="let step of selectedRecipe.recipeDescriptionSteps" style="word-wrap: break-word;">{{ step.description  }}</li>
   </ol>
 </div>
 <div class="modal-footer" *ngIf="userHasMessagingId || userHasRecipe">
