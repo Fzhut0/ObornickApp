@@ -1,4 +1,5 @@
 using API.DTOs;
+using API.DTOs.RecipeModuleDTOS;
 using API.Entities;
 using API.Entities.RecipeModuleEntities;
 using API.Interfaces;
@@ -9,245 +10,245 @@ using Microsoft.IdentityModel.Tokens;
 namespace API.Controllers
 {
     public class RecipesController : BaseApiController
-{
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _uow;
-
-    public RecipesController(IUnitOfWork uow, IMapper mapper)
     {
-        _uow = uow;
-        _mapper = mapper;
-    }
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _uow;
 
-
-    [HttpPost("addrecipe")]
-    public async Task<ActionResult> AddRecipe([FromBody] RecipeDto recipeDTO)
-    {
-        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
-        var userId = user.Id;
-
-        if(user == null)
+        public RecipesController(IUnitOfWork uow, IMapper mapper)
         {
-            return BadRequest("Brak użytkownika");
-        }
-
-        if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any() 
-        || recipeDTO.Name.IsNullOrEmpty() || recipeDTO.RecipeDescriptionSteps == null)
-        {
-            return BadRequest("Nieprawidłowe dane");
-        }
-
-        if(await _uow.RecipeRepository.RecipeExists(recipeDTO.Name))
-        {
-            return BadRequest("Przepis o tej nazwie już istnieje");
-        }
-
-        var newRecipe = new Recipe
-        {
-            Name = recipeDTO.Name,
-            RecipeIngredients = new List<RecipeIngredient>(),
-            UserId = userId,
-            RecipeDescriptionSteps = new List<RecipeDescriptionStep>()
-        };
-
-        foreach(var step in recipeDTO.RecipeDescriptionSteps)
-        {
-                var descriptionStep = _mapper.Map<RecipeDescriptionStep>(step);
-            newRecipe.RecipeDescriptionSteps.Add(descriptionStep);
+            _uow = uow;
+            _mapper = mapper;
         }
 
 
-        foreach(var ing in recipeDTO.Ingredients)
+        [HttpPost("addrecipe")]
+        public async Task<ActionResult> AddRecipe([FromBody] RecipeDto recipeDTO)
         {
-            var ingredient = await _uow.IngredientRepository.GetIngredientByName(ing.IngredientName);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+            var userId = user.Id;
 
-            if(ingredient == null)
+            if(user == null)
             {
-                ingredient = new Ingredient
-                {
-                    Name = ing.IngredientName
-                };
-                await _uow.IngredientRepository.AddIngredient(ingredient);
-                await _uow.Complete();
+                return BadRequest("Brak użytkownika");
             }
 
-            var recipeIngredient = new RecipeIngredient
+            if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any() 
+            || recipeDTO.Name.IsNullOrEmpty() || recipeDTO.RecipeDescriptionSteps == null)
             {
-                Recipe = newRecipe,
-                Ingredient = ingredient,
-                IngredientQuantity = ing.Quantity
+                return BadRequest("Nieprawidłowe dane");
+            }
+
+            if(await _uow.RecipeRepository.RecipeExists(recipeDTO.Name))
+            {
+                return BadRequest("Przepis o tej nazwie już istnieje");
+            }
+
+            var newRecipe = new Recipe
+            {
+                Name = recipeDTO.Name,
+                RecipeIngredients = new List<RecipeIngredient>(),
+                UserId = userId,
+                RecipeDescriptionSteps = new List<RecipeDescriptionStep>()
             };
-            newRecipe.RecipeIngredients.Add(recipeIngredient);
+
+            foreach(var step in recipeDTO.RecipeDescriptionSteps)
+            {
+                    var descriptionStep = _mapper.Map<RecipeDescriptionStep>(step);
+                newRecipe.RecipeDescriptionSteps.Add(descriptionStep);
+            }
+
+
+            foreach(var ing in recipeDTO.Ingredients)
+            {
+                var ingredient = await _uow.IngredientRepository.GetIngredientByName(ing.IngredientName);
+
+                if(ingredient == null)
+                {
+                    ingredient = new Ingredient
+                    {
+                        Name = ing.IngredientName
+                    };
+                    await _uow.IngredientRepository.AddIngredient(ingredient);
+                    await _uow.Complete();
+                }
+
+                var recipeIngredient = new RecipeIngredient
+                {
+                    Recipe = newRecipe,
+                    Ingredient = ingredient,
+                    IngredientQuantity = ing.Quantity
+                };
+                newRecipe.RecipeIngredients.Add(recipeIngredient);
+            }
+
+            await _uow.RecipeRepository.AddRecipe(newRecipe);
+            await _uow.Complete();
+
+            return Ok("Recipe added successfully");
         }
-
-        await _uow.RecipeRepository.AddRecipe(newRecipe);
-        await _uow.Complete();
-
-        return Ok("Recipe added successfully");
-    }
 
     
-    [HttpGet("getrecipe-byname")]
-    public async Task<ActionResult<RecipeDto>> GetRecipeByName(string name)
-    {
-
-        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
-        var userId = user.Id;
-
-        if(user == null)
+        [HttpGet("getrecipe-byname")]
+        public async Task<ActionResult<RecipeDto>> GetRecipeByName(string name)
         {
-            return BadRequest("Brak użytkownika");
-        }
 
-        var recipe = await _uow.RecipeRepository.GetRecipeByName(name, userId);
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+            var userId = user.Id;
 
-        if(recipe == null)
-        {
-            return NotFound("Recipe not found");
-        }
+            if(user == null)
+            {
+                return BadRequest("Brak użytkownika");
+            }
 
-        var recipeDto = _mapper.Map<RecipeDto>(recipe);
+            var recipe = await _uow.RecipeRepository.GetRecipeByName(name, userId);
 
-        return Ok(recipeDto);
-    }
-    
-    [HttpGet("getrecipe-byid")]
-    public async Task<ActionResult<RecipeDto>> GetRecipeById(int id)
-    {
-        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+            if(recipe == null)
+            {
+                return NotFound("Recipe not found");
+            }
 
-        if(user == null)
-        {
-            return BadRequest("Brak użytkownika");
-        }
-
-        var recipe = await _uow.RecipeRepository.GetRecipeById(id);
-
-        if(recipe == null)
-        {
-            return NotFound("Recipe not found");
-        }
-
-        var recipeDto = _mapper.Map<RecipeDto>(recipe);
-
-        return Ok(recipeDto);
-    }
-
-    [HttpGet("getrecipes")]
-    public async Task<ActionResult<List<RecipeDto>>> GetAllRecipes()
-    {
-        var recipes = await _uow.RecipeRepository.GetAllRecipes();
-
-        if(recipes.IsNullOrEmpty())
-        {
-            return NotFound("No recipes found");
-        }
-
-        var recipeDtoList = new List<RecipeDto>();
-
-        foreach(var recipe in recipes)
-
-        {
             var recipeDto = _mapper.Map<RecipeDto>(recipe);
-            recipeDtoList.Add(recipeDto);
+
+            return Ok(recipeDto);
         }
-
-        return Ok(recipeDtoList);
-    }
-
-    [HttpDelete("deleterecipe")]
-    public async Task<ActionResult> DeleteRecipe(string name)
-    {
-
-        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
-        var userId = user.Id;
-
-        if(user == null)
+    
+        [HttpGet("getrecipe-byid")]
+        public async Task<ActionResult<RecipeDto>> GetRecipeById(int id)
         {
-            return BadRequest("Brak użytkownika");
-        }
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
 
-        var recipe = await _uow.RecipeRepository.GetRecipeByName(name, userId);
-
-        if(recipe == null)
-        {
-            return BadRequest("recipe doesn't exist");
-        }
-
-        _uow.RecipeRepository.DeleteRecipe(recipe);
-
-        if(await _uow.Complete())
-        {
-            return Ok();
-        }
-
-        return BadRequest("problem deleting recipe");
-    }
-
-    [HttpPut("updaterecipe")]
-    public async Task<ActionResult> UpdateRecipe([FromBody] RecipeDto recipeDTO)
-    {
-
-        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
-        var userId = user.Id;
-
-        if(user == null)
-        {
-            return BadRequest("Brak użytkownika");
-        }
-
-        if (recipeDTO == null || recipeDTO.Ingredients == null)
-        {
-            return BadRequest("Invalid input");
-        }
-
-        var existingRecipe = await _uow.RecipeRepository.GetRecipeByName(recipeDTO.OriginalName, userId);
-
-        if (existingRecipe == null)
-        {
-            return BadRequest("Recipe not found");
-        }
-
-        existingRecipe.RecipeIngredients.Clear();
-        existingRecipe.RecipeDescriptionSteps.Clear();
-
-        existingRecipe.Name = recipeDTO.Name;
-        foreach(var step in recipeDTO.RecipeDescriptionSteps)
-        {
-            var descriptionStep = _mapper.Map<RecipeDescriptionStep>(step);
-            existingRecipe.RecipeDescriptionSteps.Add(descriptionStep);
-        }
-
-        foreach (var ing in recipeDTO.Ingredients)
-        {
-            var ingredient = await _uow.IngredientRepository.GetIngredientByName(ing.IngredientName);
-
-            if (ingredient == null)
+            if(user == null)
             {
-                ingredient = new Ingredient
-                {
-                    Name = ing.IngredientName
-                };
-                await _uow.IngredientRepository.AddIngredient(ingredient);
+                return BadRequest("Brak użytkownika");
             }
 
+            var recipe = await _uow.RecipeRepository.GetRecipeById(id);
 
-            var recipeIngredient = new RecipeIngredient
+            if(recipe == null)
             {
-                Recipe = existingRecipe,
-                IngredientId = ingredient.IngredientId,
-                Ingredient = ingredient,
-                IngredientQuantity = ing.Quantity
-            };
-            existingRecipe.RecipeIngredients.Add(recipeIngredient);                  
-        }
-        if (await _uow.Complete())
-        {
-            return Ok("Recipe updated");
+                return NotFound("Recipe not found");
+            }
+
+            var recipeDto = _mapper.Map<RecipeDto>(recipe);
+
+            return Ok(recipeDto);
         }
 
-        return BadRequest("Problem updating recipe");
-    }
+        [HttpGet("getrecipes")]
+        public async Task<ActionResult<List<RecipeDto>>> GetAllRecipes()
+        {
+            var recipes = await _uow.RecipeRepository.GetAllRecipes();
+
+            if(recipes.IsNullOrEmpty())
+            {
+                return NotFound("No recipes found");
+            }
+
+            var recipeDtoList = new List<RecipeDto>();
+
+            foreach(var recipe in recipes)
+
+            {
+                var recipeDto = _mapper.Map<RecipeDto>(recipe);
+                recipeDtoList.Add(recipeDto);
+            }
+
+            return Ok(recipeDtoList);
+        }
+
+        [HttpDelete("deleterecipe")]
+        public async Task<ActionResult> DeleteRecipe(string name)
+        {
+
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+            var userId = user.Id;
+
+            if(user == null)
+            {
+                return BadRequest("Brak użytkownika");
+            }
+
+            var recipe = await _uow.RecipeRepository.GetRecipeByName(name, userId);
+
+            if(recipe == null)
+            {
+                return BadRequest("recipe doesn't exist");
+            }
+
+            _uow.RecipeRepository.DeleteRecipe(recipe);
+
+            if(await _uow.Complete())
+            {
+                return Ok();
+            }
+
+            return BadRequest("problem deleting recipe");
+        }
+
+        [HttpPut("updaterecipe")]
+        public async Task<ActionResult> UpdateRecipe([FromBody] RecipeDto recipeDTO)
+        {
+
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+            var userId = user.Id;
+
+            if(user == null)
+            {
+                return BadRequest("Brak użytkownika");
+            }
+
+            if (recipeDTO == null || recipeDTO.Ingredients == null)
+            {
+                return BadRequest("Invalid input");
+            }
+
+            var existingRecipe = await _uow.RecipeRepository.GetRecipeByName(recipeDTO.OriginalName, userId);
+
+            if (existingRecipe == null)
+            {
+                return BadRequest("Recipe not found");
+            }
+
+            existingRecipe.RecipeIngredients.Clear();
+            existingRecipe.RecipeDescriptionSteps.Clear();
+
+            existingRecipe.Name = recipeDTO.Name;
+            foreach(var step in recipeDTO.RecipeDescriptionSteps)
+            {
+                var descriptionStep = _mapper.Map<RecipeDescriptionStep>(step);
+                existingRecipe.RecipeDescriptionSteps.Add(descriptionStep);
+            }
+
+            foreach (var ing in recipeDTO.Ingredients)
+            {
+                var ingredient = await _uow.IngredientRepository.GetIngredientByName(ing.IngredientName);
+
+                if (ingredient == null)
+                {
+                    ingredient = new Ingredient
+                    {
+                        Name = ing.IngredientName
+                    };
+                    await _uow.IngredientRepository.AddIngredient(ingredient);
+                }
+
+
+                var recipeIngredient = new RecipeIngredient
+                {
+                    Recipe = existingRecipe,
+                    IngredientId = ingredient.IngredientId,
+                    Ingredient = ingredient,
+                    IngredientQuantity = ing.Quantity
+                };
+                existingRecipe.RecipeIngredients.Add(recipeIngredient);                  
+            }
+            if (await _uow.Complete())
+            {
+                return Ok("Recipe updated");
+            }
+
+            return BadRequest("Problem updating recipe");
+        }
 
         
         [HttpGet("userhasrecipe")]
@@ -268,6 +269,42 @@ namespace API.Controllers
                 return true;
             }
             return false;
+        }
+
+        [HttpGet("getrecipedescriptionsteps")]
+        public async Task<ActionResult<List<RecipeDescriptionStepDto>>> GetRecipeDescriptionSteps(int recipeId)
+        {
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(User.Identity.Name);
+            var userId = user.Id;
+
+            if(user == null)
+            {
+                return BadRequest("Brak użytkownika");
+            }
+
+            var recipe = await _uow.RecipeRepository.GetRecipeById(recipeId);
+
+            if (recipe == null)
+            {
+                return NotFound("Recipe not found");
+            }
+
+            var recipeDescriptionSteps = await _uow.RecipeRepository.GetRecipeDescriptionSteps(recipeId);
+
+            if(recipeDescriptionSteps.IsNullOrEmpty())
+            {
+                return BadRequest("Brak kroków w przepisie");
+            }
+
+            var recipeDescriptionDtoList = new List<RecipeDescriptionStepDto>();
+
+            foreach(var step in recipeDescriptionSteps)
+            {
+                var recipeDescriptionDto = _mapper.Map<RecipeDescriptionStepDto>(step);
+
+                recipeDescriptionDtoList.Add(recipeDescriptionDto);
+            }
+            return Ok(recipeDescriptionDtoList);
         }
     }
 

@@ -42,6 +42,13 @@ export class RecipeIngredientsComponent implements OnInit {
     })
   }
 
+  updateRecipeSteps(recipeId: number)
+  {
+    this.recipeService.getRecipeSteps(recipeId).subscribe({
+      next: response => this.selectedRecipe.recipeDescriptionSteps = response
+    })
+  }
+
   sendIngredientsAsList() {
     var message = '';
 
@@ -75,6 +82,7 @@ export class RecipeIngredientsComponent implements OnInit {
     modalRef.onHide?.subscribe({
       next: () => {
         this.listRecipeIngredients(modalRef.content!.recipeId)
+        this.updateRecipeSteps(modalRef.content!.recipeId)
         this.changeRecipeName(modalRef.content!.recipeName)
       }
     })
