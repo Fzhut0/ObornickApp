@@ -21,6 +21,7 @@ export class RecipeIngredientsComponent implements OnInit {
   user: User | undefined;
   recipeId: number = 0;
 
+
   userHasRecipe: boolean = false;
   userHasMessagingId: boolean = false;
 
@@ -38,6 +39,13 @@ export class RecipeIngredientsComponent implements OnInit {
   listRecipeIngredients(recipeId: number) {
     this.recipeService.getRecipeIngredients(recipeId).subscribe({
       next: response => this.ingredients = response
+    })
+  }
+
+  updateRecipeSteps(recipeId: number)
+  {
+    this.recipeService.getRecipeSteps(recipeId).subscribe({
+      next: response => this.selectedRecipe.recipeDescriptionSteps = response
     })
   }
 
@@ -66,13 +74,15 @@ export class RecipeIngredientsComponent implements OnInit {
         recipeName: recipe.name,
         selectedRecipe: recipe,
         ingredients: this.ingredients,
-        recipeId: recipe.recipeId
+        recipeId: recipe.recipeId,
+        descriptionSteps: recipe.recipeDescriptionSteps
       }
     }
     const modalRef = this.modalService.show(EditRecipeComponent, config);
     modalRef.onHide?.subscribe({
       next: () => {
         this.listRecipeIngredients(modalRef.content!.recipeId)
+        this.updateRecipeSteps(modalRef.content!.recipeId)
         this.changeRecipeName(modalRef.content!.recipeName)
       }
     })

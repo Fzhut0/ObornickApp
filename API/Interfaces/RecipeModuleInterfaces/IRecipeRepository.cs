@@ -1,4 +1,5 @@
 using API.Entities;
+using API.Entities.RecipeModuleEntities;
 
 namespace API.Interfaces
 {
@@ -17,6 +18,8 @@ namespace API.Interfaces
         Task<List<Recipe>> GetAllRecipes();
 
         Task<ICollection<Recipe>> GetUserRecipes(int userId);
+
+        Task<ICollection<RecipeDescriptionStep>> GetRecipeDescriptionSteps(int recipeId);
 
         void DeleteRecipe(Recipe recipe);
 

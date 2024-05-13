@@ -1,3 +1,5 @@
+using API.Entities.RecipeModuleEntities;
+
 namespace API.Entities
 {
     public class Recipe
@@ -9,6 +11,8 @@ namespace API.Entities
         public ICollection<RecipeIngredient> RecipeIngredients { get; set; }
 
         public int UserId { get; set; }
+
+        public ICollection<RecipeDescriptionStep> RecipeDescriptionSteps { get; set; }
         
     }
 }

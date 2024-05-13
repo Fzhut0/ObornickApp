@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Recipe } from '../_models/recipe';
 import { Ingredient } from '../_models/ingredient';
 import { FormGroup } from '@angular/forms';
+import { RecipeDescriptionStep } from '../_models/recipedescriptionstep';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,10 @@ export class RecipesService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addRecipe(model: FormGroup)
+  addRecipe(model: any)
   {
-    return this.httpClient.post(this.baseUrl + 'recipes/addrecipe', model, {responseType: 'text'});
+      console.log(model.value);
+     return this.httpClient.post(this.baseUrl + 'recipes/addrecipe', model, {responseType: 'text'});
   }
 
   getAllRecipes()
@@ -31,6 +33,16 @@ export class RecipesService {
       }
     })
     return this.httpClient.get<Ingredient[]>(this.baseUrl + 'Ingredients/getrecipeingredients', {params: params})
+  }
+
+  getRecipeSteps(model: number)
+  {
+   const params = new HttpParams({
+      fromObject: {
+        recipeId: model
+      }
+    })
+    return this.httpClient.get<RecipeDescriptionStep[]>(this.baseUrl + 'recipes/getrecipedescriptionsteps', {params: params})
   }
 
   editRecipe(model: FormGroup) {

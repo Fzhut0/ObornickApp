@@ -68,6 +68,9 @@ app.UseCors(builder => builder
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

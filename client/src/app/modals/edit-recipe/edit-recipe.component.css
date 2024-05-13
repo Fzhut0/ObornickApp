@@ -38,6 +38,16 @@
   margin: 5px;
 }
 
+.add-step-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin: 5px;
+}
+
 .submit-btn {
   background-color: #2196F3;
   color: white;

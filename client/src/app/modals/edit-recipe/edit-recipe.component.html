@@ -26,6 +26,20 @@
       </div>
     </div>
   </div>
+  <div formArrayName="recipeDescriptionSteps" class="description-steps-container">
+    <div *ngFor="let step of stepsArray.controls; let i = index" class="description-step-row">
+      <div [formGroupName]="i">
+        <label>
+          Opis kroku:
+          <textarea formControlName="description" class="form-control"></textarea>
+        </label>
+        <button type="button" (click)="removeStep(i)" class="remove-btn">Usuń krok</button>
+      </div>
+    </div>
+  </div>
+  
+  <button type="button" (click)="addStepInForm()" class="add-step-btn">Dodaj krok</button>
+
   <button type="button" (click)="addIngredientInForm()" class="add-ingredient-btn">Dodaj składnik</button>
   <br>
   <button type="submit" class="submit-btn">Zaktualizuj przepis</button>

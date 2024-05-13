@@ -21,6 +21,19 @@
   </div>
   <button type="button" (click)="addIngredientInForm()" class="add-ingredient-btn">Dodaj składnik</button>
   <br>
+  <div formArrayName="recipeDescriptionSteps" class="step-container">
+    <div *ngFor="let step of stepsArray.controls; let i = index" class="step-row">
+      <div [formGroupName]="i">
+        <label>
+          Krok {{ i + 1 }}:
+          <input type="text" formControlName="description" class="form-control">
+        </label>
+        <button type="button" (click)="removeStep(i)" class="remove-btn">Usuń krok</button>
+      </div>
+    </div>
+  </div>
+  <button type="button" (click)="addStepInForm()" class="add-step-btn">Dodaj krok</button>
+  <br>
   <button type="submit" class="submit-btn">Dodaj przepis</button>
   <button type="button" (click)="cancel()" class="cancel-btn">Anuluj</button>
 </form>
