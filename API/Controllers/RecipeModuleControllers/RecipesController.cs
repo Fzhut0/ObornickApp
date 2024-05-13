@@ -33,9 +33,9 @@ namespace API.Controllers
             }
 
             if (recipeDTO == null || recipeDTO.Ingredients == null || !recipeDTO.Ingredients.Any() 
-            || recipeDTO.Name.IsNullOrEmpty() || recipeDTO.RecipeDescriptionSteps == null)
+            || recipeDTO.Name.IsNullOrEmpty() || recipeDTO.RecipeDescriptionSteps.IsNullOrEmpty())
             {
-                return BadRequest("Nieprawidłowe dane");
+                return BadRequest("Brak składników lub kroków wykonania przepisu.");
             }
 
             if(await _uow.RecipeRepository.RecipeExists(recipeDTO.Name))
@@ -104,7 +104,7 @@ namespace API.Controllers
 
             if(recipe == null)
             {
-                return NotFound("Recipe not found");
+                return NotFound("Brak przepisu");
             }
 
             var recipeDto = _mapper.Map<RecipeDto>(recipe);
@@ -126,7 +126,7 @@ namespace API.Controllers
 
             if(recipe == null)
             {
-                return NotFound("Recipe not found");
+                return NotFound("Brak przepisu");
             }
 
             var recipeDto = _mapper.Map<RecipeDto>(recipe);
@@ -172,7 +172,7 @@ namespace API.Controllers
 
             if(recipe == null)
             {
-                return BadRequest("recipe doesn't exist");
+                return BadRequest("Brak przepisu");
             }
 
             _uow.RecipeRepository.DeleteRecipe(recipe);
@@ -182,7 +182,7 @@ namespace API.Controllers
                 return Ok();
             }
 
-            return BadRequest("problem deleting recipe");
+            return BadRequest("Błąd usuwania przepisu");
         }
 
         [HttpPut("updaterecipe")]
@@ -197,9 +197,10 @@ namespace API.Controllers
                 return BadRequest("Brak użytkownika");
             }
 
-            if (recipeDTO == null || recipeDTO.Ingredients == null)
+            if (recipeDTO == null || recipeDTO.Ingredients.IsNullOrEmpty() 
+            || recipeDTO.Name.IsNullOrEmpty() || recipeDTO.RecipeDescriptionSteps.IsNullOrEmpty())
             {
-                return BadRequest("Invalid input");
+                return BadRequest("Nieprawidłowe dane");
             }
 
             var existingRecipe = await _uow.RecipeRepository.GetRecipeByName(recipeDTO.OriginalName, userId);
@@ -247,7 +248,7 @@ namespace API.Controllers
                 return Ok("Recipe updated");
             }
 
-            return BadRequest("Problem updating recipe");
+            return BadRequest("Bład aktualizacji przepisu");
         }
 
         

@@ -81,11 +81,9 @@ export class AddRecipesComponent {
         console.error('Error adding recipe:', error);
       }
     });
-
-    this.resetForm();
   }
 
-    resetForm() {
+  resetForm() {
     this.recipeForm.reset();
     this.ingredientsArray.clear();
   }
