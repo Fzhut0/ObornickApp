@@ -233,7 +233,6 @@ namespace API.Controllers
                     await _uow.IngredientRepository.AddIngredient(ingredient);
                 }
 
-
                 var recipeIngredient = new RecipeIngredient
                 {
                     Recipe = existingRecipe,
@@ -305,7 +304,8 @@ namespace API.Controllers
 
                 recipeDescriptionDtoList.Add(recipeDescriptionDto);
             }
-            return Ok(recipeDescriptionDtoList);
+            var sortedStepsList = recipeDescriptionDtoList.OrderBy(t => t.OrderNumber);
+            return Ok(sortedStepsList);
         }
     }
 

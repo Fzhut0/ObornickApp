@@ -9,6 +9,8 @@ namespace API.Entities.RecipeModuleEntities
 
         public int RecipeId { get; set; }
 
+        public int OrderNumber { get; set; }
+
         public string Description { get; set; }
     }
 }

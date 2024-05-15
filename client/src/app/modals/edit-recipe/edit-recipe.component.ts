@@ -63,7 +63,9 @@ export class EditRecipeComponent implements OnInit {
   {
     this.stepsArray.push(this.fb.group({
       description: [desc.description, Validators.required],
+      orderNumber: [desc.orderNumber]
     }));
+   // this.stepsArray.controls.sort((a,b) => a.value.orderNumber - b.value.orderNumber)
   }
 
   initializeForm()
@@ -94,7 +96,8 @@ export class EditRecipeComponent implements OnInit {
   }
 
   addStepInForm(): void {
-    this.stepsArray.push(this.fb.group({ description: ['', Validators.required] }));
+    const orderNumber = this.stepsArray.length + 1;
+    this.stepsArray.push(this.fb.group({ description: ['', Validators.required], orderNumber: [orderNumber]}));
   }
 
   removeStep(index: number): void {
@@ -126,6 +129,11 @@ export class EditRecipeComponent implements OnInit {
     const values = { ...this.recipeForm.value };
     const newName = values.name;
 
+    for (let index = 0; index < this.stepsArray.value.length; index++) {
+      const step = this.stepsArray.value[index];
+      step.orderNumber = index 
+    }
+
     this.recipeService.editRecipe(values).subscribe({
       next: () => {
         if (newName != this.recipeName)
@@ -137,7 +145,7 @@ export class EditRecipeComponent implements OnInit {
       })
   }
 
-    resetForm() {
+  resetForm() {
     this.recipeForm.reset();
     this.ingredientsArray.clear();
   }

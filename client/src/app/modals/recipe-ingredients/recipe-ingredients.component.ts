@@ -32,6 +32,7 @@ export class RecipeIngredientsComponent implements OnInit {
 
   ngOnInit(): void {
     this.listRecipeIngredients(this.recipeId);
+    this.updateRecipeSteps(this.recipeId);
     this.checkHasUserRecipe(this.recipeName);
     this.checkHasUserMessagingId();
   }
@@ -51,8 +52,6 @@ export class RecipeIngredientsComponent implements OnInit {
 
   sendIngredientsAsList() {
     var message = '';
-
-    
     
     if (this.ingredients.length > 0 && this.recipeName.length > 0) {
       message = `Do zrobienia ${this.recipeName} potrzebujesz:\\n`
